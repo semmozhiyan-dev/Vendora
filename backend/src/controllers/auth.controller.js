@@ -19,9 +19,12 @@ const generateToken = (userId) => {
   return jwt.sign({ userId }, secret, { expiresIn: "1d" });
 };
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password } = req.body || {};
+    if (!req.body) {
+      return res.status(400).json({ success: false, message: 'Request body is required' });
+    }
 
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -65,16 +68,16 @@ const register = async (req, res) => {
       user: sanitizeUser(user),
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Internal server error",
-    });
+    return next(error);
   }
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body || {};
+    if (!req.body) {
+      return res.status(400).json({ success: false, message: 'Request body is required' });
+    }
 
     if (!email || !password) {
       return res.status(400).json({
@@ -110,10 +113,7 @@ const login = async (req, res) => {
       user: sanitizeUser(user),
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Internal server error",
-    });
+    return next(error);
   }
 };
 
