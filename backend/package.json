@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Vendora backend API",
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
