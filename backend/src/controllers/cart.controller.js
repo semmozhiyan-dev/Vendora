@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose');
 const Cart = require('../models/cart.model');
+const logger = require('../utils/logger');
 
 let Product = null;
 try {
@@ -25,6 +26,7 @@ const addToCart = async (req, res, next) => {
     const userId = user.userId;
 
     const { productId, quantity = 1 } = req.body || {};
+      logger.info(`[${req.id}] Adding product to cart: ${productId}, qty=${quantity}`);
     if (!req.body) {
       return res.status(400).json({ success: false, message: 'Request body is required' });
     }
@@ -61,6 +63,7 @@ const getCart = async (req, res, next) => {
   try {
     const user = req.user;
     if (!user) return res.status(401).json({ success: false, message: 'Authentication required' });
+      logger.info(`[${req.id}] Fetching user cart`);
     const userId = user.userId;
 
     const cart = await Cart.findOne({ user: userId }).populate('items.product');
@@ -79,6 +82,7 @@ const updateCartItem = async (req, res, next) => {
 
     const { productId } = req.params;
     const { quantity } = req.body || {};
+      logger.info(`[${req.id}] Updating cart item: ${productId}, qty=${quantity}`);
     if (!req.body) {
       return res.status(400).json({ success: false, message: 'Request body is required' });
     }
@@ -111,6 +115,7 @@ const updateCartItem = async (req, res, next) => {
 };
 
 const removeCartItem = async (req, res, next) => {
+    logger.info(`[${req.id}] Removing item from cart: ${productId}`);
   try {
     const user = req.user;
     if (!user) return res.status(401).json({ success: false, message: 'Authentication required' });

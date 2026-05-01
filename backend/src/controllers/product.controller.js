@@ -1,11 +1,13 @@
 "use strict";
 
 const mongoose = require('mongoose');
+const logger = require('../utils/logger');
 const Product = require('../models/product.model');
 
 const createProduct = async (req, res, next) => {
   try {
     const { name, description = '', price, stock = 0 } = req.body || {};
+  logger.info(`[${req.id}] Creating product: ${name}`);
 
     if (!req.body) {
       return res.status(400).json({ success: false, message: 'Request body is required' });
@@ -46,6 +48,7 @@ const getProducts = async (req, res, next) => {
     const page = Math.max(1, Number(req.query.page) || 1);
     const limit = Math.max(1, Number(req.query.limit) || 10);
     const skip = (page - 1) * limit;
+  logger.info(`[${req.id}] Fetching products: page=${page}, limit=${limit}`);
 
     const [items, total] = await Promise.all([
       Product.find().skip(skip).limit(limit).lean(),
@@ -61,6 +64,7 @@ const getProducts = async (req, res, next) => {
 const getProductById = async (req, res, next) => {
   try {
     const { id } = req.params;
+      logger.info(`[${req.id}] Getting product by id: ${id}`);
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ success: false, message: 'Invalid product id' });
     }
@@ -74,6 +78,7 @@ const getProductById = async (req, res, next) => {
 };
 
 const updateProduct = async (req, res, next) => {
+    logger.info(`[${req.id}] Updating product: ${id}`);
   try {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -115,6 +120,7 @@ const updateProduct = async (req, res, next) => {
 };
 
 const deleteProduct = async (req, res, next) => {
+    logger.info(`[${req.id}] Deleting product: ${id}`);
   try {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {

@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
+const logger = require("../utils/logger");
 
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -22,6 +23,7 @@ const generateToken = (userId) => {
 const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body || {};
+      logger.info(`[${req.id}] Registering user: ${email}`);
     if (!req.body) {
       return res.status(400).json({ success: false, message: 'Request body is required' });
     }
@@ -75,6 +77,7 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body || {};
+      logger.info(`[${req.id}] User login attempt: ${email}`);
     if (!req.body) {
       return res.status(400).json({ success: false, message: 'Request body is required' });
     }
