@@ -21,7 +21,10 @@ const generateToken = (userId) => {
 
 const register = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password } = req.body || {};
+    if (!req.body) {
+      return res.status(400).json({ success: false, message: 'Request body is required' });
+    }
 
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -71,7 +74,10 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body || {};
+    if (!req.body) {
+      return res.status(400).json({ success: false, message: 'Request body is required' });
+    }
 
     if (!email || !password) {
       return res.status(400).json({
