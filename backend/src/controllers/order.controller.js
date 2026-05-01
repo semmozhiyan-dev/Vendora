@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Order = require('../models/order.model');
 const Cart = require('../models/cart.model');
 const Product = require('../models/product.model');
+const logger = require('../utils/logger');
 
 const createOrder = async (req, res, next) => {
   try {
@@ -12,6 +13,7 @@ const createOrder = async (req, res, next) => {
     const userId = user.userId;
 
     const { shippingAddress, items } = req.body || {};
+      logger.info(`[${req.id}] Creating order for user: ${userId}`);
     if (!req.body) {
       return res.status(400).json({ success: false, message: 'Request body is required' });
     }
@@ -84,6 +86,7 @@ const getOrders = async (req, res, next) => {
     const page = Math.max(1, Number(req.query.page) || 1);
     const limit = Math.max(1, Number(req.query.limit) || 10);
     const skip = (page - 1) * limit;
+  logger.info(`[${req.id}] Fetching user orders: page=${page}, limit=${limit}`);
 
     const [items, total] = await Promise.all([
       Order.find({ user: userId }).skip(skip).limit(limit).populate('items.product').sort({ createdAt: -1 }).lean(),
@@ -103,6 +106,7 @@ const getOrderById = async (req, res, next) => {
     const userId = user.userId;
 
     const { id } = req.params;
+      logger.info(`[${req.id}] Getting order by id: ${id}`);
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ success: false, message: 'Invalid order id' });
     }
@@ -129,6 +133,7 @@ const updateOrderStatus = async (req, res, next) => {
 
     const { id } = req.params;
     const { status } = req.body || {};
+  logger.info(`[${req.id}] Updating order status: ${id} -> ${status}`);
 
     if (!req.body) {
       return res.status(400).json({ success: false, message: 'Request body is required' });
@@ -166,6 +171,7 @@ const updateOrderStatus = async (req, res, next) => {
 };
 
 const cancelOrder = async (req, res, next) => {
+    logger.info(`[${req.id}] Cancelling order: ${id}`);
   try {
     const user = req.user;
     if (!user) return res.status(401).json({ success: false, message: 'Authentication required' });
