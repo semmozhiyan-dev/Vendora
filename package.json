@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "express-rate-limit": "^8.4.1",
     "uuid": "^14.0.0",
     "winston": "^3.19.0"
   }
