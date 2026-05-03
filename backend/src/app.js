@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const requestIdMiddleware = require("./middlewares/requestId.middleware");
 const loggerMiddleware = require("./middlewares/logger.middleware");
+const rateLimitMiddleware = require("./middlewares/rateLimit.middleware");
+const healthRoutes = require("./routes/health.routes");
 const authRoutes = require("./routes/auth.routes");
 const { notFound, errorHandler } = require("./middlewares/error.middleware");
 
@@ -33,9 +35,11 @@ const productRoutes = require("./routes/product.routes");
 const orderRoutes = require("./routes/order.routes");
 
 // ========== ROUTES ==========
+app.use("/health", healthRoutes);
+app.use("/api", rateLimitMiddleware);
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/products", productRoutes);
+app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/orders", orderRoutes);
 
 // ========== ERROR HANDLING (MUST BE LAST) ==========
