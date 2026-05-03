@@ -1,13 +1,22 @@
-const express = require('express');
-const { createOrder, verifyPayment } = require('../controllers/payment.controller');
-const authMiddleware = require('../middlewares/auth.middleware');
+"use strict";
 
+const express = require("express");
 const router = express.Router();
 
-// Create a Razorpay order
-router.post('/create-order', /* authMiddleware, */ createOrder);
+const auth = require("../middlewares/auth.middleware");
+const validate = require("../middlewares/validate.middleware");
+const { verifyPaymentSchema } = require("../validators/order.validator");
+const { createRazorpayOrder, verifyPayment, handleWebhook } = require("../controllers/payment.controller");
 
-// Verify a payment signature
-router.post('/verify', /* authMiddleware, */ verifyPayment);
+// Webhook route with raw body parser (must be first, before any JSON parsing)
+router.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  handleWebhook
+);
+
+// All other routes use JSON body (parsed by app.js express.json())
+router.post("/create-order", auth, createRazorpayOrder);
+router.post("/verify", auth, validate(verifyPaymentSchema), verifyPayment);
 
 module.exports = router;

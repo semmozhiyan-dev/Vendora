@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const auth = require('../middlewares/auth.middleware');
+const validate = require('../middlewares/validate.middleware');
+const { createOrderSchema, updateOrderStatusSchema } = require('../validators/order.validator');
 const {
   createOrder,
   getOrders,
@@ -13,10 +15,10 @@ const {
 // All order routes are protected
 router.use(auth);
 
-router.post('/', createOrder);
+router.post('/', validate(createOrderSchema), createOrder);
 router.get('/', getOrders);
 router.get('/:id', getOrderById);
-router.put('/:id/status', updateOrderStatus);
+router.put('/:id/status', validate(updateOrderStatusSchema), updateOrderStatus);
 router.put('/:id/cancel', cancelOrder);
 
 module.exports = router;

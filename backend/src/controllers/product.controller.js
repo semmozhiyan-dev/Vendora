@@ -78,18 +78,16 @@ const getProductById = async (req, res, next) => {
 };
 
 const updateProduct = async (req, res, next) => {
-    logger.info(`[${req.id}] Updating product: ${id}`);
   try {
     const { id } = req.params;
+    logger.info(`[${req.id}] Updating product: ${id}`);
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ success: false, message: 'Invalid product id' });
     }
 
     const updates = {};
     const { name, description, price, stock } = req.body || {};
-    if (!req.body) {
-      return res.status(400).json({ success: false, message: 'Request body is required' });
-    }
     if (name !== undefined) updates.name = name;
     if (description !== undefined) updates.description = description;
     if (price !== undefined) {
@@ -120,9 +118,10 @@ const updateProduct = async (req, res, next) => {
 };
 
 const deleteProduct = async (req, res, next) => {
-    logger.info(`[${req.id}] Deleting product: ${id}`);
   try {
     const { id } = req.params;
+    logger.info(`[${req.id}] Deleting product: ${id}`);
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ success: false, message: 'Invalid product id' });
     }
