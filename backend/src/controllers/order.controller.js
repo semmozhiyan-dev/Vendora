@@ -13,17 +13,12 @@ const createOrder = async (req, res, next) => {
     const userId = user.userId;
 
     const { shippingAddress, items } = req.body || {};
-      logger.info(`[${req.id}] Creating order for user: ${userId}`);
-    if (!req.body) {
-      return res.status(400).json({ success: false, message: 'Request body is required' });
-    }
+    logger.info(`[${req.id}] Creating order for user: ${userId}`);
 
     let orderItems = [];
     let totalAmount = 0;
 
-    // If items provided in request, use those; otherwise get from cart
     if (items && Array.isArray(items) && items.length > 0) {
-      // Direct items provided (for testing or API-driven flow)
       for (const item of items) {
         if (!item.productId || !item.quantity) {
           return res.status(400).json({ success: false, message: 'Each item must have productId and quantity' });
@@ -32,37 +27,34 @@ const createOrder = async (req, res, next) => {
         if (!product) {
           return res.status(404).json({ success: false, message: `Product ${item.productId} not found` });
         }
-        orderItems.push({
-          product: product._id,
-          quantity: item.quantity,
-          price: product.price
-        });
+        if (product.stock < item.quantity) {
+          return res.status(400).json({ success: false, message: `Insufficient stock for product: ${product.name}` });
+        }
+        orderItems.push({ product: product._id, quantity: item.quantity, price: product.price });
         totalAmount += product.price * item.quantity;
       }
     } else {
-      // Get from cart (checkout flow)
       const cart = await Cart.findOne({ user: userId }).populate('items.product');
       if (!cart || cart.items.length === 0) {
         return res.status(400).json({ success: false, message: 'Cart is empty' });
       }
 
-      totalAmount = 0;
+      for (const item of cart.items) {
+        if (item.product.stock < item.quantity) {
+          return res.status(400).json({ success: false, message: `Insufficient stock for product: ${item.product.name}` });
+        }
+      }
+
       orderItems = cart.items.map((item) => {
         const price = item.product.price;
         totalAmount += price * item.quantity;
-        return {
-          product: item.product._id,
-          quantity: item.quantity,
-          price
-        };
+        return { product: item.product._id, quantity: item.quantity, price };
       });
 
-      // Clear cart after order creation
       cart.items = [];
       await cart.save();
     }
 
-    // Create order
     const order = await Order.create({
       user: userId,
       items: orderItems,
@@ -133,11 +125,7 @@ const updateOrderStatus = async (req, res, next) => {
 
     const { id } = req.params;
     const { status } = req.body || {};
-  logger.info(`[${req.id}] Updating order status: ${id} -> ${status}`);
-
-    if (!req.body) {
-      return res.status(400).json({ success: false, message: 'Request body is required' });
-    }
+    logger.info(`[${req.id}] Updating order status: ${id} -> ${status}`);
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ success: false, message: 'Invalid order id' });
@@ -147,20 +135,19 @@ const updateOrderStatus = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Status is required' });
     }
 
-    const validStatuses = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'];
-    if (!validStatuses.includes(status.toLowerCase())) {
+    const validStatuses = ['PENDING', 'PAID', 'FAILED', 'CANCELLED', 'SHIPPED', 'DELIVERED'];
+    if (!validStatuses.includes(status.toUpperCase())) {
       return res.status(400).json({ success: false, message: `Invalid status. Must be one of: ${validStatuses.join(', ')}` });
     }
 
     const order = await Order.findById(id);
     if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
 
-    // Ensure user can only update their own orders
     if (order.user.toString() !== userId) {
       return res.status(403).json({ success: false, message: 'Not authorized to update this order' });
     }
 
-    order.status = status.toLowerCase();
+    order.status = status.toUpperCase();
     await order.save();
 
     const populated = await Order.findById(order._id).populate('items.product');
@@ -171,13 +158,14 @@ const updateOrderStatus = async (req, res, next) => {
 };
 
 const cancelOrder = async (req, res, next) => {
-    logger.info(`[${req.id}] Cancelling order: ${id}`);
   try {
     const user = req.user;
     if (!user) return res.status(401).json({ success: false, message: 'Authentication required' });
     const userId = user.userId;
 
     const { id } = req.params;
+    logger.info(`[${req.id}] Cancelling order: ${id}`);
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ success: false, message: 'Invalid order id' });
     }
@@ -185,17 +173,15 @@ const cancelOrder = async (req, res, next) => {
     const order = await Order.findById(id);
     if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
 
-    // Ensure user can only cancel their own orders
     if (order.user.toString() !== userId) {
       return res.status(403).json({ success: false, message: 'Not authorized to cancel this order' });
     }
 
-    // Only allow cancelling pending or confirmed orders
-    if (!['pending', 'confirmed'].includes(order.status)) {
+    if (!['PENDING', 'PAID'].includes(order.status)) {
       return res.status(400).json({ success: false, message: `Cannot cancel order with status: ${order.status}` });
     }
 
-    order.status = 'cancelled';
+    order.status = 'CANCELLED';
     await order.save();
 
     const populated = await Order.findById(order._id).populate('items.product');

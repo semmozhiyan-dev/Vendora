@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const auth = require('../middlewares/auth.middleware');
+const validate = require('../middlewares/validate.middleware');
+const { addToCartSchema, updateCartItemSchema } = require('../validators/cart.validator');
 const {
   addToCart,
   getCart,
@@ -13,10 +15,10 @@ const {
 // Apply authentication to all cart routes
 router.use(auth);
 
-router.post('/', addToCart);
+router.post('/', validate(addToCartSchema), addToCart);
 router.get('/', getCart);
-router.put('/:productId', updateCartItem);
+router.delete('/clear', clearCart);
+router.put('/:productId', validate(updateCartItemSchema), updateCartItem);
 router.delete('/:productId', removeCartItem);
-router.delete('/', clearCart);
 
 module.exports = router;

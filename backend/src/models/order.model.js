@@ -47,11 +47,23 @@ const OrderSchema = new Schema(
         message: 'Total must be greater than 0'
       }
     },
+    razorpayOrderId: {
+      type: String,
+      index: true,
+    },
+    razorpayPaymentId: {
+      type: String,
+    },
+    razorpaySignature: {
+      type: String,
+    },
+    paidAt: {
+      type: Date,
+    },
     status: {
       type: String,
-      enum: ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'],
-      default: 'pending',
-      lowercase: true
+      enum: ['PENDING', 'PAID', 'FAILED', 'CANCELLED', 'SHIPPED', 'DELIVERED'],
+      default: 'PENDING'
     },
     shippingAddress: {
       street: String,
