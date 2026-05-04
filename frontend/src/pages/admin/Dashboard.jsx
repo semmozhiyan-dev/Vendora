@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import API from "../../api/axios";
+import { CardSkeleton } from "../../components/common/Skeleton";
 
 function Dashboard() {
   const [data, setData] = useState(null);
@@ -25,10 +26,16 @@ function Dashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
+      <div>
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Dashboard</h1>
+          <p className="text-gray-600 mt-1">Welcome back! Here's what's happening today.</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          <CardSkeleton />
+          <CardSkeleton />
+          <CardSkeleton />
+          <CardSkeleton />
         </div>
       </div>
     );
@@ -36,22 +43,14 @@ function Dashboard() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md">
-          <div className="flex items-center gap-3 mb-2">
-            <svg className="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-            </svg>
-            <h3 className="text-lg font-semibold text-red-900">Error</h3>
-          </div>
-          <p className="text-red-700">{error}</p>
-          <button
-            onClick={fetchDashboardData}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-          >
-            Retry
-          </button>
-        </div>
+      <div className="bg-white rounded-xl shadow-md border border-gray-100 py-16 text-center">
+        <p className="text-gray-500 text-lg">Failed to load dashboard</p>
+        <button
+          onClick={fetchDashboardData}
+          className="mt-4 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition"
+        >
+          Retry
+        </button>
       </div>
     );
   }
@@ -112,7 +111,7 @@ function Dashboard() {
         {stats.map((stat, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            className="bg-white rounded-xl shadow-md overflow-hidden transition-shadow hover:shadow-lg"
           >
             <div className={`${stat.color} p-5 text-white`}>
               <div className="flex items-center justify-between">
@@ -160,7 +159,7 @@ function Dashboard() {
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {data.recentOrders.map((order) => (
-                  <tr key={order._id} className="hover:bg-purple-50/50 transition-colors duration-200">
+                  <tr key={order._id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-3 whitespace-nowrap">
                       <span className="text-sm font-medium text-gray-900">
                         #{order._id.slice(-8).toUpperCase()}
@@ -197,21 +196,8 @@ function Dashboard() {
               </tbody>
             </table>
           ) : (
-            <div className="px-6 py-12 text-center">
-              <svg
-                className="mx-auto h-12 w-12 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-                />
-              </svg>
-              <p className="mt-2 text-sm text-gray-600">No orders yet</p>
+            <div className="px-6 py-16 text-center">
+              <p className="text-gray-500 text-lg">No orders yet</p>
             </div>
           )}
         </div>
