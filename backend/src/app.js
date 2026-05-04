@@ -15,6 +15,7 @@ const cartRoutes = require("./routes/cart.routes");
 const orderRoutes = require("./routes/order.routes");
 const paymentRoutes = require("./routes/payment.routes");
 const testRoutes = require("./routes/test.routes"); // Temporary test routes
+const adminRoutes = require("./modules/admin/routes/admin.routes");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 
@@ -78,6 +79,7 @@ app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/orders", orderRoutes);
 app.use("/api/v1/payments", paymentRoutes);
 app.use("/api/v1/payment", paymentRoutes); // Add alias for backward compatibility
+app.use("/api/v1/admin", adminRoutes);
 
 // ⚠️ TEMPORARY TEST ROUTES - Remove before production
 app.use("/api/v1/test", testRoutes);
