@@ -6,21 +6,21 @@
 
 const sanitize = (obj, isKey = false) => {
   if (obj === null || obj === undefined) return obj;
-  
-  if (typeof obj === 'string') {
+
+  if (typeof obj === "string") {
     // For keys: remove $ and . to prevent operators like $where, $ne, etc.
     if (isKey) {
-      return obj.replace(/[$\.]/g, '');
+      return obj.replace(/[$\.]/g, "");
     }
     // For values: only remove $ to prevent injection, keep . for emails/decimals
-    return obj.replace(/\$/g, '');
+    return obj.replace(/\$/g, "");
   }
-  
+
   if (Array.isArray(obj)) {
-    return obj.map(item => sanitize(item, false));
+    return obj.map((item) => sanitize(item, false));
   }
-  
-  if (typeof obj === 'object') {
+
+  if (typeof obj === "object") {
     const sanitized = {};
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
@@ -32,7 +32,7 @@ const sanitize = (obj, isKey = false) => {
     }
     return sanitized;
   }
-  
+
   return obj;
 };
 
