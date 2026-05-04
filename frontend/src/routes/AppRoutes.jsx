@@ -10,6 +10,7 @@ import Checkout from "../pages/client/Checkout";
 import Home from "../pages/client/Home";
 import Product from "../pages/client/Product";
 import ProductDetails from "../pages/client/ProductDetails";
+import OrderSuccess from "../pages/client/OrderSuccess";
 import Login from "../pages/auth/Login";
 import AdminRoute from "./AdminRoute";
 import ProtectedRoute from "./ProtectedRoute";
@@ -37,6 +38,7 @@ function AppRoutes() {
       >
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order-success" element={<OrderSuccess />} />
       </Route>
 
       {/* Admin routes */}
