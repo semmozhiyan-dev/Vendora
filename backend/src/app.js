@@ -4,6 +4,7 @@ const helmet = require("helmet");
 const mongoSanitizeMiddleware = require("./middlewares/mongoSanitize.middleware");
 const requestIdMiddleware = require("./middlewares/requestId.middleware");
 const loggerMiddleware = require("./middlewares/logger.middleware");
+const timeoutMiddleware = require("./middlewares/timeout.middleware");
 const rateLimitMiddleware = require("./middlewares/rateLimit.middleware");
 const { notFound, errorHandler } = require("./middlewares/error.middleware");
 
@@ -13,6 +14,7 @@ const productRoutes = require("./routes/product.routes");
 const cartRoutes = require("./routes/cart.routes");
 const orderRoutes = require("./routes/order.routes");
 const paymentRoutes = require("./routes/payment.routes");
+const testRoutes = require("./routes/test.routes"); // Temporary test routes
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 
@@ -59,6 +61,9 @@ app.use(requestIdMiddleware);
 // 5. Logger
 app.use(loggerMiddleware);
 
+// 6. Request Timeout
+app.use(timeoutMiddleware);
+
 // ========== ROUTES ==========
 app.get("/", (req, res) => {
   res.status(200).json({ success: true, message: "API is running..." });
@@ -73,6 +78,9 @@ app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/orders", orderRoutes);
 app.use("/api/v1/payments", paymentRoutes);
 app.use("/api/v1/payment", paymentRoutes); // Add alias for backward compatibility
+
+// ⚠️ TEMPORARY TEST ROUTES - Remove before production
+app.use("/api/v1/test", testRoutes);
 
 // ========== ERROR HANDLING (MUST BE LAST) ==========
 app.use(notFound);
