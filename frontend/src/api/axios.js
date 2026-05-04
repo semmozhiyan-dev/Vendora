@@ -6,15 +6,19 @@ export const setLoadingHandler = (setLoading) => {
   setLoadingGlobal = setLoading;
 };
 
+const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1";
+
 const api = axios.create({
-  baseURL: "http://localhost:5000/api/v1",
+  baseURL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
 api.interceptors.request.use((config) => {
-  if (setLoadingGlobal) setLoadingGlobal(true);
+  if (setLoadingGlobal && !config.headers['X-Skip-Loading']) {
+    setLoadingGlobal(true);
+  }
   const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -24,11 +28,15 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (response) => {
-    if (setLoadingGlobal) setLoadingGlobal(false);
+    if (setLoadingGlobal && !response.config.headers['X-Skip-Loading']) {
+      setLoadingGlobal(false);
+    }
     return response;
   },
   (error) => {
-    if (setLoadingGlobal) setLoadingGlobal(false);
+    if (setLoadingGlobal && !error.config?.headers['X-Skip-Loading']) {
+      setLoadingGlobal(false);
+    }
     return Promise.reject(error);
   }
 );

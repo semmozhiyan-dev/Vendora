@@ -9,6 +9,7 @@ import Cart from "../pages/client/Cart";
 import Checkout from "../pages/client/Checkout";
 import Home from "../pages/client/Home";
 import Product from "../pages/client/Product";
+import ProductDetails from "../pages/client/ProductDetails";
 import Login from "../pages/auth/Login";
 import AdminRoute from "./AdminRoute";
 import ProtectedRoute from "./ProtectedRoute";
@@ -23,6 +24,7 @@ function AppRoutes() {
       <Route element={<ClientLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Product />} />
+        <Route path="/products/:id" element={<ProductDetails />} />
       </Route>
 
       {/* Protected client routes */}
