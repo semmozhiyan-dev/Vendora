@@ -11,6 +11,7 @@ import Home from "../pages/client/Home";
 import Product from "../pages/client/Product";
 import Login from "../pages/auth/Login";
 import AdminRoute from "./AdminRoute";
+import ProtectedRoute from "./ProtectedRoute";
 
 function AppRoutes() {
   return (
@@ -18,13 +19,25 @@ function AppRoutes() {
       {/* Login route - no layout */}
       <Route path="/login" element={<Login />} />
 
+      {/* Public client routes */}
       <Route element={<ClientLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Product />} />
+      </Route>
+
+      {/* Protected client routes */}
+      <Route
+        element={
+          <ProtectedRoute>
+            <ClientLayout />
+          </ProtectedRoute>
+        }
+      >
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
       </Route>
 
+      {/* Admin routes */}
       <Route
         path="/admin"
         element={

@@ -1,10 +1,10 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../../api/axios";
 import { AuthContext } from "../../context/AuthContext";
 
 const Login = () => {
-  const { setUser } = useContext(AuthContext);
+  const { login, user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -15,6 +15,17 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  // Automatic redirect if user is already logged in
+  useEffect(() => {
+    if (user) {
+      if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/");
+      }
+    }
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -35,12 +46,8 @@ const Login = () => {
         return;
       }
 
-      // Save token
-      localStorage.setItem("token", token);
-
-      // Save user in localStorage and context
-      localStorage.setItem("user", JSON.stringify(user));
-      setUser(user);
+      // Use login function from AuthContext
+      login(token, user);
 
       // Redirect
       if (user.role === "admin") {

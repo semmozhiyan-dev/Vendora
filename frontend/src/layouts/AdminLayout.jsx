@@ -5,12 +5,10 @@ import { AuthContext } from "../context/AuthContext";
 function AdminLayout({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, setUser } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
+    logout();
     navigate("/login");
   };
 
