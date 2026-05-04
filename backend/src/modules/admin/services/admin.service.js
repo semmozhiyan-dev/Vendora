@@ -218,6 +218,7 @@ const getUserById = async (userId) => {
 const getDashboardStats = async () => {
   try {
     const totalUsers = await User.countDocuments();
+    const totalProducts = await Product.countDocuments();
     const totalOrders = await Order.countDocuments();
     const totalRevenue = await Order.aggregate([
       { $match: { status: { $in: ["PAID", "SHIPPED", "DELIVERED"] } } },
@@ -232,6 +233,7 @@ const getDashboardStats = async () => {
 
     return {
       totalUsers,
+      totalProducts,
       totalOrders,
       totalRevenue: totalRevenue[0]?.total || 0,
       recentOrders,

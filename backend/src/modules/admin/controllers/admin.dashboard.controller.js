@@ -16,6 +16,7 @@ exports.getDashboard = async (req, res) => {
       message: "Dashboard stats retrieved successfully",
       data: {
         totalUsers: stats.totalUsers,
+        totalProducts: stats.totalProducts,
         totalOrders: stats.totalOrders,
         totalRevenue: stats.totalRevenue,
         recentOrders: stats.recentOrders,

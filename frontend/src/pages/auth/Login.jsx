@@ -38,7 +38,8 @@ const Login = () => {
       // Save token
       localStorage.setItem("token", token);
 
-      // Save user in context
+      // Save user in localStorage and context
+      localStorage.setItem("user", JSON.stringify(user));
       setUser(user);
 
       // Redirect
