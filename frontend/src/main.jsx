@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import App from "./App";
 import { AuthProvider } from "./context/AuthContext";
 import { LoadingProvider } from "./context/LoadingContext";
+import { CartProvider } from "./context/CartContext";
 import Loader from "./components/common/Loader";
 import "./index.css";
 
@@ -13,17 +14,19 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <LoadingProvider>
         <AuthProvider>
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              style: {
-                background: '#333',
-                color: '#fff',
-              },
-            }}
-          />
-          <Loader />
-          <App />
+          <CartProvider>
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                style: {
+                  background: '#333',
+                  color: '#fff',
+                },
+              }}
+            />
+            <Loader />
+            <App />
+          </CartProvider>
         </AuthProvider>
       </LoadingProvider>
     </BrowserRouter>
