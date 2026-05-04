@@ -156,11 +156,11 @@ function Products() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div>
       {/* Header */}
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Products</h1>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Products</h1>
           <p className="text-gray-600 mt-1">Manage your product inventory</p>
         </div>
         <button 
@@ -169,7 +169,7 @@ function Products() {
             setFormError("");
             setEditingProduct(null);
           }}
-          className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center gap-2"
+          className="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 flex items-center gap-2"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -180,32 +180,32 @@ function Products() {
 
       {/* Products Table */}
       {products.length > 0 ? (
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="bg-gradient-to-r from-purple-50 to-pink-50 border-b border-gray-100">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                     Name
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                     Price
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                     Stock
                   </th>
-                  <th className="px-6 py-4 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-100">
                 {products.map((product) => (
-                  <tr key={product._id} className="hover:bg-gray-50 transition">
+                  <tr key={product._id} className="hover:bg-purple-50/50 transition-colors duration-200">
                     {/* Name */}
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center flex-shrink-0">
+                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center flex-shrink-0">
                           {product.image ? (
                             <img
                               src={product.image}
@@ -213,7 +213,7 @@ function Products() {
                               className="w-full h-full object-cover rounded-lg"
                             />
                           ) : (
-                            <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                             </svg>
                           )}
@@ -228,14 +228,14 @@ function Products() {
                     </td>
 
                     {/* Price */}
-                    <td className="px-6 py-4">
-                      <span className="text-lg font-bold text-purple-600">${product.price}</span>
+                    <td className="px-6 py-3">
+                      <span className="text-base font-bold text-purple-600">${product.price}</span>
                     </td>
 
                     {/* Stock */}
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-3">
                       <span
-                        className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        className={`px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
                           product.stock > 10
                             ? "bg-green-100 text-green-800"
                             : product.stock > 0
@@ -248,11 +248,11 @@ function Products() {
                     </td>
 
                     {/* Actions */}
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-3">
                       <div className="flex items-center justify-end gap-2">
                         <button 
                           onClick={() => handleOpenEditModal(product)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200"
                           title="Edit product"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -262,7 +262,7 @@ function Products() {
                         <button 
                           onClick={() => handleDeleteProduct(product)}
                           disabled={deletingProduct === product._id}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                           title="Delete product"
                         >
                           {deletingProduct === product._id ? (
@@ -285,7 +285,7 @@ function Products() {
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-12 text-center">
+        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-12 text-center">
           <svg
             className="mx-auto h-16 w-16 text-gray-400 mb-4"
             fill="none"
@@ -307,7 +307,7 @@ function Products() {
               setFormError("");
               setEditingProduct(null);
             }}
-            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all inline-flex items-center gap-2"
+            className="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 inline-flex items-center gap-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

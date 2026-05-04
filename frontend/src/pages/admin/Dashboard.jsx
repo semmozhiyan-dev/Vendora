@@ -100,27 +100,27 @@ function Dashboard() {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div>
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Dashboard</h1>
         <p className="text-gray-600 mt-1">Welcome back! Here's what's happening today.</p>
       </div>
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
         {stats.map((stat, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+            className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
           >
-            <div className={`${stat.color} p-6 text-white`}>
+            <div className={`${stat.color} p-5 text-white`}>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-white/80 text-sm font-medium">{stat.title}</p>
-                  <p className="text-3xl font-bold mt-2">{stat.value}</p>
+                  <p className="text-white/90 text-xs font-medium uppercase tracking-wide">{stat.title}</p>
+                  <p className="text-2xl font-bold mt-2">{stat.value}</p>
                 </div>
-                <div className="bg-white/20 p-3 rounded-lg">
+                <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
                   {stat.icon}
                 </div>
               </div>
@@ -130,8 +130,8 @@ function Dashboard() {
       </div>
 
       {/* Recent Orders Table */}
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200">
+      <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+        <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-pink-50">
           <h2 className="text-xl font-bold text-gray-900">Recent Orders</h2>
           <p className="text-sm text-gray-600 mt-1">Latest orders from your customers</p>
         </div>
@@ -160,23 +160,23 @@ function Dashboard() {
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {data.recentOrders.map((order) => (
-                  <tr key={order._id} className="hover:bg-gray-50 transition">
-                    <td className="px-6 py-4 whitespace-nowrap">
+                  <tr key={order._id} className="hover:bg-purple-50/50 transition-colors duration-200">
+                    <td className="px-6 py-3 whitespace-nowrap">
                       <span className="text-sm font-medium text-gray-900">
                         #{order._id.slice(-8).toUpperCase()}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-3 whitespace-nowrap">
                       <span className="text-sm text-gray-900">{order.user?.name || "N/A"}</span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm font-semibold text-gray-900">
+                    <td className="px-6 py-3 whitespace-nowrap">
+                      <span className="text-sm font-semibold text-purple-600">
                         ${order.totalAmount?.toFixed(2) || "0.00"}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-3 whitespace-nowrap">
                       <span
-                        className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        className={`px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
                           order.status === "delivered"
                             ? "bg-green-100 text-green-800"
                             : order.status === "shipped"
@@ -189,7 +189,7 @@ function Dashboard() {
                         {order.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-600">
                       {new Date(order.createdAt).toLocaleDateString()}
                     </td>
                   </tr>

@@ -80,63 +80,63 @@ function Orders() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div>
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Orders</h1>
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Orders</h1>
         <p className="text-gray-600 mt-1">Manage customer orders and track deliveries</p>
       </div>
 
       {/* Orders Table */}
       {orders.length > 0 ? (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="bg-gradient-to-r from-purple-50 to-pink-50 border-b border-gray-100">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                     Order ID
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                     User Email
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                     Total Amount
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">
                     Action
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-100">
                 {orders.map((order) => (
-                  <tr key={order._id} className="hover:bg-gray-50 transition-colors duration-200">
+                  <tr key={order._id} className="hover:bg-purple-50/50 transition-colors duration-200">
                     {/* Order ID */}
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-3 whitespace-nowrap">
                       <span className="text-sm font-medium text-gray-900">
                         #{order._id.slice(-8).toUpperCase()}
                       </span>
                     </td>
 
                     {/* User Email */}
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-3 whitespace-nowrap">
                       <span className="text-sm text-gray-900">
                         {order.user?.email || "N/A"}
                       </span>
                     </td>
 
                     {/* Total Amount */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-lg font-bold text-purple-600">
+                    <td className="px-6 py-3 whitespace-nowrap">
+                      <span className="text-base font-bold text-purple-600">
                         ${order.totalAmount?.toFixed(2) || "0.00"}
                       </span>
                     </td>
 
                     {/* Status */}
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-3 whitespace-nowrap">
                       <div className="flex items-center gap-2">
                         <select
                           value={order.status}
@@ -174,7 +174,7 @@ function Orders() {
                     </td>
 
                     {/* Action */}
-                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                    <td className="px-6 py-3 whitespace-nowrap text-right">
                       <button
                         className="text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors duration-200"
                         title="View details"
@@ -189,7 +189,7 @@ function Orders() {
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
+        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-12 text-center">
           <svg
             className="mx-auto h-16 w-16 text-gray-400 mb-4"
             fill="none"
