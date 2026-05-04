@@ -1,53 +1,79 @@
+"use strict";
+
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
-const orderItemSchema = new mongoose.Schema({
-  product: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Product",
-    required: true,
-  },
-  quantity: {
-    type: Number,
-    required: true,
-    min: 1,
-  },
-  price: {
-    type: Number,
-    required: true,
-    min: 0,
-  },
-});
-
-const orderSchema = new mongoose.Schema(
+const OrderItemSchema = new Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+    product: {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+      required: [true, "Product reference is required"],
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      min: [1, "Quantity must be at least 1"],
+    },
+    price: {
+      type: Number,
       required: true,
     },
-    items: [orderItemSchema],
+  },
+  { _id: false }
+);
+
+const OrderSchema = new Schema(
+  {
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: [true, "User reference is required"],
+      index: true,
+    },
+    items: {
+      type: [OrderItemSchema],
+      required: true,
+      validate: {
+        validator: (v) => v.length > 0,
+        message: "Order must have at least one item",
+      },
+    },
     totalAmount: {
       type: Number,
       required: true,
-      min: 0,
+      validate: {
+        validator: (v) => v > 0,
+        message: "Total must be greater than 0",
+      },
+    },
+    razorpayOrderId: {
+      type: String,
+      index: true,
+    },
+    razorpayPaymentId: {
+      type: String,
+    },
+    razorpaySignature: {
+      type: String,
+    },
+    paidAt: {
+      type: Date,
     },
     status: {
       type: String,
-      enum: ["PENDING", "PAID", "SHIPPED", "DELIVERED", "CANCELLED"],
+      enum: ["PENDING", "PAID", "FAILED", "CANCELLED", "SHIPPED", "DELIVERED"],
       default: "PENDING",
     },
-    paymentId: {
-      type: String,
-      default: null,
-    },
     shippingAddress: {
-      type: String,
-      default: null,
+      street: String,
+      city: String,
+      state: String,
+      zip: String,
+      country: String,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-module.exports = mongoose.model("Order", orderSchema);
+module.exports = mongoose.models.Order || mongoose.model("Order", OrderSchema);

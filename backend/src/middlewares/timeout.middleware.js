@@ -1,3 +1,7 @@
+const logger = require("../utils/logger");
+
+const DEFAULT_TIMEOUT_MS = 30000;
+
 /**
  * Timeout Middleware
  * 
@@ -5,23 +9,51 @@
  * Default timeout is 30 seconds.
  */
 const timeoutMiddleware = (req, res, next) => {
-  const timeout = parseInt(process.env.REQUEST_TIMEOUT) || 30000; // 30 seconds default
-  
-  // Set timeout
-  req.setTimeout(timeout, () => {
-    res.status(408).json({
-      success: false,
-      message: "Request timeout",
-    });
+  const requestId = req.id || "NO-ID";
+  const timeoutMs =
+    parseInt(process.env.REQUEST_TIMEOUT_MS, 10) ||
+    parseInt(process.env.REQUEST_TIMEOUT, 10) ||
+    DEFAULT_TIMEOUT_MS;
+
+  let timeoutId;
+  let hasResponded = false;
+
+  // Handle response finish to clear the timer
+  const cleanup = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  };
+
+  res.on("finish", cleanup);
+  res.on("close", cleanup);
+
+  // Set the timeout
+  timeoutId = setTimeout(() => {
+    if (!hasResponded && !res.headersSent) {
+      hasResponded = true;
+      logger.warn(`[${requestId}] Request timeout after ${timeoutMs}ms`);
+      res.status(503).json({
+        success: false,
+        message: "Request timeout",
+      });
+    }
+  }, timeoutMs);
+
+  // Also use Node's built-in setTimeout
+  req.setTimeout(timeoutMs, () => {
+    if (!hasResponded && !res.headersSent) {
+      hasResponded = true;
+      logger.warn(
+        `[${requestId}] Request timeout after ${timeoutMs}ms (socket timeout)`
+      );
+      res.status(503).json({
+        success: false,
+        message: "Request timeout",
+      });
+    }
   });
-  
-  res.setTimeout(timeout, () => {
-    res.status(408).json({
-      success: false,
-      message: "Response timeout",
-    });
-  });
-  
+
   next();
 };
 

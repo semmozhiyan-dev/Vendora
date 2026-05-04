@@ -1,13 +1,23 @@
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
-const authRoutes = require("./routes/auth.routes");
-const adminRoutes = require("./modules/admin/routes/admin.routes");
+const mongoSanitizeMiddleware = require("./middlewares/mongoSanitize.middleware");
 const requestIdMiddleware = require("./middlewares/requestId.middleware");
 const loggerMiddleware = require("./middlewares/logger.middleware");
 const timeoutMiddleware = require("./middlewares/timeout.middleware");
-const mongoSanitizeMiddleware = require("./middlewares/mongoSanitize.middleware");
+const rateLimitMiddleware = require("./middlewares/rateLimit.middleware");
 const { notFound, errorHandler } = require("./middlewares/error.middleware");
+
+const healthRoutes = require("./routes/health.routes");
+const authRoutes = require("./routes/auth.routes");
+const productRoutes = require("./routes/product.routes");
+const cartRoutes = require("./routes/cart.routes");
+const orderRoutes = require("./routes/order.routes");
+const paymentRoutes = require("./routes/payment.routes");
+const testRoutes = require("./routes/test.routes"); // Temporary test routes
+const adminRoutes = require("./modules/admin/routes/admin.routes");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
 
 const app = express();
 
@@ -16,16 +26,17 @@ const app = express();
 // 0. Security Headers
 app.use(helmet());
 
-// 1. CORS
+// 1. CORS - Configure allowed origins
 const allowedOrigins = [
   process.env.FRONTEND_URL || "http://localhost:3000",
-  "http://localhost:5173",
+  "http://localhost:5173", // Vite default
   "http://localhost:5000",
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, Postman, etc.)
       if (!origin) return callback(null, true);
       if (allowedOrigins.includes(origin)) {
         callback(null, true);
@@ -42,7 +53,7 @@ app.use(
 // 2. Body Parser (JSON)
 app.use(express.json({ limit: "10mb" }));
 
-// 3. NoSQL Injection Protection
+// 3. NoSQL Injection Protection (custom middleware for Express 5 compatibility)
 app.use(mongoSanitizeMiddleware);
 
 // 4. Request ID
@@ -56,14 +67,22 @@ app.use(timeoutMiddleware);
 
 // ========== ROUTES ==========
 app.get("/", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "API is running...",
-  });
+  res.status(200).json({ success: true, message: "API is running..." });
 });
 
+app.use("/health", healthRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api", rateLimitMiddleware);
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/products", productRoutes);
+app.use("/api/v1/cart", cartRoutes);
+app.use("/api/v1/orders", orderRoutes);
+app.use("/api/v1/payments", paymentRoutes);
+app.use("/api/v1/payment", paymentRoutes); // Add alias for backward compatibility
 app.use("/api/v1/admin", adminRoutes);
+
+// ⚠️ TEMPORARY TEST ROUTES - Remove before production
+app.use("/api/v1/test", testRoutes);
 
 // ========== ERROR HANDLING (MUST BE LAST) ==========
 app.use(notFound);

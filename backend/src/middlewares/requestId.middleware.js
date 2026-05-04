@@ -7,12 +7,11 @@ const { v4: uuidv4 } = require("uuid");
  * The ID is attached to the request object and can be used in logs.
  */
 const requestIdMiddleware = (req, res, next) => {
-  // Generate unique request ID
-  req.id = uuidv4();
-  
-  // Add request ID to response headers for client tracking
-  res.setHeader("X-Request-ID", req.id);
-  
+  const requestId = `REQ-${uuidv4()}`;
+
+  req.id = requestId;
+  res.setHeader("X-Request-ID", requestId);
+
   next();
 };
 

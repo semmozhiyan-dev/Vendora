@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
-
-const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+const logger = require("../utils/logger");
 
 const sanitizeUser = (user) => ({
   id: user._id,
@@ -11,57 +10,29 @@ const sanitizeUser = (user) => ({
 
 const generateToken = (userId) => {
   const secret = process.env.JWT_SECRET;
-
   if (!secret) {
     throw new Error("JWT_SECRET is not set in environment variables");
   }
-
   return jwt.sign({ userId }, secret, { expiresIn: "1d" });
 };
 
 const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
-
-    if (!name || !email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Name, email, and password are required",
-      });
-    }
-
-    if (!isValidEmail(email)) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide a valid email address",
-      });
-    }
-
-    if (password.length < 6) {
-      return res.status(400).json({
-        success: false,
-        message: "Password must be at least 6 characters long",
-      });
-    }
+    logger.info(`[${req.id}] Registering user: ${email}`);
 
     const existingUser = await User.findOne({ email: email.toLowerCase() });
-
     if (existingUser) {
-      return res.status(409).json({
-        success: false,
-        message: "User already exists",
-      });
+      return res.status(409).json({ success: false, message: "User already exists" });
     }
 
-    const user = await User.create({
-      name,
-      email,
-      password,
-    });
+    const user = await User.create({ name, email, password });
+    const token = generateToken(user._id);
 
     return res.status(201).json({
       success: true,
       message: "User registered successfully",
+      token,
       user: sanitizeUser(user),
     });
   } catch (error) {
@@ -72,30 +43,16 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Email and password are required",
-      });
-    }
+    logger.info(`[${req.id}] User login attempt: ${email}`);
 
     const user = await User.findOne({ email: email.toLowerCase() }).select("+password");
-
     if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid credentials",
-      });
+      return res.status(401).json({ success: false, message: "Invalid credentials" });
     }
 
     const isPasswordValid = await user.comparePassword(password);
-
     if (!isPasswordValid) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid credentials",
-      });
+      return res.status(401).json({ success: false, message: "Invalid credentials" });
     }
 
     const token = generateToken(user._id);
@@ -111,7 +68,4 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  register,
-  login,
-};
+module.exports = { register, login };

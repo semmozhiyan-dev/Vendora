@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "razorpay": "^2.9.6",
+    "uuid": "^14.0.0",
+    "winston": "^3.19.0"
+  }
+}
