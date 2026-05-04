@@ -115,13 +115,13 @@ const updateCartItem = async (req, res, next) => {
 };
 
 const removeCartItem = async (req, res, next) => {
-    logger.info(`[${req.id}] Removing item from cart: ${productId}`);
   try {
     const user = req.user;
     if (!user) return res.status(401).json({ success: false, message: 'Authentication required' });
     const userId = user.userId;
 
     const { productId } = req.params;
+    logger.info(`[${req.id}] Removing item from cart: ${productId}`);
     if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).json({ success: false, message: 'Invalid productId' });
     }

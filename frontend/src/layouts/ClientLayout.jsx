@@ -1,6 +1,9 @@
 import { Link, Outlet } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 
 function ClientLayout({ children }) {
+  const { cartCount } = useCart();
+
   return (
     <div className="min-h-screen bg-white">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50 backdrop-blur-sm bg-white/95">
@@ -43,7 +46,7 @@ function ClientLayout({ children }) {
               </svg>
               {/* Cart Badge */}
               <span className="absolute -top-1 -right-1 w-5 h-5 bg-gray-900 text-white text-xs rounded-full flex items-center justify-center font-medium">
-                0
+                {cartCount}
               </span>
             </Link>
 

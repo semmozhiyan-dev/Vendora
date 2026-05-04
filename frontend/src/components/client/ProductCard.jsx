@@ -1,16 +1,23 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function ProductCard({ product }) {
+  const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
   const [imageError, setImageError] = useState(false);
   
-  const { name, price, image, secondaryImage } = product;
+  const { _id, name, price, image, secondaryImage } = product;
   const displayImage = isHovered && secondaryImage ? secondaryImage : image;
   const showPlaceholder = !displayImage || imageError;
+
+  const handleClick = () => {
+    navigate(`/products/${_id}`);
+  };
 
   return (
     <div 
       className="group cursor-pointer"
+      onClick={handleClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
