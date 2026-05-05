@@ -97,6 +97,44 @@ const getOrders = async (req, res, next) => {
   }
 };
 
+const getMyOrders = async (req, res, next) => {
+  try {
+    const user = req.user;
+
+    if (!user) {
+      return res.status(401).json({ success: false, message: 'Authentication required' });
+    }
+
+    const userId = user.userId;
+    const page = Math.max(1, Number(req.query.page) || 1);
+    const limit = Math.max(1, Number(req.query.limit) || 10);
+    const skip = (page - 1) * limit;
+
+    logger.info(`[${req.id}] Fetching my orders: page=${page}, limit=${limit}`);
+
+    const [items, total] = await Promise.all([
+      Order.find({ user: userId })
+        .select('status timeline items totalAmount createdAt updatedAt trackingId estimatedDelivery shippingAddress')
+        .populate('items.product')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Order.countDocuments({ user: userId }),
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      page,
+      limit,
+      total,
+      items,
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 const getOrderById = async (req, res, next) => {
   try {
     const user = req.user;
@@ -286,6 +324,7 @@ const getOrderTracking = async (req, res, next) => {
 module.exports = {
   createOrder,
   getOrders,
+  getMyOrders,
   getOrderById,
   updateOrderStatus,
   cancelOrder,

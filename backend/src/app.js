@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
+const mongoose = require("mongoose");
 const mongoSanitizeMiddleware = require("./middlewares/mongoSanitize.middleware");
 const requestIdMiddleware = require("./middlewares/requestId.middleware");
 const loggerMiddleware = require("./middlewares/logger.middleware");
@@ -10,6 +11,7 @@ const { notFound, errorHandler } = require("./middlewares/error.middleware");
 
 const healthRoutes = require("./routes/health.routes");
 const authRoutes = require("./routes/auth.routes");
+const usersRoutes = require("./routes/users.routes");
 const productRoutes = require("./routes/product.routes");
 const cartRoutes = require("./routes/cart.routes");
 const orderRoutes = require("./routes/order.routes");
@@ -30,6 +32,7 @@ app.use(helmet());
 const allowedOrigins = [
   process.env.FRONTEND_URL || "http://localhost:3000",
   "http://localhost:5173", // Vite default
+  "http://localhost:5174", // Vite alternate port
   "http://localhost:5000",
 ];
 
@@ -70,10 +73,22 @@ app.get("/", (req, res) => {
   res.status(200).json({ success: true, message: "API is running..." });
 });
 
+app.get("/api/metrics", (req, res) => {
+  res.status(200).json({
+    success: true,
+    service: "vendora-backend",
+    status: "OK",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+    dbStatus: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+  });
+});
+
 app.use("/health", healthRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api", rateLimitMiddleware);
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/users", usersRoutes);
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/orders", orderRoutes);
