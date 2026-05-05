@@ -59,7 +59,13 @@ const createOrder = async (req, res, next) => {
       user: userId,
       items: orderItems,
       totalAmount,
-      shippingAddress: shippingAddress || {}
+      shippingAddress: shippingAddress || {},
+      timeline: [
+        {
+          status: 'PENDING',
+          timestamp: new Date()
+        }
+      ]
     });
 
     const populated = await Order.findById(order._id).populate('items.product');
@@ -122,6 +128,7 @@ const updateOrderStatus = async (req, res, next) => {
     const user = req.user;
     if (!user) return res.status(401).json({ success: false, message: 'Authentication required' });
     const userId = user.userId;
+    const isAdmin = user.role === 'admin';
 
     const { id } = req.params;
     const { status } = req.body || {};
@@ -143,11 +150,53 @@ const updateOrderStatus = async (req, res, next) => {
     const order = await Order.findById(id);
     if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
 
-    if (order.user.toString() !== userId) {
+    // Only admin or order owner can update
+    if (order.user.toString() !== userId && !isAdmin) {
       return res.status(403).json({ success: false, message: 'Not authorized to update this order' });
     }
 
-    order.status = status.toUpperCase();
+    const newStatus = status.toUpperCase();
+    const currentStatus = order.status;
+
+    // Validate status transitions
+    const validTransitions = {
+      PENDING: ['PAID', 'FAILED', 'CANCELLED'],
+      PAID: ['SHIPPED', 'CANCELLED'],
+      SHIPPED: ['DELIVERED'],
+      DELIVERED: [], // Final state
+      FAILED: [], // Final state
+      CANCELLED: [] // Final state
+    };
+
+    // Check if transition is valid
+    if (!validTransitions[currentStatus]?.includes(newStatus)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid status transition from ${currentStatus} to ${newStatus}. Valid transitions: ${validTransitions[currentStatus]?.join(', ') || 'None (final state)'}`
+      });
+    }
+
+    order.status = newStatus;
+    
+    // Generate tracking ID when order is shipped
+    if (newStatus === 'SHIPPED' && !order.trackingId) {
+      const timestamp = Date.now().toString(36).toUpperCase();
+      const random = Math.random().toString(36).substring(2, 7).toUpperCase();
+      order.trackingId = `TRK-${timestamp}-${random}`;
+      
+      // Set estimated delivery (3 to 5 days from now)
+      const daysToAdd = Math.floor(Math.random() * 3) + 3; // Random between 3-5
+      const estimatedDate = new Date();
+      estimatedDate.setDate(estimatedDate.getDate() + daysToAdd);
+      order.estimatedDelivery = estimatedDate;
+    }
+    
+    // Add to timeline
+    order.timeline.push({
+      status: newStatus,
+      timestamp: new Date()
+    });
+    
     await order.save();
 
     const populated = await Order.findById(order._id).populate('items.product');
@@ -182,10 +231,53 @@ const cancelOrder = async (req, res, next) => {
     }
 
     order.status = 'CANCELLED';
+    
+    // Add to timeline
+    order.timeline.push({
+      status: 'CANCELLED',
+      timestamp: new Date()
+    });
+    
     await order.save();
 
     const populated = await Order.findById(order._id).populate('items.product');
     return res.status(200).json({ success: true, message: 'Order cancelled', order: populated });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+const getOrderTracking = async (req, res, next) => {
+  try {
+    const user = req.user;
+    if (!user) return res.status(401).json({ success: false, message: 'Authentication required' });
+    const userId = user.userId;
+    const isAdmin = user.role === 'admin';
+
+    const { id } = req.params;
+    logger.info(`[${req.id}] Getting order tracking: ${id}`);
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ success: false, message: 'Invalid order id' });
+    }
+
+    const order = await Order.findById(id).lean();
+    if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
+
+    // Only owner or admin can access
+    if (order.user.toString() !== userId && !isAdmin) {
+      return res.status(403).json({ success: false, message: 'Not authorized to view this tracking information' });
+    }
+
+    const trackingInfo = {
+      orderId: order._id,
+      status: order.status,
+      trackingId: order.trackingId || null,
+      estimatedDelivery: order.estimatedDelivery || null,
+      timeline: order.timeline || []
+    };
+
+    return res.status(200).json({ success: true, tracking: trackingInfo });
   } catch (err) {
     return next(err);
   }
@@ -196,5 +288,6 @@ module.exports = {
   getOrders,
   getOrderById,
   updateOrderStatus,
-  cancelOrder
+  cancelOrder,
+  getOrderTracking
 };

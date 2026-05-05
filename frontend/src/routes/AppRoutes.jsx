@@ -11,6 +11,8 @@ import Home from "../pages/client/Home";
 import Product from "../pages/client/Product";
 import ProductDetails from "../pages/client/ProductDetails";
 import OrderSuccess from "../pages/client/OrderSuccess";
+import ClientOrders from "../pages/client/Orders";
+import OrderDetails from "../pages/client/OrderDetails";
 import Login from "../pages/auth/Login";
 import AdminRoute from "./AdminRoute";
 import ProtectedRoute from "./ProtectedRoute";
@@ -39,6 +41,8 @@ function AppRoutes() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-success" element={<OrderSuccess />} />
+        <Route path="/orders" element={<ClientOrders />} />
+        <Route path="/orders/:id" element={<OrderDetails />} />
       </Route>
 
       {/* Admin routes */}
