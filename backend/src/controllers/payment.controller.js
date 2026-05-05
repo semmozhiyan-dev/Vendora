@@ -33,35 +33,54 @@ const createRazorpayOrder = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "Valid orderId or amount is required" });
     }
 
-    const order = await Order.findById(orderId);
-    if (!order) return res.status(404).json({ success: false, message: "Order not found" });
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      const order = await Order.findById(orderId).session(session);
+      if (!order) {
+        await session.abortTransaction();
+        await session.endSession();
+        return res.status(404).json({ success: false, message: "Order not found" });
+      }
 
-    if (order.user.toString() !== userId) {
-      return res.status(403).json({ success: false, message: "Not authorized" });
+      if (order.user.toString() !== userId) {
+        await session.abortTransaction();
+        await session.endSession();
+        return res.status(403).json({ success: false, message: "Not authorized" });
+      }
+
+      if (order.status !== "PENDING") {
+        await session.abortTransaction();
+        await session.endSession();
+        return res.status(400).json({ success: false, message: `Order is already ${order.status}` });
+      }
+
+      const amountInPaise = Math.round(order.totalAmount * 100);
+      const razorpayOrder = await createRzpOrder(amountInPaise, "INR", order._id.toString());
+
+      order.razorpayOrderId = razorpayOrder.id;
+      await order.save({ session });
+
+      await session.commitTransaction();
+      await session.endSession();
+
+      logger.info(`[${req.id}] Razorpay order created: ${razorpayOrder.id}`);
+
+      return res.status(201).json({
+        success: true,
+        razorpayOrderId: razorpayOrder.id,
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency,
+        orderId: order._id,
+        key: process.env.RAZORPAY_KEY_ID,
+      });
+    } catch (transactionErr) {
+      await session.abortTransaction();
+      await session.endSession();
+      throw transactionErr;
     }
-
-    if (order.status !== "PENDING") {
-      return res.status(400).json({ success: false, message: `Order is already ${order.status}` });
-    }
-
-    const amountInPaise = Math.round(order.totalAmount * 100);
-    const razorpayOrder = await createRzpOrder(amountInPaise, "INR", order._id.toString());
-
-    order.razorpayOrderId = razorpayOrder.id;
-    await order.save();
-
-    logger.info(`[${req.id}] Razorpay order created: ${razorpayOrder.id}`);
-
-    return res.status(201).json({
-      success: true,
-      razorpayOrderId: razorpayOrder.id,
-      amount: razorpayOrder.amount,
-      currency: razorpayOrder.currency,
-      orderId: order._id,
-      key: process.env.RAZORPAY_KEY_ID,
-    });
   } catch (err) {
-    return next(err);
+    next(err);
   }
 };
 

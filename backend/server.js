@@ -10,8 +10,18 @@ const GRACEFUL_SHUTDOWN_TIMEOUT = 10000; // 10 seconds
 
 let server;
 
+const validateEnv = () => {
+  const required = ['DB_URL', 'JWT_SECRET', 'RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET'];
+  const missing = required.filter(key => !process.env[key]);
+  if (missing.length > 0) {
+    logger.error(`Missing required environment variables: ${missing.join(', ')}`);
+    process.exit(1);
+  }
+};
+
 const startServer = async () => {
   try {
+    validateEnv();
     await connectDB();
     logger.info(`Connected to MongoDB`);
 

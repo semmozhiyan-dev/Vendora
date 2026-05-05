@@ -61,12 +61,16 @@ const addToCart = async (req, res, next) => {
 
 const getCart = async (req, res, next) => {
   try {
-    const user = req.user;
-    if (!user) return res.status(401).json({ success: false, message: 'Authentication required' });
-      logger.info(`[${req.id}] Fetching user cart`);
-    const userId = user.userId;
-
+    // Support guest users - return empty cart
+    if (!req.user) {
+      logger.info(`[${req.id}] Guest cart access - returning empty cart`);
+      return res.status(200).json({ success: true, items: [] });
+    }
+    
+    logger.info(`[${req.id}] Fetching user cart`);
+    const userId = req.user.userId;
     const cart = await Cart.findOne({ user: userId }).populate('items.product');
+    
     if (!cart) return res.status(200).json({ success: true, items: [] });
     return res.status(200).json({ success: true, cart });
   } catch (err) {

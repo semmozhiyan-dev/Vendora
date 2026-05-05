@@ -40,4 +40,5 @@ const CartSchema = new Schema(
 );
 
 // Export model (avoid recompilation errors in watch/hot-reload setups)
+CartSchema.index({ user: 1 }, { unique: true });
 module.exports = mongoose.models.Cart || mongoose.model("Cart", CartSchema);

@@ -12,11 +12,12 @@ const {
   clearCart,
 } = require('../controllers/cart.controller');
 
-// Apply authentication to all cart routes
-router.use(auth);
-
-router.post('/', validate(addToCartSchema), addToCart);
+// Public GET cart (empty for guests)
 router.get('/', getCart);
+
+// Protect all mutations
+router.use(auth);
+router.post('/', validate(addToCartSchema), addToCart);
 router.delete('/clear', clearCart);
 router.put('/:productId', validate(updateCartItemSchema), updateCartItem);
 router.delete('/:productId', removeCartItem);

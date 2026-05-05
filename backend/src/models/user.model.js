@@ -99,4 +99,6 @@ userSchema.methods.comparePassword = async function comparePassword(candidatePas
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-module.exports = mongoose.model("User", userSchema);
+userSchema.index({ email: 1 });
+userSchema.index({ role: 1 });
+module.exports = mongoose.models.User || mongoose.model("User", userSchema);

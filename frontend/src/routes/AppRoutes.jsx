@@ -22,14 +22,16 @@ import Profile, {
   ProfilePreferences,
 } from "../pages/client/Profile";
 import Login from "../pages/auth/Login";
+import Register from "../pages/auth/Register";
 import AdminRoute from "./AdminRoute";
 import ProtectedRoute from "./ProtectedRoute";
 
 function AppRoutes() {
   return (
     <Routes>
-      {/* Login route - no layout */}
+      {/* Auth routes - no layout */}
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
       {/* Public client routes */}
       <Route element={<ClientLayout />}>

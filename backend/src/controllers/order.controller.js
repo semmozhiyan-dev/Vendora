@@ -82,7 +82,8 @@ const getOrders = async (req, res, next) => {
     const userId = user.userId;
 
     const page = Math.max(1, Number(req.query.page) || 1);
-    const limit = Math.max(1, Number(req.query.limit) || 10);
+    const MAX_LIMIT = 50;
+    const limit = Math.min(MAX_LIMIT, Math.max(1, Number(req.query.limit) || 10));
     const skip = (page - 1) * limit;
   logger.info(`[${req.id}] Fetching user orders: page=${page}, limit=${limit}`);
 

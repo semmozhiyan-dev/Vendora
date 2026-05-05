@@ -102,4 +102,6 @@ const OrderSchema = new Schema(
   { timestamps: true }
 );
 
+OrderSchema.index({ user: 1, createdAt: -1 });
+OrderSchema.index({ razorpayOrderId: 1 });
 module.exports = mongoose.models.Order || mongoose.model("Order", OrderSchema);
