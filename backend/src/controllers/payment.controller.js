@@ -5,6 +5,8 @@ const Order = require("../models/order.model");
 const Product = require("../models/product.model");
 const logger = require("../utils/logger");
 const { createRazorpayOrder: createRzpOrder, verifySignature } = require("../services/payment.service");
+const { sendEmail } = require('../services/mail.service');
+const { paymentSuccessTemplate } = require('../templates/emailTemplates');
 
 const createRazorpayOrder = async (req, res, next) => {
   try {
@@ -127,6 +129,15 @@ const verifyPayment = async (req, res, next) => {
     logger.info(`[${req.id}] Payment verified and order marked PAID: ${order._id}`);
 
     const populated = await Order.findById(order._id).populate("items.product");
+    
+    // Send payment success email (non-blocking)
+    const User = require('../models/user.model');
+    const userDoc = await User.findById(userId);
+    if (userDoc && userDoc.email) {
+      console.log(`[PAYMENT] Sending payment success email to: ${userDoc.email}`);
+      sendEmail(userDoc.email, 'Payment Successful - Vendora', paymentSuccessTemplate(userDoc.name || 'Customer', order._id, order.totalAmount));
+    }
+    
     return res.status(200).json({ success: true, message: "Payment verified successfully", order: populated });
   } catch (err) {
     return next(err);

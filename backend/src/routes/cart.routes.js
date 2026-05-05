@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const auth = require('../middlewares/auth.middleware');
+const optionalAuth = require('../middlewares/optionalAuth.middleware');
 const validate = require('../middlewares/validate.middleware');
 const { addToCartSchema, updateCartItemSchema } = require('../validators/cart.validator');
 const {
@@ -12,8 +13,8 @@ const {
   clearCart,
 } = require('../controllers/cart.controller');
 
-// Public GET cart (empty for guests)
-router.get('/', getCart);
+// GET cart with optional auth (works for both guests and logged-in users)
+router.get('/', optionalAuth, getCart);
 
 // Protect all mutations
 router.use(auth);

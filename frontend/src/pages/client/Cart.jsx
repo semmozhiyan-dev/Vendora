@@ -27,9 +27,14 @@ function Cart() {
     try {
       setLoading(true);
       setError('');
+      console.log('Fetching cart...');
       const res = await API.get('/cart');
-      setCart(res.data.cart || res.data);
-    } catch {
+      console.log('Cart response:', res.data);
+      const cartData = res.data.cart || res.data;
+      console.log('Cart data:', cartData);
+      setCart(cartData);
+    } catch (err) {
+      console.error('Fetch cart error:', err);
       setError('Failed to load cart.');
     } finally {
       setLoading(false);

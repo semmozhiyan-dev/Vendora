@@ -5,6 +5,8 @@ const Order = require('../models/order.model');
 const Cart = require('../models/cart.model');
 const Product = require('../models/product.model');
 const logger = require('../utils/logger');
+const { sendEmail } = require('../services/mail.service');
+const { orderPlacedTemplate, orderShippedTemplate, orderDeliveredTemplate } = require('../templates/emailTemplates');
 
 const createOrder = async (req, res, next) => {
   try {
@@ -69,6 +71,17 @@ const createOrder = async (req, res, next) => {
     });
 
     const populated = await Order.findById(order._id).populate('items.product');
+    
+    // Send order placed email (non-blocking)
+    const User = require('../models/user.model');
+    const userDoc = await User.findById(userId);
+    if (userDoc && userDoc.email) {
+      console.log(`[ORDER] Sending order placed email to: ${userDoc.email}`);
+      sendEmail(userDoc.email, 'Order Placed Successfully - Vendora', orderPlacedTemplate(userDoc.name || 'Customer', order._id));
+    } else {
+      console.log(`[ORDER] User email not found for userId: ${userId}`);
+    }
+    
     return res.status(201).json({ success: true, order: populated });
   } catch (err) {
     return next(err);
@@ -239,6 +252,20 @@ const updateOrderStatus = async (req, res, next) => {
     await order.save();
 
     const populated = await Order.findById(order._id).populate('items.product');
+    
+    // Send email based on status change (non-blocking)
+    const orderUser = await require('../models/user.model').findById(order.user);
+    if (orderUser && orderUser.email) {
+      console.log(`[ORDER STATUS] Status changed to ${newStatus}, sending email to: ${orderUser.email}`);
+      if (newStatus === 'SHIPPED') {
+        sendEmail(orderUser.email, 'Your Order Has Shipped - Vendora', orderShippedTemplate(orderUser.name || 'Customer', order._id, order.trackingId));
+      } else if (newStatus === 'DELIVERED') {
+        sendEmail(orderUser.email, 'Order Delivered - Vendora', orderDeliveredTemplate(orderUser.name || 'Customer', order._id));
+      }
+    } else {
+      console.log(`[ORDER STATUS] User email not found for order: ${order._id}`);
+    }
+    
     return res.status(200).json({ success: true, order: populated });
   } catch (err) {
     return next(err);

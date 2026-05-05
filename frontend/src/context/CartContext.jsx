@@ -8,11 +8,15 @@ export function CartProvider({ children }) {
 
   const fetchCartCount = async () => {
     try {
+      const token = localStorage.getItem('token');
+      console.log('Fetching cart count, token exists:', !!token);
       const res = await API.get('/cart', { headers: { 'X-Skip-Loading': 'true' } });
+      console.log('Cart count response:', res.data);
       const cart = res.data.cart || res.data;
       const count = cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
       setCartCount(count);
-    } catch {
+    } catch (err) {
+      console.error('Cart count fetch error:', err);
       setCartCount(0);
     }
   };

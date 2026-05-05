@@ -26,7 +26,7 @@ const addToCart = async (req, res, next) => {
     const userId = user.userId;
 
     const { productId, quantity = 1 } = req.body || {};
-      logger.info(`[${req.id}] Adding product to cart: ${productId}, qty=${quantity}`);
+    logger.info(`[${req.id}] Adding product to cart: userId=${userId}, productId=${productId}, qty=${quantity}`);
     if (!req.body) {
       return res.status(400).json({ success: false, message: 'Request body is required' });
     }
@@ -43,6 +43,7 @@ const addToCart = async (req, res, next) => {
     }
 
     const cart = await findOrCreateCart(userId);
+    logger.info(`[${req.id}] Cart before update: ${JSON.stringify(cart)}`);
 
     const existingIndex = cart.items.findIndex((it) => it.product.equals(productId));
     if (existingIndex > -1) {
@@ -52,7 +53,9 @@ const addToCart = async (req, res, next) => {
     }
 
     await cart.save();
+    logger.info(`[${req.id}] Cart after save: ${JSON.stringify(cart)}`);
     const populated = await Cart.findById(cart._id).populate('items.product');
+    logger.info(`[${req.id}] Cart items count: ${populated.items.length}`);
     return res.status(200).json({ success: true, cart: populated });
   } catch (err) {
     return next(err);
@@ -64,14 +67,15 @@ const getCart = async (req, res, next) => {
     // Support guest users - return empty cart
     if (!req.user) {
       logger.info(`[${req.id}] Guest cart access - returning empty cart`);
-      return res.status(200).json({ success: true, items: [] });
+      return res.status(200).json({ success: true, cart: { items: [] } });
     }
     
-    logger.info(`[${req.id}] Fetching user cart`);
     const userId = req.user.userId;
+    logger.info(`[${req.id}] Fetching cart for userId: ${userId}`);
     const cart = await Cart.findOne({ user: userId }).populate('items.product');
+    logger.info(`[${req.id}] Cart found: ${cart ? 'yes' : 'no'}, items: ${cart?.items?.length || 0}`);
     
-    if (!cart) return res.status(200).json({ success: true, items: [] });
+    if (!cart) return res.status(200).json({ success: true, cart: { items: [] } });
     return res.status(200).json({ success: true, cart });
   } catch (err) {
     return next(err);
@@ -152,7 +156,7 @@ const clearCart = async (req, res, next) => {
     const userId = user.userId;
 
     const cart = await Cart.findOne({ user: userId });
-    if (!cart) return res.status(200).json({ success: true, items: [] });
+    if (!cart) return res.status(200).json({ success: true, cart: { items: [] } });
 
     cart.items = [];
     await cart.save();

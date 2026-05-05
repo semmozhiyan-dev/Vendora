@@ -3,9 +3,11 @@ import { useParams, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import API from '../../api/axios';
 import ProductCard from '../../components/client/ProductCard';
+import { useCart } from '../../context/CartContext';
 
 function ProductDetails() {
   const { id } = useParams();
+  const { refreshCart } = useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -76,12 +78,17 @@ function ProductDetails() {
   const handleAddToCart = async () => {
     try {
       setAddingToCart(true);
-      await API.post('/cart', {
+      console.log('Adding to cart:', { productId: id, quantity });
+      const response = await API.post('/cart', {
         productId: id,
         quantity: quantity
       });
+      console.log('Cart response:', response.data);
       toast.success('Added to cart successfully!');
+      refreshCart();
     } catch (err) {
+      console.error('Add to cart error:', err);
+      console.error('Error response:', err.response?.data);
       const errorMessage = err.response?.data?.message || 'Failed to add to cart';
       toast.error(errorMessage);
     } finally {
