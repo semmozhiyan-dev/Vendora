@@ -1,15 +1,33 @@
-# dependencies
+# Dependencies
 node_modules/
 
-# env
+# Environment
 .env
+.env.local
+.env.*.local
 
-# build
-dist/
-
-# coverage
-coverage/
-
-# logs
+# Logs
 logs/
 *.log
+npm-debug.log*
+
+# Build artifacts
+dist/
+build/
+.next/
+out/
+
+# Testing
+.coverage/
+coverage/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
