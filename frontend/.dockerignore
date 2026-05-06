@@ -1,24 +1,14 @@
 node_modules/
-logs/
-coverage/
-.git/
-
-# Environment files (except .env.production if needed)
+dist/
+build/
 .env
 .env*
 !.env.production
 
-# Test files
-__tests__/
-*.test.js
-*.spec.js
-jest.config.js
-
-# Build artifacts and cache
-dist/
-build/
-.next/
-*.tsbuildinfo
+# Git
+.git/
+.gitignore
+.gitattributes
 
 # IDE and editor
 .vscode/
@@ -29,15 +19,26 @@ build/
 .DS_Store
 Thumbs.db
 
-# Git
-.git
-.gitignore
-.gitattributes
+# Build and cache
+.cache/
+.parcel-cache/
+.turbo/
 
 # CI/CD
 .github/
 .gitlab-ci.yml
 .circleci/
+
+# Testing
+.coverage/
+*.test.*
+*.spec.*
+vitest.config.*
+
+# Configuration
+.eslintcache
+.stylelintcache
+vite.config.*.backup
 
 # Documentation
 *.md
@@ -55,3 +56,6 @@ docker-compose*.yml
 .env.local
 postman_collection.json
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
