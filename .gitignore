@@ -1,7 +1,5 @@
 # Dependencies
 node_modules/
-package-lock.json
-yarn.lock
 
 # Environment
 .env
@@ -19,6 +17,10 @@ build/
 .next/
 out/
 
+# Testing
+.coverage/
+coverage/
+
 # IDE
 .vscode/
 .idea/
@@ -29,7 +31,3 @@ out/
 # OS
 .DS_Store
 Thumbs.db
-
-# Testing
-.coverage/
-coverage/
