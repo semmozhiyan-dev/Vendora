@@ -31,3 +31,9 @@ coverage/
 # OS
 .DS_Store
 Thumbs.db
+
+# Nginx runtime configuration (do not commit real production config)
+/nginx/nginx.conf
+/nginx/ssl/
+*.pem
+*.key
