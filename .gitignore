@@ -37,3 +37,6 @@ Thumbs.db
 /nginx/ssl/
 *.pem
 *.key
+
+# Local env files
+.env.development
