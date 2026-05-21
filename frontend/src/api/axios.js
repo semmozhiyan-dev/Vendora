@@ -6,7 +6,19 @@ export const setLoadingHandler = (setLoading) => {
   setLoadingGlobal = setLoading;
 };
 
-const baseURL = import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
+const normalizeBaseURL = (value) => {
+  if (!value) {
+    return "/api/v1";
+  }
+
+  if (/^https?:\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0)(:\d+)?(\/|$)/i.test(value)) {
+    return "/api/v1";
+  }
+
+  return value;
+};
+
+const baseURL = normalizeBaseURL(import.meta.env.VITE_API_URL);
 
 const api = axios.create({
   baseURL,

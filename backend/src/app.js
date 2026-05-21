@@ -29,29 +29,46 @@ const app = express();
 app.use(helmet());
 
 // 1. CORS - Configure allowed origins
-const allowedOrigins = [
-  process.env.FRONTEND_URL || "http://localhost:3000",
-  "http://localhost:5173", // Vite default
-  "http://localhost:5174", // Vite alternate port
-  "http://localhost:5000",
-];
+const allowedOrigins = new Set(
+  [
+    process.env.FRONTEND_URL,
+    process.env.FRONTEND_ORIGIN,
+    "http://15.134.33.229",
+    "http://localhost:5173", // Vite default
+    "http://localhost:5174", // Vite alternate port
+    "http://localhost:5000",
+  ].filter(Boolean)
+);
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, Postman, etc.)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+const corsOptionsDelegate = (req, callback) => {
+  const origin = req.header("Origin");
+
+  // Allow requests with no origin (mobile apps, Postman, curl, same-origin non-browser requests)
+  if (!origin) {
+    return callback(null, { origin: true, credentials: true });
+  }
+
+  let isAllowed = allowedOrigins.has(origin);
+
+  if (!isAllowed) {
+    try {
+      const originHost = new URL(origin).host;
+      const requestHost = req.headers.host;
+      isAllowed = originHost === requestHost;
+    } catch (error) {
+      isAllowed = false;
+    }
+  }
+
+  callback(null, {
+    origin: isAllowed,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Skip-Loading"],
-  })
-);
+  });
+};
+
+app.use(cors(corsOptionsDelegate));
 
 // 2. Body Parser (JSON)
 app.use(express.json({ limit: "10mb" }));
