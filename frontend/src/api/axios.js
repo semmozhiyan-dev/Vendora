@@ -11,7 +11,10 @@ const normalizeBaseURL = (value) => {
     return "/api/v1";
   }
 
-  if (/^https?:\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0)(:\d+)?(\/|$)/i.test(value)) {
+  if (
+    /^https?:\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0)(:\d+)?(\/|$)/i.test(value) ||
+    /^https?:\/\/(10(?:\.\d{1,3}){3}|192\.168(?:\.\d{1,3}){2}|172\.(1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(:\d+)?(\/|$)/i.test(value)
+  ) {
     return "/api/v1";
   }
 

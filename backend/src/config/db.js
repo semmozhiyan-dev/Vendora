@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
-  const { DB_URL } = process.env;
+  const DB_URL = process.env.DB_URL || process.env.MONGO_URI;
 
   if (!DB_URL) {
-    throw new Error("DB_URL is not set in environment variables");
+    throw new Error("DB_URL or MONGO_URI is not set in environment variables");
   }
 
   await mongoose.connect(DB_URL);

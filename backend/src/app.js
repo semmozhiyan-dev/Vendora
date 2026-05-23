@@ -33,7 +33,6 @@ const allowedOrigins = new Set(
   [
     process.env.FRONTEND_URL,
     process.env.FRONTEND_ORIGIN,
-    "http://15.134.33.229",
     "http://localhost:5173", // Vite default
     "http://localhost:5174", // Vite alternate port
     "http://localhost:5000",
@@ -52,9 +51,9 @@ const corsOptionsDelegate = (req, callback) => {
 
   if (!isAllowed) {
     try {
-      const originHost = new URL(origin).host;
-      const requestHost = req.headers.host;
-      isAllowed = originHost === requestHost;
+      const originHostname = new URL(origin).hostname;
+      const requestHostname = req.hostname;
+      isAllowed = originHostname === requestHostname;
     } catch (error) {
       isAllowed = false;
     }

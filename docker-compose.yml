@@ -1,23 +1,4 @@
 services:
-  mongodb:
-    image: mongo:latest
-    container_name: vendora-mongodb
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin123
-      MONGO_INITDB_DATABASE: vendora
-    volumes:
-      - mongodb_data:/data/db
-    networks:
-      - vendora-network
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   backend:
     build:
       context: ./backend
@@ -28,7 +9,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 5000
-      DB_URL: mongodb://admin:admin123@mongodb:27017/vendora?authSource=admin
+      DB_URL: ${DB_URL:-mongodb://admin:admin123@localhost:27017/vendora?authSource=admin}
       JWT_SECRET: ${JWT_SECRET:-supersecret}
       RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID}
       RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET}
@@ -40,9 +21,6 @@ services:
       EMAIL_PASS: ${EMAIL_PASS}
       EMAIL_FROM: ${EMAIL_FROM}
       FRONTEND_URL: http://frontend
-    depends_on:
-      mongodb:
-        condition: service_healthy
     networks:
       - vendora-network
     restart: unless-stopped
@@ -78,10 +56,6 @@ services:
     networks:
       - vendora-network
     restart: unless-stopped
-
-volumes:
-  mongodb_data:
-    driver: local
 
 networks:
   vendora-network:
