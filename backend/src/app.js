@@ -36,6 +36,8 @@ const allowedOrigins = new Set(
     "http://localhost:5173", // Vite default
     "http://localhost:5174", // Vite alternate port
     "http://localhost:5000",
+    "http://localhost",
+    "http://localhost:80",
   ].filter(Boolean)
 );
 
@@ -44,25 +46,44 @@ const corsOptionsDelegate = (req, callback) => {
 
   // Allow requests with no origin (mobile apps, Postman, curl, same-origin non-browser requests)
   if (!origin) {
-    return callback(null, { origin: true, credentials: true });
+    return callback(null, { 
+      origin: true, 
+      credentials: true,
+      methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+      allowedHeaders: ["Content-Type", "Authorization", "X-Skip-Loading"],
+    });
   }
 
-  let isAllowed = allowedOrigins.has(origin);
+    let isAllowed = allowedOrigins.has(origin);
 
   if (!isAllowed) {
     try {
-      const originHostname = new URL(origin).hostname;
+      const originUrl = new URL(origin);
+      const originHostname = originUrl.hostname;
+      const originPort = originUrl.port;
       const requestHostname = req.hostname;
-      isAllowed = originHostname === requestHostname;
+      const xForwardedHost = req.get('x-forwarded-host');
+      
+      // Allow same-hostname requests (for any IP or domain)
+      // Also check x-forwarded-host for proxied requests
+      isAllowed = originHostname === requestHostname || 
+                  originHostname === xForwardedHost ||
+                  requestHostname === 'localhost' ||
+                  requestHostname.includes('127.0.0.1') ||
+                  requestHostname.includes('backend') ||
+                  originHostname.includes('172.') || // Private IPs (AWS, Docker, etc.)
+                  originHostname.includes('192.168') || // Private IPs
+                  originHostname.includes('localhost') ||
+                  originHostname.includes('127.0.0.1');
     } catch (error) {
       isAllowed = false;
     }
   }
 
   callback(null, {
-    origin: isAllowed,
+    origin: isAllowed ? origin : false,
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Skip-Loading"],
   });
 };

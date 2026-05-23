@@ -32,8 +32,6 @@ services:
     container_name: vendora-frontend
     expose:
       - "80"
-    environment:
-      VITE_API_URL: http://backend:5000
     depends_on:
       - backend
     networks:
