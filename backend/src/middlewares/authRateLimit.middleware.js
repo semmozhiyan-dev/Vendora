@@ -1,13 +1,14 @@
 const rateLimit = require("express-rate-limit");
 
 const authRateLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // 100 requests per window (increased for testing)
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 30, // 30 failed auth attempts per IP per hour
+  skipSuccessfulRequests: true, // Only count failures
   standardHeaders: true,
   legacyHeaders: false,
   message: {
     success: false,
-    message: "Too many authentication attempts, please try again after 15 minutes",
+    message: "Too many authentication attempts from this IP. Try again in 1 hour.",
   },
 });
 

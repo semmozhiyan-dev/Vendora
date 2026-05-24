@@ -3,9 +3,11 @@ import { useParams, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import API from '../../api/axios';
 import ProductCard from '../../components/client/ProductCard';
+import { useCart } from '../../context/CartContext';
 
 function ProductDetails() {
   const { id } = useParams();
+  const { refreshCart } = useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -36,7 +38,33 @@ function ProductDetails() {
       const res = await API.get(`/products/${id}`, {
         headers: { 'X-Skip-Loading': 'true' }
       });
-      setProduct(res.data.product || res.data.data || res.data);
+      const productData = res.data.product || res.data.data || res.data;
+      
+      // Add images to the product (use a hash of the product ID to get consistent images)
+      const productIdHash = productData._id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const imageIndex = productIdHash % 8; // Get a number between 0-7
+      
+      let productWithImages = { ...productData };
+      
+      if (imageIndex === 0) {
+        productWithImages = { ...productData, image: '/images/products/image1.jpg', secondaryImage: '/images/products/image2.jpg' };
+      } else if (imageIndex === 1) {
+        productWithImages = { ...productData, image: '/images/products/image3.jpg', secondaryImage: '/images/products/image4.jpg' };
+      } else if (imageIndex === 2) {
+        productWithImages = { ...productData, image: '/images/products/image5.jpg', secondaryImage: '/images/products/image6.jpg' };
+      } else if (imageIndex === 3) {
+        productWithImages = { ...productData, image: '/images/products/image7.jpg', secondaryImage: '/images/products/image8.jpg' };
+      } else if (imageIndex === 4) {
+        productWithImages = { ...productData, image: '/images/products/image9.jpg', secondaryImage: '/images/products/image10.jpg' };
+      } else if (imageIndex === 5) {
+        productWithImages = { ...productData, image: '/images/products/image11.jpg', secondaryImage: '/images/products/image12.jpg' };
+      } else if (imageIndex === 6) {
+        productWithImages = { ...productData, image: '/images/products/image13.jpg', secondaryImage: '/images/products/image14.jpg' };
+      } else if (imageIndex === 7) {
+        productWithImages = { ...productData, image: '/images/products/image15.jpg', secondaryImage: '/images/products/image16.jpg' };
+      }
+      
+      setProduct(productWithImages);
     } catch (err) {
       setError('Failed to load product');
       console.error('Product fetch error:', err);
@@ -53,14 +81,38 @@ function ProductDetails() {
       const productList = res.data.items || res.data.products || res.data.data || res.data;
       
       if (Array.isArray(productList)) {
+        // Add images to products
+        const productsWithImages = productList.map((p, index) => {
+          const imageIndex = index % 8;
+          
+          if (imageIndex === 0) {
+            return { ...p, image: '/images/products/image1.jpg', secondaryImage: '/images/products/image2.jpg' };
+          } else if (imageIndex === 1) {
+            return { ...p, image: '/images/products/image3.jpg', secondaryImage: '/images/products/image4.jpg' };
+          } else if (imageIndex === 2) {
+            return { ...p, image: '/images/products/image5.jpg', secondaryImage: '/images/products/image6.jpg' };
+          } else if (imageIndex === 3) {
+            return { ...p, image: '/images/products/image7.jpg', secondaryImage: '/images/products/image8.jpg' };
+          } else if (imageIndex === 4) {
+            return { ...p, image: '/images/products/image9.jpg', secondaryImage: '/images/products/image10.jpg' };
+          } else if (imageIndex === 5) {
+            return { ...p, image: '/images/products/image11.jpg', secondaryImage: '/images/products/image12.jpg' };
+          } else if (imageIndex === 6) {
+            return { ...p, image: '/images/products/image13.jpg', secondaryImage: '/images/products/image14.jpg' };
+          } else if (imageIndex === 7) {
+            return { ...p, image: '/images/products/image15.jpg', secondaryImage: '/images/products/image16.jpg' };
+          }
+          return p;
+        });
+        
         // Filter products: same category, exclude current product, limit to 4
-        const related = productList
+        const related = productsWithImages
           .filter(p => p._id !== id && p.category === product.category)
           .slice(0, 4);
         
         // If not enough products in same category, add random products
         if (related.length < 4) {
-          const additional = productList
+          const additional = productsWithImages
             .filter(p => p._id !== id && !related.includes(p))
             .slice(0, 4 - related.length);
           setRelatedProducts([...related, ...additional]);
@@ -76,12 +128,17 @@ function ProductDetails() {
   const handleAddToCart = async () => {
     try {
       setAddingToCart(true);
-      await API.post('/cart', {
+      console.log('Adding to cart:', { productId: id, quantity });
+      const response = await API.post('/cart', {
         productId: id,
         quantity: quantity
       });
+      console.log('Cart response:', response.data);
       toast.success('Added to cart successfully!');
+      refreshCart();
     } catch (err) {
+      console.error('Add to cart error:', err);
+      console.error('Error response:', err.response?.data);
       const errorMessage = err.response?.data?.message || 'Failed to add to cart';
       toast.error(errorMessage);
     } finally {

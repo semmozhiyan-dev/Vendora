@@ -1,0 +1,57 @@
+node_modules/
+logs/
+coverage/
+.git/
+
+# Environment files (except .env.production if needed)
+.env
+.env*
+!.env.production
+
+# Test files
+__tests__/
+*.test.js
+*.spec.js
+jest.config.js
+
+# Build artifacts and cache
+dist/
+build/
+.next/
+*.tsbuildinfo
+
+# IDE and editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.circleci/
+
+# Documentation
+*.md
+README*
+CHANGELOG*
+LICENSE
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Miscellaneous
+.env.example
+.env.local
+postman_collection.json
+*.log

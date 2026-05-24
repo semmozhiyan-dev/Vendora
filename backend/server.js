@@ -10,12 +10,27 @@ const GRACEFUL_SHUTDOWN_TIMEOUT = 10000; // 10 seconds
 
 let server;
 
+const validateEnv = () => {
+  const hasDatabaseUrl = Boolean(process.env.DB_URL || process.env.MONGO_URI);
+  const required = ['JWT_SECRET', 'RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET'];
+  const missing = required.filter(key => !process.env[key]);
+
+  if (!hasDatabaseUrl) {
+    missing.unshift('DB_URL or MONGO_URI');
+  }
+  if (missing.length > 0) {
+    logger.error(`Missing required environment variables: ${missing.join(', ')}`);
+    process.exit(1);
+  }
+};
+
 const startServer = async () => {
   try {
+    validateEnv();
     await connectDB();
     logger.info(`Connected to MongoDB`);
 
-    server = app.listen(PORT, () => {
+    server = app.listen(PORT, '0.0.0.0', () => {
       logger.info(`Server running on port ${PORT}`);
     });
 

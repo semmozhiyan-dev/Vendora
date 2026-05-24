@@ -1,7 +1,5 @@
 # Dependencies
 node_modules/
-package-lock.json
-yarn.lock
 
 # Environment
 .env
@@ -19,6 +17,10 @@ build/
 .next/
 out/
 
+# Testing
+.coverage/
+coverage/
+
 # IDE
 .vscode/
 .idea/
@@ -30,6 +32,11 @@ out/
 .DS_Store
 Thumbs.db
 
-# Testing
-.coverage/
-coverage/
+# Nginx runtime configuration (do not commit real production config)
+/nginx/nginx.conf
+/nginx/ssl/
+*.pem
+*.key
+
+# Local env files
+.env.development

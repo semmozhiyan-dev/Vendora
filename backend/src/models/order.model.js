@@ -23,6 +23,20 @@ const OrderItemSchema = new Schema(
   { _id: false }
 );
 
+const TimelineSchema = new Schema(
+  {
+    status: {
+      type: String,
+      required: true,
+    },
+    timestamp: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  { _id: false }
+);
+
 const OrderSchema = new Schema(
   {
     user: {
@@ -65,6 +79,18 @@ const OrderSchema = new Schema(
       enum: ["PENDING", "PAID", "FAILED", "CANCELLED", "SHIPPED", "DELIVERED"],
       default: "PENDING",
     },
+    timeline: {
+      type: [TimelineSchema],
+      default: [],
+    },
+    trackingId: {
+      type: String,
+      default: null,
+    },
+    estimatedDelivery: {
+      type: Date,
+      default: null,
+    },
     shippingAddress: {
       street: String,
       city: String,
@@ -76,4 +102,6 @@ const OrderSchema = new Schema(
   { timestamps: true }
 );
 
+OrderSchema.index({ user: 1, createdAt: -1 });
+OrderSchema.index({ razorpayOrderId: 1 });
 module.exports = mongoose.models.Order || mongoose.model("Order", OrderSchema);

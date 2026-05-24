@@ -1,0 +1,103 @@
+## nginx/nginx.conf.example
+# This is a template for the production NGINX configuration.
+# Do NOT commit your real TLS private keys or other secrets into the repository.
+# Copy this file to `nginx/nginx.conf` or place your production `nginx.conf`
+# at a secure location (for example: ~/.config/Vendora/nginx/nginx.conf) and
+# ensure that file is excluded from git.
+
+user  nginx;
+worker_processes auto;
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+
+events {
+  worker_connections 1024;
+}
+
+http {
+  include       /etc/nginx/mime.types;
+  default_type  application/octet-stream;
+
+  sendfile        on;
+  tcp_nopush      on;
+  tcp_nodelay     on;
+  keepalive_timeout 65;
+  types_hash_max_size 2048;
+
+  server_tokens off;
+
+  # Gzip compression
+  gzip on;
+  gzip_vary on;
+  gzip_proxied any;
+  gzip_comp_level 5;
+  gzip_min_length 256;
+  gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript image/svg+xml;
+
+  # Use Docker's embedded DNS resolver for dynamic service discovery
+  resolver 127.0.0.11 valid=30s;
+
+  server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
+
+    # Increase limits for file uploads
+    client_max_body_size 20M;
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "no-referrer-when-downgrade" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+    add_header Content-Security-Policy "default-src 'self' 'unsafe-inline' https: data:; img-src 'self' data: https:; connect-src 'self' http: https: ws:;" always;
+
+    # Health-check proxy to backend (resolve backend dynamically)
+    location = /health {
+      set $backend_target vendora-backend:8000;
+      proxy_pass http://$backend_target/health;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_http_version 1.1;
+      proxy_set_header Connection "";
+    }
+
+    # Proxy API requests to backend
+    location /api/ {
+      set $backend_target vendora-backend:8000;
+      proxy_pass http://$backend_target;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_http_version 1.1;
+      proxy_set_header Connection "";
+      proxy_buffers 16 16k;
+      proxy_buffer_size 32k;
+      proxy_read_timeout 90s;
+      proxy_send_timeout 90s;
+    }
+
+    # Serve static assets with long cache lifetime
+    location ~* \.(?:css|js|woff2|woff|ttf|otf|eot|svg|jpg|jpeg|png|gif|ico)$ {
+      root /usr/share/nginx/html;
+      expires 1y;
+      add_header Cache-Control "public, max-age=31536000, immutable";
+      access_log off;
+    }
+
+    # Serve the SPA directly from this nginx container
+    location / {
+      root /usr/share/nginx/html;
+      try_files $uri $uri/ /index.html;
+    }
+
+    error_page 502 503 504 /50x.html;
+    location = /50x.html {
+      root /usr/share/nginx/html;
+    }
+  }
+}

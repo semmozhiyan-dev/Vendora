@@ -7,9 +7,11 @@ const { createOrderSchema, updateOrderStatusSchema } = require('../validators/or
 const {
   createOrder,
   getOrders,
+  getMyOrders,
   getOrderById,
   updateOrderStatus,
   cancelOrder,
+  getOrderTracking,
 } = require('../controllers/order.controller');
 
 // All order routes are protected
@@ -17,7 +19,9 @@ router.use(auth);
 
 router.post('/', validate(createOrderSchema), createOrder);
 router.get('/', getOrders);
+router.get('/my', getMyOrders);
 router.get('/:id', getOrderById);
+router.get('/:id/tracking', getOrderTracking);
 router.put('/:id/status', validate(updateOrderStatusSchema), updateOrderStatus);
 router.put('/:id/cancel', cancelOrder);
 

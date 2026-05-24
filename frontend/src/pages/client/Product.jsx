@@ -18,7 +18,32 @@ function Product() {
       setError("");
       const res = await API.get("/products");
       const productList = res.data.items || res.data.products || res.data.data || res.data;
-      setProducts(Array.isArray(productList) ? productList : []);
+      
+      // Add hover images to products (same as Home page)
+      const productsWithHover = Array.isArray(productList) ? productList.map((product, index) => {
+        const imageIndex = index % 8; // Cycle through 8 image pairs
+        
+        if (imageIndex === 0) {
+          return { ...product, image: '/images/products/image1.jpg', secondaryImage: '/images/products/image2.jpg' };
+        } else if (imageIndex === 1) {
+          return { ...product, image: '/images/products/image3.jpg', secondaryImage: '/images/products/image4.jpg' };
+        } else if (imageIndex === 2) {
+          return { ...product, image: '/images/products/image5.jpg', secondaryImage: '/images/products/image6.jpg' };
+        } else if (imageIndex === 3) {
+          return { ...product, image: '/images/products/image7.jpg', secondaryImage: '/images/products/image8.jpg' };
+        } else if (imageIndex === 4) {
+          return { ...product, image: '/images/products/image9.jpg', secondaryImage: '/images/products/image10.jpg' };
+        } else if (imageIndex === 5) {
+          return { ...product, image: '/images/products/image11.jpg', secondaryImage: '/images/products/image12.jpg' };
+        } else if (imageIndex === 6) {
+          return { ...product, image: '/images/products/image13.jpg', secondaryImage: '/images/products/image14.jpg' };
+        } else if (imageIndex === 7) {
+          return { ...product, image: '/images/products/image15.jpg', secondaryImage: '/images/products/image16.jpg' };
+        }
+        return product;
+      }) : [];
+      
+      setProducts(productsWithHover);
     } catch (err) {
       setError("Failed to load products");
     } finally {
