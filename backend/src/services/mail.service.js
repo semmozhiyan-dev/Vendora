@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const logger = require('../utils/logger');
 
 // Initialize transporter
 const transporter = nodemailer.createTransport({
@@ -13,12 +14,12 @@ const transporter = nodemailer.createTransport({
 
 // Send email function (async, non-blocking)
 const sendEmail = async (to, subject, html) => {
-  console.log(`[EMAIL] Queuing email to: ${to}, subject: ${subject}`);
-  
+  logger.info(`[EMAIL] Queuing email to: ${to}, subject: ${subject}`);
+   
   // Send email asynchronously without blocking
   setImmediate(async () => {
     try {
-      console.log(`[EMAIL] Sending email to: ${to}`);
+      logger.info(`[EMAIL] Sending email to: ${to}`);
       const info = await transporter.sendMail({
         from: process.env.EMAIL_FROM,
         to,
@@ -26,9 +27,9 @@ const sendEmail = async (to, subject, html) => {
         html,
       });
 
-      console.log('[EMAIL] Email sent successfully:', info.messageId);
+      logger.info(`[EMAIL] Email sent successfully: ${info.messageId}`);
     } catch (error) {
-      console.error('[EMAIL] Email sending failed:', error.message);
+      logger.error(`[EMAIL] Email sending failed: ${error.message}`);
     }
   });
 

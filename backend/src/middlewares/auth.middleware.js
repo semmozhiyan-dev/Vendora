@@ -1,11 +1,12 @@
 const jwt = require("jsonwebtoken");
+const logger = require("../utils/logger");
 
 const authMiddleware = (req, res, next) => {
   const requestId = req.id || 'NO-ID';
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    console.log(`[${requestId}] Auth failed: Authorization header missing`);
+    logger.info(`[${requestId}] Auth failed: Authorization header missing`);
     return res.status(401).json({
       success: false,
       message: "Authorization header missing",
@@ -15,7 +16,7 @@ const authMiddleware = (req, res, next) => {
   const parts = authHeader.split(" ");
 
   if (parts.length !== 2 || parts[0] !== "Bearer") {
-    console.log(`[${requestId}] Auth failed: Invalid authorization header format`);
+    logger.info(`[${requestId}] Auth failed: Invalid authorization header format`);
     return res.status(401).json({
       success: false,
       message: "Invalid authorization header format",
@@ -26,7 +27,7 @@ const authMiddleware = (req, res, next) => {
   const secret = process.env.JWT_SECRET;
 
   if (!secret) {
-    console.log(`[${requestId}] Auth failed: JWT_SECRET is not configured`);
+    logger.error(`[${requestId}] Auth failed: JWT_SECRET is not configured`);
     return res.status(500).json({
       success: false,
       message: "JWT_SECRET is not configured",
@@ -35,11 +36,11 @@ const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, secret);
-    console.log(`[${requestId}] Auth success: userId=${decoded.userId}`);
+    logger.info(`[${requestId}] Auth success: userId=${decoded.userId}`);
     req.user = decoded;
     return next();
   } catch (error) {
-    console.log(`[${requestId}] Auth failed: Invalid/expired token -`, error.message);
+    logger.info(`[${requestId}] Auth failed: Invalid/expired token - ${error.message}`);
     return res.status(401).json({
       success: false,
       message: "Invalid or expired token",
