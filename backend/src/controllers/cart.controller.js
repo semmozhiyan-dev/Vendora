@@ -25,11 +25,12 @@ const addToCart = async (req, res, next) => {
     if (!user) return res.status(401).json({ message: 'Authentication required' });
     const userId = user.userId;
 
-    const { productId, quantity = 1 } = req.body || {};
-    logger.info(`[${req.id}] Adding product to cart: userId=${userId}, productId=${productId}, qty=${quantity}`);
     if (!req.body) {
       return res.status(400).json({ success: false, message: 'Request body is required' });
     }
+
+    const { productId, quantity = 1 } = req.body;
+    logger.info(`[${req.id}] Adding product to cart: userId=${userId}, productId=${productId}, qty=${quantity}`);
     if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).json({ success: false, message: 'Invalid productId' });
     }
@@ -43,17 +44,17 @@ const addToCart = async (req, res, next) => {
     }
 
     const cart = await findOrCreateCart(userId);
-    logger.info(`[${req.id}] Cart before update: ${JSON.stringify(cart)}`);
+    logger.info(`[${req.id}] Cart before update for userId: ${userId}`);
 
     const existingIndex = cart.items.findIndex((it) => it.product.equals(productId));
-    if (existingIndex > -1) {
+    if (existingIndex >= 0) {
       cart.items[existingIndex].quantity += qty;
     } else {
       cart.items.push({ product: productId, quantity: qty });
     }
 
     await cart.save();
-    logger.info(`[${req.id}] Cart after save: ${JSON.stringify(cart)}`);
+    logger.info(`[${req.id}] Cart saved successfully for userId: ${userId}`);
     const populated = await Cart.findById(cart._id).populate('items.product');
     logger.info(`[${req.id}] Cart items count: ${populated.items.length}`);
     return res.status(200).json({ success: true, cart: populated });

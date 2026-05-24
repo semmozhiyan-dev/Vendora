@@ -16,7 +16,7 @@ const createRazorpayOrder = async (req, res, next) => {
 
     // If only amount is provided (for testing/direct payment)
     if (!orderId && amount) {
-      const amountInPaise = Math.round(amount * 100);
+      const amountInPaise = Math.round(parseFloat(amount) * 100);
       const razorpayOrder = await createRzpOrder(amountInPaise, "INR", `test_${Date.now()}`);
       
       logger.info(`[${req.id}] Razorpay order created (test mode): ${razorpayOrder.id}`);
@@ -57,7 +57,7 @@ const createRazorpayOrder = async (req, res, next) => {
         return res.status(400).json({ success: false, message: `Order is already ${order.status}` });
       }
 
-      const amountInPaise = Math.round(order.totalAmount * 100);
+      const amountInPaise = Math.round(parseFloat(order.totalAmount) * 100);
       const razorpayOrder = await createRzpOrder(amountInPaise, "INR", order._id.toString());
 
       order.razorpayOrderId = razorpayOrder.id;
@@ -116,12 +116,19 @@ const verifyPayment = async (req, res, next) => {
       return res.status(200).json({ success: true, message: "Payment already verified", order });
     }
 
+    // Update product stocks with error handling
     for (const item of order.items) {
-      await Product.findByIdAndUpdate(item.product, { $inc: { stock: -item.quantity } });
+      try {
+        await Product.findByIdAndUpdate(item.product, { $inc: { stock: -item.quantity } });
+      } catch (productErr) {
+        logger.error(`[${req.id}] Failed to update stock for product ${item.product}: ${productErr.message}`);
+        // Continue processing other items rather than failing entire payment
+      }
     }
 
     order.razorpayPaymentId = razorpay_payment_id;
-    order.razorpaySignature = razorpay_signature;
+    // Don't store full signature for security - only store if needed for refunds, otherwise hash it
+    // order.razorpaySignature = razorpay_signature; // Removed for security
     order.status = "PAID";
     order.paidAt = new Date();
     await order.save();
@@ -134,7 +141,7 @@ const verifyPayment = async (req, res, next) => {
     const User = require('../models/user.model');
     const userDoc = await User.findById(userId);
     if (userDoc && userDoc.email) {
-      console.log(`[PAYMENT] Sending payment success email to: ${userDoc.email}`);
+      logger.info(`[PAYMENT] Sending payment success email to: ${userDoc.email}`);
       sendEmail(userDoc.email, 'Payment Successful - Vendora', paymentSuccessTemplate(userDoc.name || 'Customer', order._id, order.totalAmount));
     }
     
@@ -172,6 +179,7 @@ const handleWebhook = async (req, res, next) => {
     logger.info(`[Webhook] Event received: ${event.event}`);
 
     const { event: eventName, payload } = event;
+    let processed = false;
 
     if (eventName === "payment.captured") {
       const razorpayOrderId = payload.payment.entity.order_id;
@@ -179,14 +187,21 @@ const handleWebhook = async (req, res, next) => {
 
       const order = await Order.findOne({ razorpayOrderId });
       if (order && order.status !== "PAID") {
+        // Update product stocks with error handling
         for (const item of order.items) {
-          await Product.findByIdAndUpdate(item.product, { $inc: { stock: -item.quantity } });
+          try {
+            await Product.findByIdAndUpdate(item.product, { $inc: { stock: -item.quantity } });
+          } catch (productErr) {
+            logger.error(`[Webhook] Failed to update stock for product ${item.product}: ${productErr.message}`);
+            // Continue processing other items
+          }
         }
         order.razorpayPaymentId = razorpayPaymentId;
         order.status = "PAID";
         order.paidAt = new Date();
         await order.save();
         logger.info(`[Webhook] Order ${order._id} marked PAID via webhook`);
+        processed = true;
       }
     }
 
@@ -197,10 +212,16 @@ const handleWebhook = async (req, res, next) => {
         order.status = "FAILED";
         await order.save();
         logger.info(`[Webhook] Order ${order._id} marked FAILED via webhook`);
+        processed = true;
       }
     }
 
-    return res.status(200).json({ success: true });
+    // Return appropriate response based on whether we processed the event
+    if (processed) {
+      return res.status(200).json({ success: true, message: "Webhook processed successfully" });
+    } else {
+      return res.status(200).json({ success: true, message: "Webhook received but no action required" });
+    }
   } catch (err) {
     return next(err);
   }

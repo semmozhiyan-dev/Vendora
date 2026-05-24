@@ -21,7 +21,9 @@ const normalizeBaseURL = (value) => {
   return value;
 };
 
-const baseURL = normalizeBaseURL(import.meta.env.VITE_API_URL);
+const baseURL = normalizeBaseURL(
+  import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL
+);
 
 const api = axios.create({
   baseURL,
