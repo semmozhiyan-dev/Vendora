@@ -23,6 +23,7 @@ const swaggerSpec = require("./config/swagger");
 
 const app = express();
 const PRODUCTION_FRONTEND_ORIGIN = process.env.FRONTEND_URL || "http://3.105.71.141:80";
+const PRODUCTION_SITE_ORIGIN = "http://3.105.71.141";
 
 // ========== MIDDLEWARE CHAIN ORDER ==========
 
@@ -33,6 +34,7 @@ app.use(helmet());
 const allowedOrigins = new Set(
   [
     PRODUCTION_FRONTEND_ORIGIN,
+    PRODUCTION_SITE_ORIGIN,
     process.env.FRONTEND_URL,
     process.env.FRONTEND_ORIGIN,
     "http://localhost:5173", // Vite default

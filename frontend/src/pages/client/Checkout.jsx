@@ -37,9 +37,9 @@ function Checkout() {
     });
   };
 
-  const openRazorpayModal = (razorpayOrderId, orderId, amount) => {
+  const openRazorpayModal = (razorpayOrderId, orderId, amount, razorpayKey) => {
     const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      key: razorpayKey,
       amount: amount * 100, // Convert to paise
       currency: 'INR',
       order_id: razorpayOrderId,
@@ -150,11 +150,15 @@ function Checkout() {
       // Step 2: Create Razorpay order
       const paymentRes = await API.post('/payment/create-order', { orderId });
       const razorpayOrderId = paymentRes.data.razorpayOrderId || paymentRes.data.id;
+      const razorpayKey = paymentRes.data.key;
+      if (!razorpayKey) {
+        throw new Error('Razorpay key missing from payment order response');
+      }
       
       console.log('Razorpay order created:', razorpayOrderId);
       
       // Step 3: Open Razorpay payment modal
-      openRazorpayModal(razorpayOrderId, orderId, total);
+      openRazorpayModal(razorpayOrderId, orderId, total, razorpayKey);
     } catch (error) {
       console.error('Order creation failed:', error);
       setToast({ type: 'error', message: 'Failed to create order. Please try again.' });

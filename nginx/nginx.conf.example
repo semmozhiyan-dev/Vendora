@@ -55,7 +55,7 @@ http {
 
     # Health-check proxy to backend (resolve backend dynamically)
     location = /health {
-      set $backend_target backend:8000;
+      set $backend_target vendora-backend:8000;
       proxy_pass http://$backend_target/health;
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
@@ -67,7 +67,7 @@ http {
 
     # Proxy API requests to backend
     location /api/ {
-      set $backend_target backend:8000;
+      set $backend_target vendora-backend:8000;
       proxy_pass http://$backend_target;
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
