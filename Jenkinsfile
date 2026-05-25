@@ -75,9 +75,9 @@ pipeline {
           set -eu
 
           if docker compose version >/dev/null 2>&1; then
-            docker compose -f "$COMPOSE_FILE" build --pull
+            docker compose -f "$COMPOSE_FILE" build
           elif command -v docker-compose >/dev/null 2>&1; then
-            docker-compose -f "$COMPOSE_FILE" build --pull
+            docker-compose -f "$COMPOSE_FILE" build
           fi
         '''
       }
@@ -101,7 +101,34 @@ pipeline {
     stage('Health Check') {
       steps {
         echo '===== Health Check ====='
-        sh './scripts/healthcheck.sh'
+        sh '''
+          set -eu
+
+          if ! command -v curl >/dev/null 2>&1; then
+            echo "curl is not installed or not on PATH."
+            exit 1
+          fi
+
+          attempt=1
+          while [ "$attempt" -le "$HEALTHCHECK_MAX_ATTEMPTS" ]; do
+            echo "Health check attempt ${attempt}/${HEALTHCHECK_MAX_ATTEMPTS}: ${HEALTHCHECK_URL}"
+
+            if curl --fail --silent --show-error "$HEALTHCHECK_URL" >/dev/null; then
+              echo "Health check passed."
+              exit 0
+            fi
+
+            if [ "$attempt" -lt "$HEALTHCHECK_MAX_ATTEMPTS" ]; then
+              echo "Health check failed; retrying in ${HEALTHCHECK_SLEEP_SECONDS} seconds..."
+              sleep "$HEALTHCHECK_SLEEP_SECONDS"
+            fi
+
+            attempt=$((attempt + 1))
+          done
+
+          echo "Health check failed after ${HEALTHCHECK_MAX_ATTEMPTS} attempts."
+          exit 1
+        '''
       }
     }
 
