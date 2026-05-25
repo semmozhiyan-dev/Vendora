@@ -71,15 +71,15 @@ const createOrder = async (req, res, next) => {
     });
 
     const populated = await Order.findById(order._id).populate('items.product');
-    
+     
     // Send order placed email (non-blocking)
     const User = require('../models/user.model');
     const userDoc = await User.findById(userId);
     if (userDoc && userDoc.email) {
-      console.log(`[ORDER] Sending order placed email to: ${userDoc.email}`);
+      logger.info(`[ORDER] Sending order placed email to: ${userDoc.email}`);
       sendEmail(userDoc.email, 'Order Placed Successfully - Vendora', orderPlacedTemplate(userDoc.name || 'Customer', order._id));
     } else {
-      console.log(`[ORDER] User email not found for userId: ${userId}`);
+      logger.info(`[ORDER] User email not found for userId: ${userId}`);
     }
     
     return res.status(201).json({ success: true, order: populated });
@@ -232,8 +232,9 @@ const updateOrderStatus = async (req, res, next) => {
     
     // Generate tracking ID when order is shipped
     if (newStatus === 'SHIPPED' && !order.trackingId) {
+      const crypto = require('crypto');
       const timestamp = Date.now().toString(36).toUpperCase();
-      const random = Math.random().toString(36).substring(2, 7).toUpperCase();
+      const random = crypto.randomBytes(3).toString('hex').toUpperCase(); // More secure than Math.random()
       order.trackingId = `TRK-${timestamp}-${random}`;
       
       // Set estimated delivery (3 to 5 days from now)
@@ -256,14 +257,14 @@ const updateOrderStatus = async (req, res, next) => {
     // Send email based on status change (non-blocking)
     const orderUser = await require('../models/user.model').findById(order.user);
     if (orderUser && orderUser.email) {
-      console.log(`[ORDER STATUS] Status changed to ${newStatus}, sending email to: ${orderUser.email}`);
+      logger.info(`[ORDER STATUS] Status changed to ${newStatus}, sending email to: ${orderUser.email}`);
       if (newStatus === 'SHIPPED') {
         sendEmail(orderUser.email, 'Your Order Has Shipped - Vendora', orderShippedTemplate(orderUser.name || 'Customer', order._id, order.trackingId));
       } else if (newStatus === 'DELIVERED') {
         sendEmail(orderUser.email, 'Order Delivered - Vendora', orderDeliveredTemplate(orderUser.name || 'Customer', order._id));
       }
     } else {
-      console.log(`[ORDER STATUS] User email not found for order: ${order._id}`);
+      logger.info(`[ORDER STATUS] User email not found for order: ${order._id}`);
     }
     
     return res.status(200).json({ success: true, order: populated });

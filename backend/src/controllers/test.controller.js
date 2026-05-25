@@ -6,7 +6,8 @@
 // Test slow endpoint to verify timeout middleware
 exports.slow = async (req, res) => {
   const requestId = req.id || 'NO-ID';
-  console.log(`[${requestId}] Slow endpoint called, will respond in 15s...`);
+  const logger = require('../utils/logger');
+  logger.info(`[${requestId}] Slow endpoint called, will respond in 15s...`);
   
   setTimeout(() => {
     // This should not be reached due to timeout middleware
