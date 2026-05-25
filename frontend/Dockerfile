@@ -3,7 +3,7 @@ FROM node:20-slim AS builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN NODE_OPTIONS="--max-old-space-size=512" npm ci
 
 COPY . .
 RUN npm run build && rm -rf node_modules src *.config.* *.json
