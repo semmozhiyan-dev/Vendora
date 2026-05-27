@@ -37,13 +37,3 @@ scrape_configs:
       - source_labels: [container_label_com_docker_compose_service]
         regex: backend
         action: keep
-
-  - job_name: jenkins
-    metrics_path: /prometheus
-    scrape_interval: 30s
-    static_configs:
-      - targets:
-          - jenkins:8080
-        labels:
-          instance: vendora-jenkins
-          service: jenkins
