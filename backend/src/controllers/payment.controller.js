@@ -188,20 +188,27 @@ const handleWebhook = async (req, res, next) => {
       const order = await Order.findOne({ razorpayOrderId });
       if (order && order.status !== "PAID") {
         // Update product stocks with error handling
+        let stockUpdateFailed = false;
         for (const item of order.items) {
           try {
             await Product.findByIdAndUpdate(item.product, { $inc: { stock: -item.quantity } });
           } catch (productErr) {
             logger.error(`[Webhook] Failed to update stock for product ${item.product}: ${productErr.message}`);
-            // Continue processing other items
+            stockUpdateFailed = true;
           }
         }
-        order.razorpayPaymentId = razorpayPaymentId;
-        order.status = "PAID";
-        order.paidAt = new Date();
-        await order.save();
-        logger.info(`[Webhook] Order ${order._id} marked PAID via webhook`);
-        processed = true;
+        
+        // Only mark order as PAID if all stock updates succeeded
+        if (!stockUpdateFailed) {
+          order.razorpayPaymentId = razorpayPaymentId;
+          order.status = "PAID";
+          order.paidAt = new Date();
+          await order.save();
+          logger.info(`[Webhook] Order ${order._id} marked PAID via webhook`);
+          processed = true;
+        } else {
+          logger.warn(`[Webhook] Skipping PAID status for order ${order._id} due to stock update failures`);
+        }
       }
     }
 
