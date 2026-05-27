@@ -58,28 +58,34 @@ const corsOptionsDelegate = (req, callback) => {
     });
   }
 
-    let isAllowed = allowedOrigins.has(origin);
+  let isAllowed = allowedOrigins.has(origin);
 
   if (!isAllowed) {
     try {
       const originUrl = new URL(origin);
       const originHostname = originUrl.hostname;
-      const originPort = originUrl.port;
       const requestHostname = req.hostname;
-      const xForwardedHost = req.get('x-forwarded-host');
-      
-      // Allow same-hostname requests (for any IP or domain)
-      // Also check x-forwarded-host for proxied requests
-      isAllowed = originHostname === requestHostname || 
-                  originHostname === xForwardedHost ||
-                  requestHostname === 'localhost' ||
-                  requestHostname.includes('127.0.0.1') ||
-                  requestHostname.includes('backend') ||
-                  originHostname.includes('172.') || // Private IPs (AWS, Docker, etc.)
-                  originHostname.includes('192.168') || // Private IPs
-                  originHostname.includes('localhost') ||
-                  originHostname.includes('127.0.0.1');
-    } catch (error) {
+
+      const xForwardedHost = req.get("x-forwarded-host");
+      const forwardedHostname = xForwardedHost
+        ? xForwardedHost.split(",")[0].trim().split(":")[0]
+        : null;
+
+      // Only treat private IP ranges as allowed when the origin host is an IPv4 literal.
+      const isIPv4 = /^(\d{1,3}\.){3}\d{1,3}$/.test(originHostname);
+      const isPrivateIPv4 =
+        isIPv4 &&
+        (originHostname.startsWith("10.") ||
+          originHostname.startsWith("127.") ||
+          originHostname.startsWith("192.168.") ||
+          /^172\.(1[6-9]|2\d|3[0-1])\./.test(originHostname));
+
+      isAllowed =
+        originHostname === requestHostname ||
+        (forwardedHostname && originHostname === forwardedHostname) ||
+        originHostname === "localhost" ||
+        isPrivateIPv4;
+    } catch {
       isAllowed = false;
     }
   }
