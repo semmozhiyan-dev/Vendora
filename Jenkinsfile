@@ -52,6 +52,16 @@ pipeline {
         '''
       }
     }
+     stage('Create .env File') {   // <-- Add this here
+        steps {
+            sh '''
+                cat > .env << EOF
+GRAFANA_ADMIN_PASSWORD=vendora
+GRAFANA_ADMIN_USER=admin
+EOF
+            '''
+        }
+    }
 
     stage('Stop Existing Containers') {
       steps {
