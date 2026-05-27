@@ -51,6 +51,7 @@ services:
   node-exporter:
     image: prom/node-exporter:v1.8.1
     container_name: vendora-node-exporter
+    profiles: ["monitoring"]
     command:
       - --path.rootfs=/host
     ports:
