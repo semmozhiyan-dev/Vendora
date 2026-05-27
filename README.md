@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Vendora - Modern Full-Stack Ecommerce Platform
 
 A premium, feature-rich ecommerce platform built with modern web technologies. Vendora offers a responsive design, secure authentication, smooth animations, and high-performance architecture.
@@ -241,3 +242,7 @@ This project is licensed under the ISC License.
 ## 📧 Support
 
 For support, email the maintainers or open an issue on the GitHub repository.
+=======
+csrf disabled test
+http fix
+>>>>>>> origin/main
