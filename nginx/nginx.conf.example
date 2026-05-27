@@ -55,7 +55,7 @@ http {
 
     # Health-check proxy to backend (resolve backend dynamically)
     location = /health {
-      set $backend_target backend:5000;
+      set $backend_target vendora-backend:8000;
       proxy_pass http://$backend_target/health;
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
@@ -67,9 +67,8 @@ http {
 
     # Proxy API requests to backend
     location /api/ {
-      # strip the /api prefix when proxying to backend
-      set $backend_target backend:5000;
-      proxy_pass http://$backend_target/;
+      set $backend_target vendora-backend:8000;
+      proxy_pass http://$backend_target;
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -82,18 +81,9 @@ http {
       proxy_send_timeout 90s;
     }
 
-    # Serve static assets with long cache lifetime
-    location ~* \.(?:css|js|woff2|woff|ttf|otf|eot|svg|jpg|jpeg|png|gif|ico)$ {
-      root /usr/share/nginx/html;
-      expires 1y;
-      add_header Cache-Control "public, max-age=31536000, immutable";
-      access_log off;
-    }
-
-    # Proxy root to frontend service (the frontend container serves the SPA)
+    # Proxy frontend assets and SPA requests to the frontend container
     location / {
-      # Proxy root requests to frontend service (SPA served by frontend container)
-      set $frontend_target frontend:80;
+      set $frontend_target vendora-frontend:80;
       proxy_pass http://$frontend_target;
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
@@ -101,15 +91,6 @@ http {
       proxy_set_header X-Forwarded-Proto $scheme;
       proxy_http_version 1.1;
       proxy_set_header Connection "";
-      proxy_buffers 16 16k;
-      proxy_buffer_size 32k;
-      proxy_read_timeout 90s;
-      proxy_send_timeout 90s;
-    }
-
-    error_page 502 503 504 /50x.html;
-    location = /50x.html {
-      root /usr/share/nginx/html;
     }
   }
 }
