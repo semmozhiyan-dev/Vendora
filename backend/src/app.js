@@ -22,8 +22,19 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 
 const app = express();
-const PRODUCTION_FRONTEND_ORIGIN = process.env.FRONTEND_URL || "http://3.105.71.141:80";
-const PRODUCTION_SITE_ORIGIN = "http://3.105.71.141";
+
+const getSiteOrigin = (origin) => {
+  try {
+    const parsedOrigin = new URL(origin);
+    return `${parsedOrigin.protocol}//${parsedOrigin.hostname}`;
+  } catch (error) {
+    return origin;
+  }
+};
+
+const PRODUCTION_FRONTEND_ORIGIN =
+  process.env.FRONTEND_URL || process.env.FRONTEND_ORIGIN || "http://localhost:5173";
+const PRODUCTION_SITE_ORIGIN = getSiteOrigin(PRODUCTION_FRONTEND_ORIGIN);
 
 // ========== MIDDLEWARE CHAIN ORDER ==========
 
