@@ -149,7 +149,7 @@ EMAIL_PASS=your_app_specific_password
 EMAIL_FROM=your_email@gmail.com
 
 # Frontend
-VITE_API_URL=http://localhost:5000
+VITE_API_URL=/api/v1
 ```
 
 ## 📝 API Documentation
