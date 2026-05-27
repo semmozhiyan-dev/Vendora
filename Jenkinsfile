@@ -58,6 +58,10 @@ pipeline {
                 cat > .env << EOF
 GRAFANA_ADMIN_PASSWORD=vendora
 GRAFANA_ADMIN_USER=admin
+JWT_SECRET=supersecret
+DB_URL=mongodb+srv://semmozhi12122005_db_user:Vendora@vendora.ab3r9fe.mongodb.net/?appName=vendora
+RAZORPAY_KEY_ID=rzp_test_Sky8bt8lVEhY2R
+RAZORPAY_KEY_SECRET=GscZNf5FVu72HBlflZOnIyeS
 EOF
             '''
         }
