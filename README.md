@@ -203,7 +203,7 @@ When running via Docker Compose, the following services are available:
 
 - **Prometheus** (http://localhost:9090) - Metrics collection
 - **Grafana** (http://localhost:3000) - Visualization dashboard
-- **cAdvisor** (http://localhost:8080) - Container metrics
+- **cAdvisor** (http://localhost:8081) - Container metrics
 
 ## 🔐 Security Features
 
