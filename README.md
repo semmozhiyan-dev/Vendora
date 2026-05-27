@@ -161,12 +161,12 @@ http://localhost:5000/api-docs
 
 ### Key Endpoints
 
-- `GET /api/products` - Get all products
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - User login
-- `POST /api/orders` - Create order
-- `GET /api/orders/:id` - Get order details
-- `POST /api/payments/verify` - Verify Razorpay payment
+- `GET /api/v1/products` - Get all products
+- `POST /api/v1/auth/register` - Register new user
+- `POST /api/v1/auth/login` - User login
+- `POST /api/v1/orders` - Create order
+- `GET /api/v1/orders/:id` - Get order details
+- `POST /api/v1/payments/verify` - Verify Razorpay payment
 
 ## 🧪 Testing
 
