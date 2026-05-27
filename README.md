@@ -98,7 +98,7 @@ cp .env.example .env.development
 docker-compose up -d
 ```
 
-The application will be available at `http://localhost:8000`
+The application will be available at `http://localhost` (served via Nginx on port 80; the backend port is not published directly to the host in the current Docker Compose setup).
 
 #### Option 2: Manual Setup
 
