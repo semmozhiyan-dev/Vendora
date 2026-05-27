@@ -1,0 +1,49 @@
+global:
+  scrape_interval: 30s
+  scrape_timeout: 10s
+  evaluation_interval: 30s
+  external_labels:
+    project: vendora
+    environment: production
+
+scrape_configs:
+  - job_name: node-exporter
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - node-exporter:9100
+        labels:
+          instance: vendora-node-exporter
+          service: node-exporter
+
+  - job_name: cadvisor
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - cadvisor:8080
+        labels:
+          instance: vendora-cadvisor
+          service: cadvisor
+
+  - job_name: backend-container
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - cadvisor:8080
+        labels:
+          instance: vendora-backend-container
+          service: backend
+    metric_relabel_configs:
+      - source_labels: [container_label_com_docker_compose_service]
+        regex: backend
+        action: keep
+
+  - job_name: jenkins
+    metrics_path: /prometheus
+    scrape_interval: 30s
+    static_configs:
+      - targets:
+          - jenkins:8080
+        labels:
+          instance: vendora-jenkins
+          service: jenkins
