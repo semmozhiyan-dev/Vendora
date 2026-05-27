@@ -31,8 +31,8 @@ services:
     environment:
       NODE_ENV: production
       PORT: 8000
-      FRONTEND_URL: http://3.105.71.141:80
-      API_URL: http://3.105.71.141:8000
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+      API_URL: ${API_URL:-http://localhost:8000}
     networks:
       - vendora-network
     restart: unless-stopped

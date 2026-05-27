@@ -117,13 +117,20 @@ const verifyPayment = async (req, res, next) => {
     }
 
     // Update product stocks with error handling
+    let stockUpdateFailed = false;
     for (const item of order.items) {
       try {
         await Product.findByIdAndUpdate(item.product, { $inc: { stock: -item.quantity } });
       } catch (productErr) {
         logger.error(`[${req.id}] Failed to update stock for product ${item.product}: ${productErr.message}`);
-        // Continue processing other items rather than failing entire payment
+        stockUpdateFailed = true;
       }
+    }
+
+    // Only mark order as PAID if all stock updates succeeded
+    if (stockUpdateFailed) {
+      logger.warn(`[${req.id}] Skipping PAID status for order ${order._id} due to stock update failures`);
+      return res.status(500).json({ success: false, message: "Stock update failed. Please contact support." });
     }
 
     order.razorpayPaymentId = razorpay_payment_id;
