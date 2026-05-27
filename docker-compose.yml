@@ -40,6 +40,7 @@ services:
   node-exporter:
     image: prom/node-exporter:v1.8.1
     container_name: vendora-node-exporter
+    profiles: ["monitoring"]
     command:
       - --path.rootfs=/host
     ports:
@@ -90,11 +91,12 @@ services:
   grafana:
     image: grafana/grafana-oss:11.2.0
     container_name: vendora-grafana
+    profiles: ["monitoring"]
     ports:
       - "3000:3000"
     environment:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-change-me-now}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?GRAFANA_ADMIN_PASSWORD is required}
       GF_USERS_ALLOW_SIGN_UP: "false"
       GF_SERVER_ROOT_URL: http://localhost:3000
     volumes:
