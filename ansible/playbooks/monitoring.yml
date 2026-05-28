@@ -1,0 +1,24 @@
+---
+- name: Deploy Monitoring Stack
+  hosts: production
+  become: true
+
+  tasks:
+    - name: Copy prometheus config
+      copy:
+        src: ../../monitoring/prometheus/prometheus.yml
+        dest: /opt/prometheus.yml
+
+    - name: Start monitoring containers (ignore if already running)
+      command: docker compose -f /opt/docker-compose.yml up -d prometheus grafana node-exporter cadvisor
+      args:
+        chdir: /opt
+      ignore_errors: yes
+
+    - name: Verify containers running
+      command: docker ps --filter "name=vendora-prometheus" --filter "name=vendora-grafana" --filter "name=vendora-cadvisor" --filter "name=vendora-node-exporter"
+      register: containers
+
+    - name: Show running containers
+      debug:
+        var: containers.stdout_lines
