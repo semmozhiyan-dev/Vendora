@@ -22,8 +22,19 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 
 const app = express();
-const PRODUCTION_FRONTEND_ORIGIN = process.env.FRONTEND_URL || "http://3.105.71.141:80";
-const PRODUCTION_SITE_ORIGIN = "http://3.105.71.141";
+
+const getSiteOrigin = (origin) => {
+  try {
+    const parsedOrigin = new URL(origin);
+    return `${parsedOrigin.protocol}//${parsedOrigin.hostname}`;
+  } catch (error) {
+    return origin;
+  }
+};
+
+const PRODUCTION_FRONTEND_ORIGIN =
+  process.env.FRONTEND_URL || process.env.FRONTEND_ORIGIN || "http://localhost:5173";
+const PRODUCTION_SITE_ORIGIN = getSiteOrigin(PRODUCTION_FRONTEND_ORIGIN);
 
 // ========== MIDDLEWARE CHAIN ORDER ==========
 
@@ -58,37 +69,7 @@ const corsOptionsDelegate = (req, callback) => {
     });
   }
 
-  let isAllowed = allowedOrigins.has(origin);
-
-  if (!isAllowed) {
-    try {
-      const originUrl = new URL(origin);
-      const originHostname = originUrl.hostname;
-      const requestHostname = req.hostname;
-
-      const xForwardedHost = req.get("x-forwarded-host");
-      const forwardedHostname = xForwardedHost
-        ? xForwardedHost.split(",")[0].trim().split(":")[0]
-        : null;
-
-      // Only treat private IP ranges as allowed when the origin host is an IPv4 literal.
-      const isIPv4 = /^(\d{1,3}\.){3}\d{1,3}$/.test(originHostname);
-      const isPrivateIPv4 =
-        isIPv4 &&
-        (originHostname.startsWith("10.") ||
-          originHostname.startsWith("127.") ||
-          originHostname.startsWith("192.168.") ||
-          /^172\.(1[6-9]|2\d|3[0-1])\./.test(originHostname));
-
-      isAllowed =
-        originHostname === requestHostname ||
-        (forwardedHostname && originHostname === forwardedHostname) ||
-        originHostname === "localhost" ||
-        isPrivateIPv4;
-    } catch {
-      isAllowed = false;
-    }
-  }
+  const isAllowed = allowedOrigins.has(origin);
 
   callback(null, {
     origin: isAllowed ? origin : false,

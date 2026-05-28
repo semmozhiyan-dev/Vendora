@@ -16,11 +16,12 @@ RUN mkdir -p /app/logs && chown -R node:node /app/logs
 ENV NODE_ENV=production
 ENV NODE_OPTIONS="--max-old-space-size=256"
 
-EXPOSE 5000
+EXPOSE 8000
 
 USER node
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+
   CMD node -e "require('http').get('http://localhost:8000', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"
 
 ENTRYPOINT ["dumb-init", "--"]

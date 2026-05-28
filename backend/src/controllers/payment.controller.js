@@ -116,22 +116,37 @@ const verifyPayment = async (req, res, next) => {
       return res.status(200).json({ success: true, message: "Payment already verified", order });
     }
 
-    // Update product stocks with error handling
-    for (const item of order.items) {
-      try {
-        await Product.findByIdAndUpdate(item.product, { $inc: { stock: -item.quantity } });
-      } catch (productErr) {
-        logger.error(`[${req.id}] Failed to update stock for product ${item.product}: ${productErr.message}`);
-        // Continue processing other items rather than failing entire payment
-      }
-    }
+    const session = await mongoose.startSession();
+    try {
+      session.startTransaction();
 
-    order.razorpayPaymentId = razorpay_payment_id;
-    // Don't store full signature for security - only store if needed for refunds, otherwise hash it
-    // order.razorpaySignature = razorpay_signature; // Removed for security
-    order.status = "PAID";
-    order.paidAt = new Date();
-    await order.save();
+      for (const item of order.items) {
+        const updatedProduct = await Product.findOneAndUpdate(
+          { _id: item.product, stock: { $gte: item.quantity } },
+          { $inc: { stock: -item.quantity } },
+          { new: true, session }
+        );
+
+        if (!updatedProduct) {
+          throw new Error(`Insufficient stock for product ${item.product}`);
+        }
+      }
+
+      order.razorpayPaymentId = razorpay_payment_id;
+      // Don't store full signature for security - only store if needed for refunds, otherwise hash it
+      // order.razorpaySignature = razorpay_signature; // Removed for security
+      order.status = "PAID";
+      order.paidAt = new Date();
+      await order.save({ session });
+
+      await session.commitTransaction();
+    } catch (stockErr) {
+      await session.abortTransaction();
+      logger.error(`[${req.id}] Failed to verify payment for order ${order._id}: ${stockErr.message}`);
+      return res.status(500).json({ success: false, message: "Stock update failed. Please contact support." });
+    } finally {
+      await session.endSession();
+    }
 
     logger.info(`[${req.id}] Payment verified and order marked PAID: ${order._id}`);
 
@@ -188,20 +203,27 @@ const handleWebhook = async (req, res, next) => {
       const order = await Order.findOne({ razorpayOrderId });
       if (order && order.status !== "PAID") {
         // Update product stocks with error handling
+        let stockUpdateFailed = false;
         for (const item of order.items) {
           try {
             await Product.findByIdAndUpdate(item.product, { $inc: { stock: -item.quantity } });
           } catch (productErr) {
             logger.error(`[Webhook] Failed to update stock for product ${item.product}: ${productErr.message}`);
-            // Continue processing other items
+            stockUpdateFailed = true;
           }
         }
-        order.razorpayPaymentId = razorpayPaymentId;
-        order.status = "PAID";
-        order.paidAt = new Date();
-        await order.save();
-        logger.info(`[Webhook] Order ${order._id} marked PAID via webhook`);
-        processed = true;
+        
+        // Only mark order as PAID if all stock updates succeeded
+        if (!stockUpdateFailed) {
+          order.razorpayPaymentId = razorpayPaymentId;
+          order.status = "PAID";
+          order.paidAt = new Date();
+          await order.save();
+          logger.info(`[Webhook] Order ${order._id} marked PAID via webhook`);
+          processed = true;
+        } else {
+          logger.warn(`[Webhook] Skipping PAID status for order ${order._id} due to stock update failures`);
+        }
       }
     }
 

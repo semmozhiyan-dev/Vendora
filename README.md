@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Vendora - Modern Full-Stack Ecommerce Platform
 
 A premium, feature-rich ecommerce platform built with modern web technologies. Vendora offers a responsive design, secure authentication, smooth animations, and high-performance architecture.
@@ -97,7 +98,7 @@ cp .env.example .env.development
 docker-compose up -d
 ```
 
-The application will be available at `http://localhost:8000`
+The application will be available at `http://localhost` (served via Nginx on port 80; the backend port is not published directly to the host in the current Docker Compose setup).
 
 #### Option 2: Manual Setup
 
@@ -148,7 +149,7 @@ EMAIL_PASS=your_app_specific_password
 EMAIL_FROM=your_email@gmail.com
 
 # Frontend
-VITE_API_URL=http://localhost:5000
+VITE_API_URL=/api/v1
 ```
 
 ## 📝 API Documentation
@@ -160,12 +161,12 @@ http://localhost:5000/api-docs
 
 ### Key Endpoints
 
-- `GET /api/products` - Get all products
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - User login
-- `POST /api/orders` - Create order
-- `GET /api/orders/:id` - Get order details
-- `POST /api/payments/verify` - Verify Razorpay payment
+- `GET /api/v1/products` - Get all products
+- `POST /api/v1/auth/register` - Register new user
+- `POST /api/v1/auth/login` - User login
+- `POST /api/v1/orders` - Create order
+- `GET /api/v1/orders/:id` - Get order details
+- `POST /api/v1/payments/verify` - Verify Razorpay payment
 
 ## 🧪 Testing
 
@@ -202,7 +203,7 @@ When running via Docker Compose, the following services are available:
 
 - **Prometheus** (http://localhost:9090) - Metrics collection
 - **Grafana** (http://localhost:3000) - Visualization dashboard
-- **cAdvisor** (http://localhost:8080) - Container metrics
+- **cAdvisor** (http://localhost:8081) - Container metrics
 
 ## 🔐 Security Features
 
@@ -241,3 +242,7 @@ This project is licensed under the ISC License.
 ## 📧 Support
 
 For support, email the maintainers or open an issue on the GitHub repository.
+=======
+csrf disabled test
+http fix
+>>>>>>> origin/main
