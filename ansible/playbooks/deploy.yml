@@ -1,0 +1,40 @@
+---
+- name: Deploy Vendora Application
+  hosts: production
+  become: true
+
+  vars:
+    repo_url: https://github.com/semmozhiyan-dev/Vendora.git
+    app_dir: /opt/vendora
+
+  tasks:
+    - name: Install git
+      apt:
+        name: git
+        state: present
+
+    - name: Clone or pull latest code
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ app_dir }}"
+        version: main
+        force: yes
+
+    - name: Copy .env file to server
+      copy:
+        src: ../../.env
+        dest: "{{ app_dir }}/.env"
+        mode: '0600'
+
+    - name: Build and restart containers
+      command: docker compose up -d --build
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Verify app containers running
+      command: docker ps --filter "name=vendora-frontend" --filter "name=vendora-backend" --filter "name=vendora-nginx"
+      register: app_containers
+
+    - name: Show app containers
+      debug:
+        var: app_containers.stdout_lines
