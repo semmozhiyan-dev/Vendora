@@ -1,0 +1,19 @@
+# Server
+server_ip: "3.105.71.141"
+domain: "vendora.com"
+
+# App
+repo_url: "https://github.com/semmozhiyan-dev/Vendora.git"
+app_dir: "/opt/vendora"
+
+# Docker images
+app_image: "vendora"
+app_tag: "latest"
+
+# Ports
+jenkins_port: 8080
+grafana_port: 3000
+prometheus_port: 9090
+nginx_port: 80
+cadvisor_port: 8081
+node_exporter_port: 9100
