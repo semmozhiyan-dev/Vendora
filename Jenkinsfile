@@ -71,14 +71,15 @@ EOF
       steps {
         echo '===== Stop Existing Containers ====='
         sh '''
-          set -eu
-
-          if docker compose version >/dev/null 2>&1; then
-            docker compose -f "$COMPOSE_FILE" down --remove-orphans
-          elif command -v docker-compose >/dev/null 2>&1; then
-            docker-compose -f "$COMPOSE_FILE" down --remove-orphans
-          fi
-        '''
+  set -eu
+  if docker compose version >/dev/null 2>&1; then
+    docker compose -f "$COMPOSE_FILE" down --remove-orphans || \
+    sudo docker compose -f "$COMPOSE_FILE" down --remove-orphans
+  elif command -v docker-compose >/dev/null 2>&1; then
+    docker-compose -f "$COMPOSE_FILE" down --remove-orphans || \
+    sudo docker-compose -f "$COMPOSE_FILE" down --remove-orphans
+  fi
+'''
       }
     }
 
