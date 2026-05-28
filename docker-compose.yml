@@ -1,4 +1,24 @@
 services:
+  mongodb:
+    image: mongo:latest
+    container_name: vendora-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: vendora
+    volumes:
+      - mongodb_data:/data/db
+
+    networks:
+      - vendora-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   backend:
     build:
       context: ./backend
@@ -11,10 +31,83 @@ services:
     environment:
       NODE_ENV: production
       PORT: 8000
-      FRONTEND_URL: http://3.105.71.141:80
-      API_URL: http://3.105.71.141:8000
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+      API_URL: ${API_URL:-http://localhost:8000}
     networks:
       - vendora-network
+    restart: unless-stopped
+
+  node-exporter:
+    image: prom/node-exporter:v1.8.1
+    container_name: vendora-node-exporter
+    profiles: ["monitoring"]
+    command:
+      - --path.rootfs=/host
+    ports:
+      - "9100:9100"
+    volumes:
+      - /:/host:ro,rslave
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+    networks:
+      - monitoring-network
+    restart: unless-stopped
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    container_name: vendora-cadvisor
+    profiles: ["monitoring"]
+    privileged: true
+    ports:
+      - "8081:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    networks:
+      - monitoring-network
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    container_name: vendora-prometheus
+    profiles: ["monitoring"]
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    depends_on:
+      - node-exporter
+      - cadvisor
+    networks:
+      - monitoring-network
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana-oss:11.2.0
+    container_name: vendora-grafana
+    profiles: ["monitoring"]
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?GRAFANA_ADMIN_PASSWORD is required}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_SERVER_ROOT_URL: http://localhost:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - prometheus
+    networks:
+      - monitoring-network
     restart: unless-stopped
 
   frontend:
@@ -38,6 +131,8 @@ services:
     container_name: vendora-nginx
     ports:
       - "80:80"
+    volumes:
+      - ./nginx/nginx.conf.example:/etc/nginx/nginx.conf:ro
     depends_on:
       - frontend
       - backend
@@ -45,6 +140,14 @@ services:
       - vendora-network
     restart: unless-stopped
 
+volumes:
+  mongodb_data:
+    driver: local
+  prometheus-data:
+  grafana-data:
+
 networks:
   vendora-network:
+    driver: bridge
+  monitoring-network:
     driver: bridge

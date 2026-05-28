@@ -22,8 +22,19 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 
 const app = express();
-const PRODUCTION_FRONTEND_ORIGIN = process.env.FRONTEND_URL || "http://3.105.71.141:80";
-const PRODUCTION_SITE_ORIGIN = "http://3.105.71.141";
+
+const getSiteOrigin = (origin) => {
+  try {
+    const parsedOrigin = new URL(origin);
+    return `${parsedOrigin.protocol}//${parsedOrigin.hostname}`;
+  } catch (error) {
+    return origin;
+  }
+};
+
+const PRODUCTION_FRONTEND_ORIGIN =
+  process.env.FRONTEND_URL || process.env.FRONTEND_ORIGIN || "http://localhost:5173";
+const PRODUCTION_SITE_ORIGIN = getSiteOrigin(PRODUCTION_FRONTEND_ORIGIN);
 
 // ========== MIDDLEWARE CHAIN ORDER ==========
 
@@ -58,31 +69,7 @@ const corsOptionsDelegate = (req, callback) => {
     });
   }
 
-    let isAllowed = allowedOrigins.has(origin);
-
-  if (!isAllowed) {
-    try {
-      const originUrl = new URL(origin);
-      const originHostname = originUrl.hostname;
-      const originPort = originUrl.port;
-      const requestHostname = req.hostname;
-      const xForwardedHost = req.get('x-forwarded-host');
-      
-      // Allow same-hostname requests (for any IP or domain)
-      // Also check x-forwarded-host for proxied requests
-      isAllowed = originHostname === requestHostname || 
-                  originHostname === xForwardedHost ||
-                  requestHostname === 'localhost' ||
-                  requestHostname.includes('127.0.0.1') ||
-                  requestHostname.includes('backend') ||
-                  originHostname.includes('172.') || // Private IPs (AWS, Docker, etc.)
-                  originHostname.includes('192.168') || // Private IPs
-                  originHostname.includes('localhost') ||
-                  originHostname.includes('127.0.0.1');
-    } catch (error) {
-      isAllowed = false;
-    }
-  }
+  const isAllowed = allowedOrigins.has(origin);
 
   callback(null, {
     origin: isAllowed ? origin : false,
