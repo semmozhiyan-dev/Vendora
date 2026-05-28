@@ -13,6 +13,7 @@ services:
 
     networks:
       - vendora-network
+      - monitoring-network
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -58,18 +59,42 @@ services:
     container_name: vendora-cadvisor
     profiles: ["monitoring"]
     privileged: true
+    user: root
     ports:
       - "8081:8080"
     volumes:
       - /:/rootfs:ro
-      - /var/run:/var/run:ro
+      - /var/run:/var/run:rw
+      - /var/run/docker.sock:/var/run/docker.sock:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
     networks:
       - monitoring-network
     restart: unless-stopped
-
+  docker-exporter:
+    image: wywywywy/docker_stats_exporter:latest
+    container_name: vendora-docker-exporter
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - "9487:9487"
+    networks:
+      - monitoring-network
+    restart: unless-stopped
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:1.1.0
+    container_name: vendora-nginx-exporter
+    command:
+      - --nginx.scrape-uri=http://nginx/stub_status
+    ports:
+      - "9113:9113"
+    depends_on:
+      - nginx
+    networks:
+      - vendora-network
+      - monitoring-network
+    restart: unless-stopped
   prometheus:
     image: prom/prometheus:v2.55.1
     container_name: vendora-prometheus
@@ -81,11 +106,12 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus
     depends_on:
       - node-exporter
       - cadvisor
+      - docker-exporter
     networks:
       - monitoring-network
     restart: unless-stopped
