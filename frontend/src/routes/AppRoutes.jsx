@@ -13,6 +13,7 @@ import ProductDetails from "../pages/client/ProductDetails";
 import OrderSuccess from "../pages/client/OrderSuccess";
 import ClientOrders from "../pages/client/Orders";
 import OrderDetails from "../pages/client/OrderDetails";
+import AuthCallback from "../pages/auth/AuthCallback";
 import Profile, {
   ProfileAddresses,
   ProfileDetails,
@@ -32,6 +33,7 @@ function AppRoutes() {
       {/* Auth routes - no layout */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/auth/callback" element={<AuthCallback />} />
 
       {/* Public client routes */}
       <Route element={<ClientLayout />}>
