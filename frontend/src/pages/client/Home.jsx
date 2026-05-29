@@ -51,25 +51,25 @@ function Home() {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-screen w-full">
-        <div className="w-full px-6 py-32 md:py-40 relative z-10">
+      <section className="relative overflow-hidden min-h-[88svh] md:min-h-screen w-full">
+        <div className="w-full px-4 sm:px-6 py-20 sm:py-28 md:py-40 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-6xl md:text-7xl font-bold text-gray-900 mb-6 tracking-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-gray-900 mb-5 md:mb-6 tracking-tight">
               Beautifully crafted.
               <br />
               Thoughtfully designed.
             </h1>
-            <p className="text-xl md:text-2xl text-gray-600 mb-12 font-light">
+            <p className="text-base sm:text-lg md:text-2xl text-gray-600 mb-8 sm:mb-10 md:mb-12 font-light max-w-2xl mx-auto">
               Discover products that blend form and function.
             </p>
-            <button className="px-8 py-4 bg-gray-900 text-white rounded-full text-lg font-medium hover:bg-gray-800 transition-colors">
+            <button className="w-full sm:w-auto px-8 py-4 bg-gray-900 text-white rounded-full text-lg font-medium hover:bg-gray-800 transition-colors">
               Shop Now
             </button>
           </div>
         </div>
         
         {/* Animated Product Images */}
-        <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 pointer-events-none hidden md:block">
           {/* Image 1 - Top Left */}
           <div className="absolute top-10 left-10 w-64 h-64 opacity-40 animate-float">
             <img src="/images/products/image1.jpg" alt="" className="w-full h-full object-cover rounded-3xl shadow-2xl" />
@@ -107,9 +107,9 @@ function Home() {
 
       {/* Categories Section */}
       <section className="py-16 bg-white w-full">
-        <div className="w-full px-12">
-          <h2 className="text-3xl font-semibold text-gray-900 mb-8 px-6">Shop by Category</h2>
-          <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide px-6">
+        <div className="w-full px-4 sm:px-6 lg:px-12">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-6 sm:mb-8 px-0 sm:px-6">Shop by Category</h2>
+          <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-4 scrollbar-hide px-0 sm:px-6 snap-x snap-mandatory">
             <div className="flex-shrink-0 w-40 text-center group cursor-pointer">
               <div className="w-40 h-40 bg-gray-100 rounded-2xl mb-4 flex items-center justify-center transition-transform hover:scale-105">
                 <svg className="w-16 h-16 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,7 +163,7 @@ function Home() {
       </section>
 
       {/* Video Showcase Section */}
-      <section className="relative h-[600px] overflow-hidden bg-gray-900">
+      <section className="relative h-[42svh] min-h-[300px] md:h-[600px] overflow-hidden bg-gray-900">
         {/* Video */}
         <video
           autoPlay
@@ -181,14 +181,14 @@ function Home() {
 
       {/* Featured Products Section */}
       <section className="py-20 bg-gray-50 w-full">
-        <div className="w-full px-12">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-semibold text-gray-900 mb-3">Featured Products</h2>
+        <div className="w-full px-4 sm:px-6 lg:px-12">
+          <div className="text-center mb-10 sm:mb-12">
+            <h2 className="text-3xl sm:text-4xl font-semibold text-gray-900 mb-3">Featured Products</h2>
             <p className="text-gray-600">Handpicked favorites just for you</p>
           </div>
           
           {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 px-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 px-0 sm:px-6">
               <CardSkeleton />
               <CardSkeleton />
               <CardSkeleton />
@@ -209,7 +209,7 @@ function Home() {
               </button>
             </div>
           ) : products.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 px-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 px-0 sm:px-6">
               {products.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}
@@ -224,11 +224,11 @@ function Home() {
 
       {/* Features Section */}
       <section className="py-20 bg-gray-50 w-full">
-        <div className="w-full px-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
+        <div className="w-full px-4 sm:px-6 lg:px-12">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-10 sm:mb-12 text-center">
             Why Choose Us
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 px-0 sm:px-6">
             <div className="text-center">
               <div className="w-16 h-16 bg-gray-900 rounded-lg mx-auto mb-4 flex items-center justify-center">
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -261,16 +261,16 @@ function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-32 w-full bg-gray-900">
-        <div className="w-full px-12">
+      <section className="py-20 sm:py-28 md:py-32 w-full bg-gray-900">
+        <div className="w-full px-4 sm:px-6 lg:px-12">
           <div className="text-center">
-            <h2 className="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white mb-5 sm:mb-6 tracking-tight">
               Start Shopping Today
             </h2>
-            <p className="text-xl text-gray-300 mb-10 font-light">
+            <p className="text-base sm:text-xl text-gray-300 mb-8 sm:mb-10 font-light max-w-2xl mx-auto">
               Join thousands of satisfied customers
             </p>
-            <button className="px-10 py-4 bg-white text-gray-900 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors">
+            <button className="w-full sm:w-auto px-10 py-4 bg-white text-gray-900 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors">
               Browse Collection
             </button>
           </div>
