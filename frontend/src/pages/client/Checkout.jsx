@@ -169,7 +169,7 @@ function Checkout() {
 
   if (loading) {
     return (
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <p className="text-gray-500">Loading checkout...</p>
       </div>
     );
@@ -202,13 +202,13 @@ function Checkout() {
         </div>
       )}
 
-      <div className="max-w-6xl mx-auto px-6 py-12">
-      <h1 className="text-3xl font-bold text-gray-900 mb-10">Checkout</h1>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 sm:mb-10">Checkout</h1>
 
-      <div className="flex flex-col lg:flex-row gap-10">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
         {/* Address Form */}
         <div className="flex-1">
-          <div className="bg-white border border-gray-100 rounded-xl p-8 shadow-sm">
+          <div className="bg-white border border-gray-100 rounded-xl p-5 sm:p-8 shadow-sm">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Shipping Address</h2>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
@@ -224,7 +224,7 @@ function Checkout() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                   <input
@@ -265,7 +265,7 @@ function Checkout() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
                   <input
@@ -310,7 +310,7 @@ function Checkout() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full mt-8 py-4 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed active:scale-98"
+                className="w-full mt-6 sm:mt-8 py-4 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed active:scale-98"
               >
                 {submitting ? 'Processing...' : 'Place Order'}
               </button>
@@ -320,11 +320,11 @@ function Checkout() {
 
         {/* Order Summary */}
         <div className="lg:w-96 flex-shrink-0">
-          <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm sticky top-24">
+          <div className="bg-white border border-gray-100 rounded-xl p-5 sm:p-6 shadow-sm sticky top-24">
             <h2 className="text-lg font-semibold text-gray-900 mb-6">Order Summary</h2>
 
             {/* Cart Items */}
-            <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
+            <div className="space-y-4 mb-6 max-h-72 overflow-y-auto">
               {items.map((item) => {
                 const product = item.product || item;
                 const price = item.price ?? product.price ?? 0;

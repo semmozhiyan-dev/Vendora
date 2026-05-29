@@ -149,14 +149,14 @@ function ProductDetails() {
   if (loading) {
     return (
       <div className="bg-white min-h-screen">
-        <div className="w-full px-12 py-16">
+        <div className="w-full px-4 sm:px-6 lg:px-12 py-10 sm:py-16">
           {/* Breadcrumb Skeleton */}
-          <div className="max-w-7xl mx-auto mb-8 animate-pulse">
+          <div className="max-w-7xl mx-auto mb-6 sm:mb-8 animate-pulse">
             <div className="h-4 bg-gray-200 rounded w-64"></div>
           </div>
 
           {/* Two-column layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 max-w-7xl mx-auto">
             {/* Left Column - Image Skeleton */}
             <div className="animate-pulse">
               <div className="aspect-square bg-gray-200 rounded-2xl mb-6"></div>
@@ -211,7 +211,7 @@ function ProductDetails() {
   if (error || !product) {
     return (
       <div className="bg-white min-h-screen">
-        <div className="w-full px-12 py-16">
+        <div className="w-full px-4 sm:px-6 lg:px-12 py-10 sm:py-16">
           <div className="text-center py-20">
             <p className="text-2xl text-gray-400 font-light mb-6">{error || 'Product not found'}</p>
             <button
@@ -230,9 +230,9 @@ function ProductDetails() {
 
   return (
     <div className="bg-white min-h-screen">
-      <div className="w-full px-12 py-16">
+      <div className="w-full px-4 sm:px-6 lg:px-12 py-10 sm:py-16">
         {/* Breadcrumb */}
-        <div className="max-w-7xl mx-auto mb-8">
+        <div className="max-w-7xl mx-auto mb-6 sm:mb-8">
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <Link to="/" className="hover:text-gray-900 transition-colors">Home</Link>
             <span>/</span>
@@ -243,11 +243,11 @@ function ProductDetails() {
         </div>
 
         {/* Two-column layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 max-w-7xl mx-auto">
           {/* Left Column - Images */}
           <div>
             {/* Main Image */}
-            <div className="aspect-square bg-gray-100 rounded-2xl overflow-hidden mb-6 group cursor-zoom-in">
+            <div className="aspect-square bg-gray-100 rounded-2xl overflow-hidden mb-4 sm:mb-6 group cursor-zoom-in">
               {images[selectedImage] ? (
                 <img
                   src={images[selectedImage]}
@@ -266,22 +266,22 @@ function ProductDetails() {
 
             {/* Thumbnail Images */}
             {images.length > 1 && (
-              <div className="flex gap-4">
+              <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-2 sm:pb-0 sm:flex-wrap">
                 {images.map((img, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`w-24 h-24 rounded-xl overflow-hidden transition-all duration-200 ${
-                      selectedImage === index 
-                        ? 'ring-2 ring-gray-900 ring-offset-2 scale-105' 
+                    className={`w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-xl overflow-hidden transition-all duration-200 ${
+                      selectedImage === index
+                        ? 'ring-2 ring-gray-900 ring-offset-2 scale-105'
                         : 'opacity-60 hover:opacity-100 hover:scale-105'
                     }`}
                   >
-                    <img 
-                      src={img} 
-                      alt="" 
+                    <img
+                      src={img}
+                      alt=""
                       loading="lazy"
-                      className="w-full h-full object-cover" 
+                      className="w-full h-full object-cover"
                     />
                   </button>
                 ))}
@@ -290,19 +290,19 @@ function ProductDetails() {
           </div>
 
           {/* Right Column - Product Info */}
-          <div className="space-y-6">
+          <div className="space-y-5 sm:space-y-6">
             {/* Category */}
             {product.category && (
               <p className="text-xs text-gray-500 uppercase tracking-widest font-medium">{product.category}</p>
             )}
 
             {/* Product Name */}
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 tracking-tight leading-tight">
               {product.name}
             </h1>
 
             {/* Price */}
-            <div className="text-4xl font-bold text-gray-900">
+            <div className="text-3xl sm:text-4xl font-bold text-gray-900">
               ${typeof product.price === 'number' ? product.price.toFixed(2) : product.price}
             </div>
 
@@ -331,18 +331,18 @@ function ProductDetails() {
             {/* Quantity Selector */}
             <div className="border-t border-gray-200 pt-6">
               <label className="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-3 block">Quantity</label>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-12 h-12 border border-gray-300 rounded-lg hover:bg-gray-100 hover:border-gray-400 active:scale-95 transition-all duration-200 font-medium text-lg"
+                  className="w-11 h-11 sm:w-12 sm:h-12 border border-gray-300 rounded-lg hover:bg-gray-100 hover:border-gray-400 active:scale-95 transition-all duration-200 font-medium text-lg"
                 >
                   −
                 </button>
-                <span className="text-xl font-semibold w-16 text-center">{quantity}</span>
+                <span className="text-xl font-semibold w-12 sm:w-16 text-center">{quantity}</span>
                 <button
                   onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
                   disabled={quantity >= product.stock}
-                  className="w-12 h-12 border border-gray-300 rounded-lg hover:bg-gray-100 hover:border-gray-400 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-300 font-medium text-lg"
+                  className="w-11 h-11 sm:w-12 sm:h-12 border border-gray-300 rounded-lg hover:bg-gray-100 hover:border-gray-400 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-300 font-medium text-lg"
                 >
                   +
                 </button>
@@ -364,9 +364,9 @@ function ProductDetails() {
 
         {/* Related Products Section */}
         {relatedProducts.length > 0 && (
-          <div className="mt-24 max-w-7xl mx-auto">
-            <h2 className="text-3xl font-semibold text-gray-900 mb-8">You May Also Like</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="mt-16 sm:mt-20 lg:mt-24 max-w-7xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-6 sm:mb-8">You May Also Like</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               {relatedProducts.map((relatedProduct) => (
                 <ProductCard key={relatedProduct._id} product={relatedProduct} />
               ))}
