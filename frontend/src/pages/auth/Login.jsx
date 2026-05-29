@@ -70,7 +70,9 @@ const Login = () => {
 
   const handleGoogleLogin = () => {
     const apiBase = API.defaults.baseURL || "/api/v1";
-    window.location.href = `${apiBase}/auth/google`;
+    const url = `${apiBase}/auth/google`;
+    console.log("Redirecting to:", url);
+    window.location.href = url;
   };
 
   return (
