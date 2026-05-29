@@ -1,11 +1,16 @@
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 function AdminLayout({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    setMobileSidebarOpen(false);
+  }, [location.pathname]);
 
   const handleLogout = () => {
     logout();
@@ -53,8 +58,17 @@ function AdminLayout({ children }) {
 
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-gray-50 via-purple-50/30 to-pink-50/30">
+      {mobileSidebarOpen && (
+        <button
+          type="button"
+          className="fixed inset-0 z-20 bg-black/30 lg:hidden"
+          aria-label="Close sidebar"
+          onClick={() => setMobileSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-64 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white fixed h-screen flex flex-col shadow-2xl z-10">
+      <aside className={`w-72 lg:w-64 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white fixed inset-y-0 left-0 flex flex-col shadow-2xl z-30 transform transition-transform duration-200 ease-out lg:translate-x-0 ${mobileSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
         {/* Logo/Brand */}
         <div className="p-6 border-b border-gray-700">
           <div className="flex items-center gap-3">
@@ -115,8 +129,19 @@ function AdminLayout({ children }) {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 ml-64 p-6 overflow-y-auto h-screen">
-        <div className="max-w-[1600px] mx-auto">
+      <main className="flex-1 ml-0 lg:ml-64 p-4 sm:p-6 pt-16 lg:pt-6 overflow-y-auto min-h-screen">
+        <button
+          type="button"
+          className="fixed left-4 top-4 z-20 inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white p-3 text-gray-700 shadow-sm lg:hidden"
+          aria-label="Open sidebar"
+          onClick={() => setMobileSidebarOpen(true)}
+        >
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+
+        <div className="max-w-[1600px] mx-auto min-w-0">
           {children ?? <Outlet />}
         </div>
       </main>

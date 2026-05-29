@@ -105,11 +105,11 @@ function Cart() {
         </div>
       )}
 
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        <h1 className="text-3xl font-bold text-gray-900 mb-10">Shopping Cart</h1>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 sm:mb-10">Shopping Cart</h1>
 
         {loading ? (
-          <div className="flex flex-col lg:flex-row gap-10">
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
             <div className="flex-1 space-y-4">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="flex gap-4 bg-white border border-gray-100 rounded-xl p-4 shadow-sm animate-pulse">
@@ -149,14 +149,14 @@ function Cart() {
             </button>
           </div>
         ) : items.length === 0 ? (
-          <div className="text-center py-24">
+          <div className="text-center py-20 sm:py-24">
             <p className="text-xl text-gray-400 mb-6">Your cart is empty.</p>
             <Link to="/products" className="px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all duration-200 active:scale-98 inline-block">
               Browse Products
             </Link>
           </div>
         ) : (
-          <div className="flex flex-col lg:flex-row gap-10">
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
             {/* Cart Items */}
             <div className="flex-1 space-y-4">
               {items.map((item) => {
@@ -164,7 +164,7 @@ function Cart() {
                 const price = item.price ?? product.price ?? 0;
                 const isUpdating = updatingItems.has(product._id);
                 return (
-                  <div key={product._id} className="flex gap-4 bg-white border border-gray-100 rounded-xl p-4 shadow-sm relative transition-all duration-200 hover:shadow-md hover:border-gray-200">
+                  <div key={product._id} className="flex flex-col sm:flex-row gap-4 bg-white border border-gray-100 rounded-xl p-4 shadow-sm relative transition-all duration-200 hover:shadow-md hover:border-gray-200">
                     {isUpdating && (
                       <div className="absolute inset-0 bg-white/80 rounded-xl flex items-center justify-center z-10 transition-opacity duration-200">
                         <span className="text-sm text-gray-600 font-medium">Updating...</span>
@@ -173,7 +173,7 @@ function Cart() {
                     <img
                       src={product.image || '/images/products/image1.jpg'}
                       alt={product.name}
-                      className="w-20 h-20 object-cover rounded-lg flex-shrink-0 transition-transform duration-200 hover:scale-105"
+                      className="w-full sm:w-20 h-40 sm:h-20 object-cover rounded-lg flex-shrink-0 transition-transform duration-200 hover:scale-105"
                     />
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-gray-900 truncate">{product.name}</p>
@@ -196,7 +196,7 @@ function Cart() {
                         </button>
                       </div>
                     </div>
-                    <div className="flex flex-col items-end justify-between">
+                    <div className="flex items-end sm:flex-col sm:items-end justify-between sm:justify-between gap-3 sm:gap-0">
                       <button
                         onClick={() => removeItem(product._id)}
                         disabled={isUpdating}
@@ -216,7 +216,7 @@ function Cart() {
 
             {/* Order Summary */}
             <div className="lg:w-80 flex-shrink-0">
-              <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm sticky top-24">
+              <div className="bg-white border border-gray-100 rounded-xl p-5 sm:p-6 shadow-sm sticky top-24">
                 <h2 className="text-lg font-semibold text-gray-900 mb-6">Order Summary</h2>
                 <div className="space-y-3 text-sm text-gray-600">
                   <div className="flex justify-between">

@@ -53,16 +53,16 @@ function Product() {
 
   return (
     <div className="bg-white min-h-screen">
-      <div className="w-full px-12 py-16">
+      <div className="w-full px-4 sm:px-6 lg:px-12 py-10 sm:py-16">
         {/* Header */}
-        <div className="mb-12 px-6">
-          <h1 className="text-4xl font-semibold text-gray-900 mb-2">All Products</h1>
+        <div className="mb-8 sm:mb-12 px-0 sm:px-6">
+          <h1 className="text-3xl sm:text-4xl font-semibold text-gray-900 mb-2">All Products</h1>
           <p className="text-gray-600">Discover our complete collection</p>
         </div>
 
         {/* Products Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 px-0 sm:px-6">
             <CardSkeleton />
             <CardSkeleton />
             <CardSkeleton />
@@ -83,7 +83,7 @@ function Product() {
             </button>
           </div>
         ) : products.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 px-0 sm:px-6">
             {products.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
