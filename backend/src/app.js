@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
+const session = require("express-session");
 const mongoose = require("mongoose");
 const mongoSanitizeMiddleware = require("./middlewares/mongoSanitize.middleware");
 const requestIdMiddleware = require("./middlewares/requestId.middleware");
@@ -8,6 +9,7 @@ const loggerMiddleware = require("./middlewares/logger.middleware");
 const timeoutMiddleware = require("./middlewares/timeout.middleware");
 const rateLimitMiddleware = require("./middlewares/rateLimit.middleware");
 const { notFound, errorHandler } = require("./middlewares/error.middleware");
+const passport = require("./config/passport");
 
 const healthRoutes = require("./routes/health.routes");
 const authRoutes = require("./routes/auth.routes");
@@ -40,6 +42,22 @@ const PRODUCTION_SITE_ORIGIN = getSiteOrigin(PRODUCTION_FRONTEND_ORIGIN);
 
 // 0. Security Headers
 app.use(helmet());
+
+if (process.env.SESSION_SECRET) {
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: false,
+      cookie: { secure: process.env.NODE_ENV === "production" },
+    })
+  );
+}
+app.use(passport.initialize());
+
+if (process.env.SESSION_SECRET) {
+  app.use(passport.session());
+}
 
 // 1. CORS - Configure allowed origins
 const allowedOrigins = new Set(
