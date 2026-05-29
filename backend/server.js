@@ -12,7 +12,7 @@ let server;
 
 const validateEnv = () => {
   const hasDatabaseUrl = Boolean(process.env.DB_URL || process.env.MONGO_URI);
-  const required = ['JWT_SECRET', 'RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET'];
+  const required = ['JWT_SECRET', 'RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET', 'SESSION_SECRET'];
   const missing = required.filter(key => !process.env[key]);
 
   if (!hasDatabaseUrl) {

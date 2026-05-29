@@ -61,9 +61,20 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
       minlength: 6,
       select: false,
+    },
+    googleId: {
+      type: String,
+      sparse: true,
+    },
+    avatar: {
+      type: String,
+    },
+    authProvider: {
+      type: String,
+      enum: ["local", "google"],
+      default: "local",
     },
     role: {
       type: String,
@@ -96,6 +107,10 @@ userSchema.pre("save", async function preSave() {
 });
 
 userSchema.methods.comparePassword = async function comparePassword(candidatePassword) {
+  if (!this.password || !candidatePassword) {
+    return false;
+  }
+
   return bcrypt.compare(candidatePassword, this.password);
 };
 
