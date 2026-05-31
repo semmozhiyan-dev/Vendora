@@ -134,28 +134,29 @@ function Products() {
 
   if (loading) {
     return (
-      <div>
-        <div className="mb-6 flex items-center justify-between">
+      <div className="space-y-6">
+        <div className="flex items-center justify-between gap-4 rounded-[28px] border border-gray-200 bg-white px-6 py-6 shadow-sm">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Products</h1>
-            <p className="text-gray-600 mt-1">Manage your product inventory</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#C9A84C]">Catalog</p>
+            <h1 className="mt-3 text-3xl font-black tracking-tight text-[#0A0A0A]">Products</h1>
+            <p className="mt-1 text-sm text-gray-600">Manage your product inventory</p>
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+        <div className="overflow-hidden rounded-[28px] border border-gray-200 bg-white shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-purple-50 to-pink-50 border-b border-gray-100">
+              <thead className="border-b border-gray-100 bg-[#FAFAFA]">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Price
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Stock
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Actions
                   </th>
                 </tr>
@@ -176,11 +177,11 @@ function Products() {
 
   if (error) {
     return (
-      <div className="bg-white rounded-xl shadow-md border border-gray-100 py-16 text-center">
-        <p className="text-gray-500 text-lg">Failed to load products</p>
+      <div className="rounded-[28px] border border-gray-200 bg-white py-16 text-center shadow-sm">
+        <p className="text-lg text-gray-500">Failed to load products</p>
         <button
           onClick={fetchProducts}
-          className="mt-4 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition"
+          className="mt-4 rounded-full bg-[#0A0A0A] px-5 py-2.5 font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
         >
           Retry
         </button>
@@ -189,12 +190,13 @@ function Products() {
   }
 
   return (
-    <div>
+    <div className="space-y-6">
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4 rounded-[28px] border border-gray-200 bg-white px-6 py-6 shadow-sm">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Products</h1>
-          <p className="text-gray-600 mt-1">Manage your product inventory</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#C9A84C]">Catalog</p>
+          <h1 className="mt-3 text-3xl font-black tracking-tight text-[#0A0A0A]">Products</h1>
+          <p className="mt-1 text-sm text-gray-600">Manage your product inventory</p>
         </div>
         <button 
           onClick={() => {
@@ -202,7 +204,7 @@ function Products() {
             setFormError("");
             setEditingProduct(null);
           }}
-          className="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-shadow flex items-center gap-2"
+          className="flex items-center gap-2 rounded-full bg-[#0A0A0A] px-5 py-3 font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -213,46 +215,46 @@ function Products() {
 
       {/* Products Table */}
       {products.length > 0 ? (
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+        <div className="overflow-hidden rounded-[28px] border border-gray-200 bg-white shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-purple-50 to-pink-50 border-b border-gray-100">
+              <thead className="border-b border-gray-100 bg-[#FAFAFA]">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Price
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Stock
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {products.map((product) => (
-                  <tr key={product._id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={product._id} className="transition-colors hover:bg-[#FAFAFA]">
                     {/* Name */}
                     <td className="px-6 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center flex-shrink-0">
+                        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-gray-200 bg-[#FAFAFA]">
                           {product.image ? (
                             <img
                               src={product.image}
                               alt={product.name}
-                              className="w-full h-full object-cover rounded-lg"
+                              className="h-full w-full object-cover"
                             />
                           ) : (
-                            <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="h-5 w-5 text-[#C9A84C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                             </svg>
                           )}
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-gray-900">{product.name}</p>
+                          <p className="text-sm font-semibold text-[#0A0A0A]">{product.name}</p>
                           {product.category && (
                             <p className="text-xs text-gray-500 mt-1">{product.category}</p>
                           )}
@@ -262,18 +264,18 @@ function Products() {
 
                     {/* Price */}
                     <td className="px-6 py-3">
-                      <span className="text-base font-bold text-purple-600">${product.price}</span>
+                      <span className="font-mono text-base font-bold text-[#0A0A0A]">${product.price}</span>
                     </td>
 
                     {/* Stock */}
                     <td className="px-6 py-3">
                       <span
-                        className={`px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold leading-5 ${
                           product.stock > 10
-                            ? "bg-green-100 text-green-800"
+                            ? "bg-emerald-50 text-emerald-700"
                             : product.stock > 0
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-red-100 text-red-800"
+                            ? "bg-amber-50 text-amber-700"
+                            : "bg-red-50 text-red-700"
                         }`}
                       >
                         {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
@@ -285,7 +287,7 @@ function Products() {
                       <div className="flex items-center justify-end gap-2">
                         <button 
                           onClick={() => handleOpenEditModal(product)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          className="rounded-xl p-2 text-[#0A0A0A] transition-colors hover:bg-gray-100"
                           title="Edit product"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -295,7 +297,7 @@ function Products() {
                         <button 
                           onClick={() => handleDeleteProduct(product)}
                           disabled={deletingProduct === product._id}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="rounded-xl p-2 text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
                           title="Delete product"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -311,9 +313,9 @@ function Products() {
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 py-16 text-center">
-          <p className="text-gray-500 text-lg">No products found</p>
-          <p className="text-gray-400 text-sm mt-2">Get started by adding your first product</p>
+        <div className="rounded-[28px] border border-gray-200 bg-white py-16 text-center shadow-sm">
+          <p className="text-lg text-gray-500">No products found</p>
+          <p className="mt-2 text-sm text-gray-400">Get started by adding your first product</p>
         </div>
       )}
 
@@ -324,8 +326,8 @@ function Products() {
         title={editingProduct ? "Edit Product" : "Add New Product"}
       >
         {formError && (
-          <div className="mb-4 p-3 bg-gray-100 border border-gray-200 rounded-lg">
-            <p className="text-sm text-gray-700">Failed to save product</p>
+          <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 p-3">
+            <p className="text-sm text-red-700">Failed to save product</p>
           </div>
         )}
         <ProductForm
