@@ -12,6 +12,15 @@ function Home() {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    const handleFocus = () => {
+      fetchProducts();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, []);
+
   const fetchProducts = async () => {
     try {
       setLoading(true);
