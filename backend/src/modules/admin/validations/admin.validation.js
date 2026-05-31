@@ -5,8 +5,8 @@ const validateProductInput = (data) => {
     errors.name = "Product name is required";
   }
 
-  if (!data.description || typeof data.description !== "string" || data.description.trim() === "") {
-    errors.description = "Product description is required";
+  if (data.description !== undefined && typeof data.description !== "string") {
+    errors.description = "Product description must be a string";
   }
 
   if (data.price === undefined || typeof data.price !== "number" || data.price < 0) {
