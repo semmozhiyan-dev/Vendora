@@ -86,7 +86,7 @@ const createOrder = async (req, res, next) => {
       logger.info(`[ORDER] User email not found for userId: ${userId}`);
     }
     
-    return res.status(201).json({ success: true, order: populated });
+    return res.status(201).json({ success: true, order: populated, orderId: populated._id.toString() });
   } catch (err) {
     return next(err);
   }
