@@ -150,7 +150,7 @@ function Checkout() {
       };
 
       const orderRes = await API.post('/orders', orderData);
-      const orderId = orderRes.data.order?._id || orderRes.data._id;
+      const orderId = orderRes.data.orderId || orderRes.data.order?._id || orderRes.data.order?.id || orderRes.data._id || orderRes.data.id;
       
       console.log('Order created:', orderId);
 
@@ -168,7 +168,8 @@ function Checkout() {
       openRazorpayModal(razorpayOrderId, orderId, total, razorpayKey);
     } catch (error) {
       console.error('Order creation failed:', error);
-      setToast({ type: 'error', message: 'Failed to create order. Please try again.' });
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to create order. Please try again.';
+      setToast({ type: 'error', message: errorMessage });
     } finally {
       setSubmitting(false);
     }
