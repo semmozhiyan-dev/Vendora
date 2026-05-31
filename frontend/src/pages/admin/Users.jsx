@@ -82,29 +82,30 @@ function Users() {
 
   if (loading) {
     return (
-      <div>
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Users</h1>
-          <p className="text-gray-600 mt-1">Manage registered users</p>
+      <div className="space-y-6">
+        <div className="rounded-[28px] border border-gray-200 bg-white px-6 py-6 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#C9A84C]">Directory</p>
+          <h1 className="mt-3 text-3xl font-black tracking-tight text-[#0A0A0A]">Users</h1>
+          <p className="mt-1 text-sm text-gray-600">Manage registered users</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="overflow-hidden rounded-[28px] border border-gray-200 bg-white shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="border-b border-gray-100 bg-[#FAFAFA]">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Email
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Role
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Joined
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Actions
                   </th>
                 </tr>
@@ -125,11 +126,11 @@ function Users() {
 
   if (error) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 py-16 text-center">
-        <p className="text-gray-500 text-lg">Failed to load users</p>
+      <div className="rounded-[28px] border border-gray-200 bg-white py-16 text-center shadow-sm">
+        <p className="text-lg text-gray-500">Failed to load users</p>
         <button
           onClick={fetchUsers}
-          className="mt-4 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition"
+          className="mt-4 rounded-full bg-[#0A0A0A] px-5 py-2.5 font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
         >
           Retry
         </button>
@@ -138,33 +139,34 @@ function Users() {
   }
 
   return (
-    <div>
+    <div className="space-y-6">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Users</h1>
-        <p className="text-gray-600 mt-1">Manage registered users</p>
+      <div className="rounded-[28px] border border-gray-200 bg-white px-6 py-6 shadow-sm">
+        <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#C9A84C]">Directory</p>
+        <h1 className="mt-3 text-3xl font-black tracking-tight text-[#0A0A0A]">Users</h1>
+        <p className="mt-1 text-sm text-gray-600">Manage registered users</p>
       </div>
 
       {/* Users Table */}
       {users.length > 0 ? (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="overflow-hidden rounded-[28px] border border-gray-200 bg-white shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="border-b border-gray-100 bg-[#FAFAFA]">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Email
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Role
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Joined
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Actions
                   </th>
                 </tr>
@@ -175,7 +177,7 @@ function Users() {
                     {/* User */}
                     <td className="px-6 py-3 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-gradient-to-br from-gray-600 to-gray-700 rounded-full flex items-center justify-center font-semibold text-white text-sm">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0A0A0A] font-semibold text-sm text-white">
                           {user.name?.charAt(0).toUpperCase() || "U"}
                         </div>
                         <div>
@@ -196,13 +198,13 @@ function Users() {
                           value={user.role || "user"}
                           onChange={(e) => handleRoleChange(user._id, e.target.value)}
                           disabled={updatingRole === user._id || currentUser?._id === user._id}
-                          className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-300 text-gray-700"
+                          className="rounded-2xl border border-gray-200 bg-[#FAFAFA] px-3 py-1.5 text-sm font-medium text-[#0A0A0A] transition-all focus:border-[#C9A84C] focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20 hover:border-gray-300 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           <option value="user">user</option>
                           <option value="admin">admin</option>
                         </select>
                         {currentUser?._id === user._id && (
-                          <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 border border-gray-300 rounded-md">
+                            <span className="rounded-md border border-gray-200 bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
                             You
                           </span>
                         )}
@@ -218,7 +220,7 @@ function Users() {
                     <td className="px-6 py-3 whitespace-nowrap text-right">
                       <div className="flex items-center justify-end gap-2">
                         <button
-                          className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors"
+                          className="text-sm font-semibold text-[#C9A84C] transition-colors hover:text-[#0A0A0A]"
                           title="View details"
                         >
                           View Details
@@ -226,7 +228,7 @@ function Users() {
                         <button
                           onClick={() => handleDeleteUser(user)}
                           disabled={deletingUser === user._id || currentUser?._id === user._id}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="rounded-xl p-2 text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
                           title={currentUser?._id === user._id ? "Cannot delete yourself" : "Delete user"}
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -242,8 +244,8 @@ function Users() {
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 py-16 text-center">
-          <p className="text-gray-500 text-lg">No users found</p>
+        <div className="rounded-[28px] border border-gray-200 bg-white py-16 text-center shadow-sm">
+          <p className="text-lg text-gray-500">No users found</p>
         </div>
       )}
     </div>

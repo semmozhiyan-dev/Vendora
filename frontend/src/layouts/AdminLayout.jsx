@@ -57,7 +57,7 @@ function AdminLayout({ children }) {
   ];
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-gray-50 via-purple-50/30 to-pink-50/30">
+    <div className="min-h-screen bg-[#FAFAFA] text-gray-900">
       {mobileSidebarOpen && (
         <button
           type="button"
@@ -68,34 +68,34 @@ function AdminLayout({ children }) {
       )}
 
       {/* Sidebar */}
-      <aside className={`w-72 lg:w-64 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white fixed inset-y-0 left-0 flex flex-col shadow-2xl z-30 transform transition-transform duration-200 ease-out lg:translate-x-0 ${mobileSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
+      <aside className={`fixed inset-y-0 left-0 z-30 flex w-72 flex-col border-r border-gray-200 bg-[#0A0A0A] text-white shadow-[0_24px_80px_rgba(15,23,42,0.18)] transform transition-transform duration-200 ease-out lg:w-64 lg:translate-x-0 ${mobileSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
         {/* Logo/Brand */}
-        <div className="p-6 border-b border-gray-700">
+        <div className="border-b border-white/10 p-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-[#C9A84C]/30 bg-[#C9A84C] text-[#0A0A0A]">
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
             </div>
             <div>
-              <h2 className="text-xl font-bold">Vendora</h2>
-              <p className="text-xs text-gray-400">Admin Panel</p>
+              <h2 className="text-xl font-black tracking-tight text-white">Vendora</h2>
+              <p className="text-xs uppercase tracking-[0.24em] text-gray-400">Admin Panel</p>
             </div>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 space-y-2 p-4">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
+                className={`flex items-center gap-3 rounded-2xl px-4 py-3 transition-all duration-200 ${
                   isActive
-                    ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg"
-                    : "text-gray-300 hover:bg-gray-700/50 hover:text-white"
+                    ? "border border-[#C9A84C]/30 bg-white/10 text-white shadow-sm"
+                    : "text-gray-300 hover:bg-white/5 hover:text-white"
                 }`}
               >
                 {item.icon}
@@ -106,21 +106,21 @@ function AdminLayout({ children }) {
         </nav>
 
         {/* User Profile & Logout */}
-        <div className="p-4 border-t border-gray-700">
-          <div className="flex items-center gap-3 px-4 py-3 bg-gray-700/50 rounded-lg mb-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center font-bold text-sm">
+        <div className="border-t border-white/10 p-4">
+          <div className="mb-2 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#C9A84C] font-bold text-sm text-[#0A0A0A]">
               {user?.name?.charAt(0).toUpperCase() || "A"}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-white truncate">{user?.name || "Admin"}</p>
-              <p className="text-xs text-gray-400 truncate">{user?.email || "admin@vendora.com"}</p>
+              <p className="truncate text-sm font-semibold text-white">{user?.name || "Admin"}</p>
+              <p className="truncate text-xs text-gray-400">{user?.email || "admin@vendora.com"}</p>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-white/10"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
             Logout
@@ -129,10 +129,10 @@ function AdminLayout({ children }) {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 ml-0 lg:ml-64 p-4 sm:p-6 pt-16 lg:pt-6 overflow-y-auto min-h-screen">
+      <main className="min-h-screen flex-1 overflow-y-auto bg-[#FAFAFA] p-4 pt-16 sm:p-6 lg:ml-64 lg:pt-6">
         <button
           type="button"
-          className="fixed left-4 top-4 z-20 inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white p-3 text-gray-700 shadow-sm lg:hidden"
+          className="fixed left-4 top-4 z-20 inline-flex items-center justify-center rounded-2xl border border-gray-200 bg-white p-3 text-gray-700 shadow-sm lg:hidden"
           aria-label="Open sidebar"
           onClick={() => setMobileSidebarOpen(true)}
         >
@@ -141,7 +141,7 @@ function AdminLayout({ children }) {
           </svg>
         </button>
 
-        <div className="max-w-[1600px] mx-auto min-w-0">
+        <div className="mx-auto min-w-0 max-w-[1600px]">
           {children ?? <Outlet />}
         </div>
       </main>

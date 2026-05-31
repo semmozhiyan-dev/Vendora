@@ -21,6 +21,10 @@ function Product() {
       
       // Add hover images to products (same as Home page)
       const productsWithHover = Array.isArray(productList) ? productList.map((product, index) => {
+        if (product.image) {
+          return product;
+        }
+
         const imageIndex = index % 8; // Cycle through 8 image pairs
         
         if (imageIndex === 0) {
