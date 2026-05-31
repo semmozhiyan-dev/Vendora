@@ -327,7 +327,7 @@ function Products() {
       >
         {formError && (
           <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 p-3">
-            <p className="text-sm text-red-700">Failed to save product</p>
+            <p className="text-sm text-red-700">{formError}</p>
           </div>
         )}
         <ProductForm
