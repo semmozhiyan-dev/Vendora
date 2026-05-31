@@ -75,7 +75,6 @@ function ProductForm({ onSubmit, initialData = null, loading = false }) {
           value={formData.description}
           onChange={handleChange}
           rows={4}
-          required
           className="w-full resize-none rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3.5 text-gray-900 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20"
           placeholder="Enter product description"
         />
@@ -116,7 +115,7 @@ function ProductForm({ onSubmit, initialData = null, loading = false }) {
               value={formData.price}
               onChange={handleChange}
               required
-              min="0"
+              min="0.01"
               step="0.01"
               className="w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] py-3.5 pl-8 pr-4 text-gray-900 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20"
               placeholder="0.00"
@@ -154,7 +153,6 @@ function ProductForm({ onSubmit, initialData = null, loading = false }) {
           name="image"
           value={formData.image}
           onChange={handleChange}
-          required
           className="w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3.5 text-gray-900 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20"
           placeholder="/images/products/image1.jpg or https://..."
         />
