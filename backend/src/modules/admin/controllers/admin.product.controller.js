@@ -133,7 +133,13 @@ exports.getAllProducts = async (req, res) => {
       });
     }
 
-    const filters = { category, isActive: isActive === "true" };
+    const filters = {};
+    if (category) {
+      filters.category = category;
+    }
+    if (isActive !== undefined) {
+      filters.isActive = isActive === "true";
+    }
     const result = await adminService.getAllProducts(page, limit, filters);
 
     console.info(`[${requestId}] Retrieved ${result.data.length} products`);
