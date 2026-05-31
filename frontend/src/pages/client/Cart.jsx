@@ -88,8 +88,8 @@ function Cart() {
     <>
       {toast && (
         <div className="fixed top-20 right-6 z-50 animate-slide-in">
-          <div className={`px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${
-            toast.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'
+          <div className={`flex items-center gap-3 rounded-2xl border px-5 py-3 shadow-xl ${
+            toast.type === 'success' ? 'border-emerald-200 bg-white text-emerald-700' : 'border-red-200 bg-white text-red-700'
           }`}>
             {toast.type === 'success' ? (
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,58 +105,64 @@ function Cart() {
         </div>
       )}
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 sm:mb-10">Shopping Cart</h1>
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+        <div className="mb-8 rounded-[32px] border border-gray-200 bg-white px-6 py-8 shadow-sm sm:mb-10 sm:px-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#C9A84C]">Cart</p>
+          <h1 className="mt-3 text-4xl font-black tracking-tight text-[#0A0A0A] sm:text-5xl">Shopping cart</h1>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-gray-600 sm:text-base">
+            Review your selected items with a clean, calm layout designed to keep the checkout path clear and premium.
+          </p>
+        </div>
 
         {loading ? (
-          <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
+          <div className="flex flex-col gap-6 lg:flex-row lg:gap-10">
             <div className="flex-1 space-y-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="flex gap-4 bg-white border border-gray-100 rounded-xl p-4 shadow-sm animate-pulse">
-                  <div className="w-20 h-20 bg-gray-200 rounded-lg flex-shrink-0"></div>
+                <div key={i} className="flex gap-4 rounded-[28px] border border-gray-200 bg-white p-4 shadow-sm animate-pulse">
+                  <div className="h-20 w-20 flex-shrink-0 rounded-2xl bg-gray-200"></div>
                   <div className="flex-1 space-y-2">
-                    <div className="h-5 bg-gray-200 rounded w-3/4"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-                    <div className="h-7 bg-gray-200 rounded w-24 mt-3"></div>
+                    <div className="h-5 w-3/4 rounded bg-gray-200"></div>
+                    <div className="h-4 w-1/4 rounded bg-gray-200"></div>
+                    <div className="mt-3 h-7 w-24 rounded bg-gray-200"></div>
                   </div>
-                  <div className="w-16 h-5 bg-gray-200 rounded"></div>
+                  <div className="h-5 w-16 rounded bg-gray-200"></div>
                 </div>
               ))}
             </div>
             <div className="lg:w-80 flex-shrink-0">
-              <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm animate-pulse">
-                <div className="h-6 bg-gray-200 rounded w-32 mb-6"></div>
+              <div className="rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm animate-pulse">
+                <div className="mb-6 h-6 w-32 rounded bg-gray-200"></div>
                 <div className="space-y-3">
-                  <div className="h-4 bg-gray-200 rounded"></div>
-                  <div className="h-4 bg-gray-200 rounded"></div>
-                  <div className="h-4 bg-gray-200 rounded"></div>
+                  <div className="h-4 rounded bg-gray-200"></div>
+                  <div className="h-4 rounded bg-gray-200"></div>
+                  <div className="h-4 rounded bg-gray-200"></div>
                 </div>
-                <div className="border-t border-gray-100 mt-4 pt-4">
-                  <div className="h-5 bg-gray-200 rounded"></div>
+                <div className="mt-4 border-t border-gray-100 pt-4">
+                  <div className="h-5 rounded bg-gray-200"></div>
                 </div>
-                <div className="h-12 bg-gray-200 rounded-lg mt-6"></div>
+                <div className="mt-6 h-12 rounded-full bg-gray-200"></div>
               </div>
             </div>
           </div>
         ) : error ? (
-          <div className="text-center py-12">
-            <p className="text-red-500 text-lg mb-4">{error}</p>
+          <div className="py-12 text-center">
+            <p className="mb-4 text-lg text-red-500">{error}</p>
             <button
               onClick={fetchCart}
-              className="px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all duration-200 active:scale-98"
+              className="rounded-full bg-[#0A0A0A] px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
             >
               Retry
             </button>
           </div>
         ) : items.length === 0 ? (
-          <div className="text-center py-20 sm:py-24">
-            <p className="text-xl text-gray-400 mb-6">Your cart is empty.</p>
-            <Link to="/products" className="px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all duration-200 active:scale-98 inline-block">
+          <div className="py-20 text-center sm:py-24">
+            <p className="mb-6 text-xl text-gray-500">Your cart is empty.</p>
+            <Link to="/products" className="inline-block rounded-full bg-[#0A0A0A] px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
               Browse Products
             </Link>
           </div>
         ) : (
-          <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
+          <div className="flex flex-col gap-6 lg:flex-row lg:gap-10">
             {/* Cart Items */}
             <div className="flex-1 space-y-4">
               {items.map((item) => {
@@ -164,50 +170,50 @@ function Cart() {
                 const price = item.price ?? product.price ?? 0;
                 const isUpdating = updatingItems.has(product._id);
                 return (
-                  <div key={product._id} className="flex flex-col sm:flex-row gap-4 bg-white border border-gray-100 rounded-xl p-4 shadow-sm relative transition-all duration-200 hover:shadow-md hover:border-gray-200">
+                  <div key={product._id} className="relative flex flex-col gap-4 rounded-[28px] border border-gray-200 bg-white p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg sm:flex-row">
                     {isUpdating && (
-                      <div className="absolute inset-0 bg-white/80 rounded-xl flex items-center justify-center z-10 transition-opacity duration-200">
-                        <span className="text-sm text-gray-600 font-medium">Updating...</span>
+                      <div className="absolute inset-0 z-10 flex items-center justify-center rounded-[28px] bg-white/80 transition-opacity duration-200">
+                        <span className="text-sm font-medium text-gray-600">Updating...</span>
                       </div>
                     )}
                     <img
                       src={product.image || '/images/products/image1.jpg'}
                       alt={product.name}
-                      className="w-full sm:w-20 h-40 sm:h-20 object-cover rounded-lg flex-shrink-0 transition-transform duration-200 hover:scale-105"
+                      className="h-40 w-full flex-shrink-0 rounded-2xl object-cover transition-transform duration-200 hover:scale-105 sm:h-24 sm:w-24"
                     />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-900 truncate">{product.name}</p>
-                      <p className="text-gray-500 text-sm mt-0.5">₹{price.toLocaleString()}</p>
-                      <div className="flex items-center gap-3 mt-3">
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-base font-semibold text-gray-950">{product.name}</p>
+                      <p className="mt-1 text-sm text-gray-500">₹{price.toLocaleString()}</p>
+                      <div className="mt-3 flex items-center gap-3">
                         <button
                           onClick={() => updateQuantity(product._id, item.quantity - 1)}
                           disabled={isUpdating}
-                          className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-100 hover:border-gray-400 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+                          className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 text-gray-600 transition-all duration-150 hover:-translate-y-0.5 hover:border-gray-400 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           −
                         </button>
-                        <span className="text-sm font-medium w-4 text-center">{item.quantity}</span>
+                        <span className="w-4 text-center text-sm font-medium">{item.quantity}</span>
                         <button
                           onClick={() => updateQuantity(product._id, item.quantity + 1)}
                           disabled={isUpdating}
-                          className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-100 hover:border-gray-400 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+                          className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 text-gray-600 transition-all duration-150 hover:-translate-y-0.5 hover:border-gray-400 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           +
                         </button>
                       </div>
                     </div>
-                    <div className="flex items-end sm:flex-col sm:items-end justify-between sm:justify-between gap-3 sm:gap-0">
+                    <div className="flex items-end justify-between gap-3 sm:flex-col sm:items-end sm:justify-between sm:gap-0">
                       <button
                         onClick={() => removeItem(product._id)}
                         disabled={isUpdating}
-                        className="text-gray-400 hover:text-red-500 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed active:scale-90"
+                        className="text-gray-400 transition-all duration-150 hover:text-red-500 disabled:cursor-not-allowed disabled:opacity-50"
                         aria-label="Remove"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
                       </button>
-                      <p className="font-semibold text-gray-900">₹{(price * item.quantity).toLocaleString()}</p>
+                      <p className="font-mono text-lg font-bold text-[#0A0A0A]">₹{(price * item.quantity).toLocaleString()}</p>
                     </div>
                   </div>
                 );
@@ -216,35 +222,35 @@ function Cart() {
 
             {/* Order Summary */}
             <div className="lg:w-80 flex-shrink-0">
-              <div className="bg-white border border-gray-100 rounded-xl p-5 sm:p-6 shadow-sm sticky top-24">
-                <h2 className="text-lg font-semibold text-gray-900 mb-6">Order Summary</h2>
+              <div className="sticky top-24 rounded-[28px] border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
+                <h2 className="mb-6 text-2xl font-bold tracking-tight text-[#0A0A0A]">Order Summary</h2>
                 <div className="space-y-3 text-sm text-gray-600">
-                  <div className="flex justify-between">
+                  <div className="flex justify-between gap-3">
                     <span>Subtotal ({items.length} item{items.length !== 1 ? 's' : ''})</span>
                     <span>₹{subtotal.toLocaleString()}</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between gap-3">
                     <span>Shipping</span>
-                    <span className="text-green-600">Free</span>
+                    <span className="text-emerald-600">Free</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between gap-3">
                     <span>Tax (18% GST)</span>
                     <span>₹{tax.toLocaleString()}</span>
                   </div>
                 </div>
-                <div className="border-t border-gray-100 mt-4 pt-4 flex justify-between font-semibold text-gray-900">
+                <div className="mt-4 flex justify-between border-t border-gray-100 pt-4 font-semibold text-gray-900">
                   <span>Total</span>
-                  <span>₹{total.toLocaleString()}</span>
+                  <span className="font-mono text-lg">₹{total.toLocaleString()}</span>
                 </div>
                 <button
                   onClick={() => navigate('/checkout')}
-                  className="mt-6 w-full py-3 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-all duration-200 active:scale-98"
+                  className="mt-6 w-full rounded-full bg-[#C9A84C] py-4 text-sm font-bold text-[#0A0A0A] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
                 >
                   Proceed to Checkout
                 </button>
                 <Link
                   to="/products"
-                  className="mt-3 block text-center text-sm text-gray-500 hover:text-gray-700 transition-colors duration-150"
+                  className="mt-3 block text-center text-sm font-medium text-gray-500 transition-colors duration-150 hover:text-[#0A0A0A]"
                 >
                   Continue Shopping
                 </Link>

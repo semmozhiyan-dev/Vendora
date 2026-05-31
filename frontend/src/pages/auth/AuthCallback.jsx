@@ -50,7 +50,15 @@ const AuthCallback = () => {
     finishLogin();
   }, [login, navigate]);
 
-  return <div className="flex min-h-screen items-center justify-center text-gray-600">Logging you in...</div>;
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-[#FAFAFA] px-4">
+      <div className="rounded-[28px] border border-gray-200 bg-white px-6 py-8 text-center shadow-sm">
+        <div className="mx-auto mb-4 h-12 w-12 animate-pulse rounded-full bg-[#C9A84C]/20" />
+        <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#C9A84C]">Vendora</p>
+        <p className="mt-3 text-base font-medium text-[#0A0A0A]">Logging you in...</p>
+      </div>
+    </div>
+  );
 };
 
 export default AuthCallback;
