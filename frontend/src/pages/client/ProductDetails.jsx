@@ -148,58 +148,58 @@ function ProductDetails() {
 
   if (loading) {
     return (
-      <div className="bg-white min-h-screen">
-        <div className="w-full px-4 sm:px-6 lg:px-12 py-10 sm:py-16">
+      <div className="min-h-screen bg-[#FAFAFA]">
+        <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-16">
           {/* Breadcrumb Skeleton */}
-          <div className="max-w-7xl mx-auto mb-6 sm:mb-8 animate-pulse">
-            <div className="h-4 bg-gray-200 rounded w-64"></div>
+          <div className="mb-6 animate-pulse sm:mb-8">
+            <div className="h-4 w-64 rounded bg-gray-200"></div>
           </div>
 
           {/* Two-column layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 max-w-7xl mx-auto">
+          <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
             {/* Left Column - Image Skeleton */}
             <div className="animate-pulse">
-              <div className="aspect-square bg-gray-200 rounded-2xl mb-6"></div>
+              <div className="mb-6 aspect-square rounded-[32px] bg-gray-200"></div>
               <div className="flex gap-4">
-                <div className="w-24 h-24 bg-gray-200 rounded-xl"></div>
-                <div className="w-24 h-24 bg-gray-200 rounded-xl"></div>
+                <div className="h-24 w-24 rounded-2xl bg-gray-200"></div>
+                <div className="h-24 w-24 rounded-2xl bg-gray-200"></div>
               </div>
             </div>
 
             {/* Right Column - Info Skeleton */}
             <div className="animate-pulse space-y-6">
               {/* Category */}
-              <div className="h-3 bg-gray-200 rounded w-24"></div>
+              <div className="h-3 w-24 rounded bg-gray-200"></div>
               
               {/* Product Name */}
               <div className="space-y-3">
-                <div className="h-10 bg-gray-200 rounded w-full"></div>
-                <div className="h-10 bg-gray-200 rounded w-3/4"></div>
+                <div className="h-10 w-full rounded bg-gray-200"></div>
+                <div className="h-10 w-3/4 rounded bg-gray-200"></div>
               </div>
               
               {/* Price */}
-              <div className="h-10 bg-gray-200 rounded w-32"></div>
+              <div className="h-10 w-32 rounded bg-gray-200"></div>
               
               {/* Stock Status */}
-              <div className="h-5 bg-gray-200 rounded w-28"></div>
+              <div className="h-5 w-28 rounded bg-gray-200"></div>
               
               {/* Description */}
-              <div className="border-t border-gray-200 pt-6 space-y-3">
-                <div className="h-4 bg-gray-200 rounded w-24"></div>
-                <div className="h-4 bg-gray-200 rounded w-full"></div>
-                <div className="h-4 bg-gray-200 rounded w-full"></div>
-                <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+              <div className="space-y-3 border-t border-gray-200 pt-6">
+                <div className="h-4 w-24 rounded bg-gray-200"></div>
+                <div className="h-4 w-full rounded bg-gray-200"></div>
+                <div className="h-4 w-full rounded bg-gray-200"></div>
+                <div className="h-4 w-5/6 rounded bg-gray-200"></div>
               </div>
               
               {/* Quantity Selector */}
-              <div className="border-t border-gray-200 pt-6 space-y-3">
-                <div className="h-4 bg-gray-200 rounded w-20"></div>
-                <div className="h-12 bg-gray-200 rounded w-48"></div>
+              <div className="space-y-3 border-t border-gray-200 pt-6">
+                <div className="h-4 w-20 rounded bg-gray-200"></div>
+                <div className="h-12 w-48 rounded bg-gray-200"></div>
               </div>
               
               {/* Add to Cart Button */}
               <div className="border-t border-gray-200 pt-6">
-                <div className="h-14 bg-gray-200 rounded-full w-full"></div>
+                <div className="h-14 w-full rounded-full bg-gray-200"></div>
               </div>
             </div>
           </div>
@@ -210,13 +210,13 @@ function ProductDetails() {
 
   if (error || !product) {
     return (
-      <div className="bg-white min-h-screen">
-        <div className="w-full px-4 sm:px-6 lg:px-12 py-10 sm:py-16">
-          <div className="text-center py-20">
-            <p className="text-2xl text-gray-400 font-light mb-6">{error || 'Product not found'}</p>
+      <div className="min-h-screen bg-[#FAFAFA]">
+        <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-16">
+          <div className="rounded-[32px] border border-gray-200 bg-white px-6 py-20 text-center shadow-sm">
+            <p className="mb-6 text-2xl font-semibold text-gray-700">{error || 'Product not found'}</p>
             <button
               onClick={fetchProduct}
-              className="px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 active:scale-95 transition-all duration-200"
+              className="rounded-full bg-[#0A0A0A] px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
             >
               Retry
             </button>
@@ -229,35 +229,35 @@ function ProductDetails() {
   
 
   return (
-    <div className="bg-white min-h-screen">
-      <div className="w-full px-4 sm:px-6 lg:px-12 py-10 sm:py-16">
+    <div className="min-h-screen bg-[#FAFAFA]">
+      <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-16">
         {/* Breadcrumb */}
-        <div className="max-w-7xl mx-auto mb-6 sm:mb-8">
+        <div className="mb-6 sm:mb-8">
           <div className="flex items-center gap-2 text-sm text-gray-500">
-            <Link to="/" className="hover:text-gray-900 transition-colors">Home</Link>
+            <Link to="/" className="transition-colors hover:text-[#0A0A0A]">Home</Link>
             <span>/</span>
-            <Link to="/products" className="hover:text-gray-900 transition-colors">Products</Link>
+            <Link to="/products" className="transition-colors hover:text-[#0A0A0A]">Products</Link>
             <span>/</span>
-            <span className="text-gray-900">{product.name}</span>
+            <span className="text-[#0A0A0A]">{product.name}</span>
           </div>
         </div>
 
         {/* Two-column layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 max-w-7xl mx-auto">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
           {/* Left Column - Images */}
           <div>
             {/* Main Image */}
-            <div className="aspect-square bg-gray-100 rounded-2xl overflow-hidden mb-4 sm:mb-6 group cursor-zoom-in">
+            <div className="group mb-4 overflow-hidden rounded-[32px] border border-gray-200 bg-white shadow-sm sm:mb-6 cursor-zoom-in">
               {images[selectedImage] ? (
                 <img
                   src={images[selectedImage]}
                   alt={product.name}
                   loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                  className="aspect-square w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <svg className="w-32 h-32 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex aspect-square w-full items-center justify-center bg-gray-50">
+                  <svg className="h-32 w-32 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                   </svg>
                 </div>
@@ -266,22 +266,22 @@ function ProductDetails() {
 
             {/* Thumbnail Images */}
             {images.length > 1 && (
-              <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-2 sm:pb-0 sm:flex-wrap">
+              <div className="flex gap-3 overflow-x-auto pb-2 sm:gap-4 sm:flex-wrap sm:pb-0">
                 {images.map((img, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-xl overflow-hidden transition-all duration-200 ${
+                    className={`h-20 w-20 flex-shrink-0 overflow-hidden rounded-2xl border bg-white transition-all duration-200 sm:h-24 sm:w-24 ${
                       selectedImage === index
-                        ? 'ring-2 ring-gray-900 ring-offset-2 scale-105'
-                        : 'opacity-60 hover:opacity-100 hover:scale-105'
+                        ? 'border-[#C9A84C] ring-2 ring-[#C9A84C]/30 ring-offset-2 scale-105'
+                        : 'border-gray-200 opacity-70 hover:scale-105 hover:opacity-100'
                     }`}
                   >
                     <img
                       src={img}
                       alt=""
                       loading="lazy"
-                      className="w-full h-full object-cover"
+                      className="h-full w-full object-cover"
                     />
                   </button>
                 ))}
@@ -290,28 +290,28 @@ function ProductDetails() {
           </div>
 
           {/* Right Column - Product Info */}
-          <div className="space-y-5 sm:space-y-6">
+          <div className="space-y-5 rounded-[32px] border border-gray-200 bg-white p-6 shadow-sm sm:space-y-6 sm:p-8 lg:p-10">
             {/* Category */}
             {product.category && (
-              <p className="text-xs text-gray-500 uppercase tracking-widest font-medium">{product.category}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#C9A84C]">{product.category}</p>
             )}
 
             {/* Product Name */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 tracking-tight leading-tight">
+            <h1 className="text-4xl font-black tracking-tight text-gray-950 sm:text-5xl">
               {product.name}
             </h1>
 
             {/* Price */}
-            <div className="text-3xl sm:text-4xl font-bold text-gray-900">
+            <div className="font-mono text-4xl font-bold text-[#0A0A0A] sm:text-5xl">
               ${typeof product.price === 'number' ? product.price.toFixed(2) : product.price}
             </div>
 
             {/* Stock Status */}
             <div className="flex items-center gap-3 py-4">
-              <div className={`w-2 h-2 rounded-full ${
+              <div className={`h-2.5 w-2.5 rounded-full ${
                 product.stock > 0 ? 'bg-green-500' : 'bg-red-500'
               }`}></div>
-              <span className="text-sm font-medium text-gray-700">
+              <span className="text-sm font-semibold text-gray-700">
                 {product.stock > 0 ? (
                   <>{product.stock} in stock</>
                 ) : (
@@ -322,27 +322,27 @@ function ProductDetails() {
 
             {/* Description */}
             <div className="border-t border-gray-200 pt-6">
-              <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-3">Description</h2>
-              <p className="text-base text-gray-600 leading-relaxed">
+              <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.24em] text-gray-500">Description</h2>
+              <p className="text-sm leading-relaxed text-gray-600 sm:text-base">
                 {product.description || 'No description available'}
               </p>
             </div>
 
             {/* Quantity Selector */}
             <div className="border-t border-gray-200 pt-6">
-              <label className="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-3 block">Quantity</label>
-              <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
+              <label className="mb-3 block text-xs font-semibold uppercase tracking-[0.24em] text-gray-500">Quantity</label>
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-11 h-11 sm:w-12 sm:h-12 border border-gray-300 rounded-lg hover:bg-gray-100 hover:border-gray-400 active:scale-95 transition-all duration-200 font-medium text-lg"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-white text-lg font-medium transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-400 hover:shadow-sm active:scale-95"
                 >
                   −
                 </button>
-                <span className="text-xl font-semibold w-12 sm:w-16 text-center">{quantity}</span>
+                <span className="w-12 text-center text-xl font-semibold sm:w-16">{quantity}</span>
                 <button
                   onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
                   disabled={quantity >= product.stock}
-                  className="w-11 h-11 sm:w-12 sm:h-12 border border-gray-300 rounded-lg hover:bg-gray-100 hover:border-gray-400 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-300 font-medium text-lg"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-white text-lg font-medium transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-400 hover:shadow-sm active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:border-gray-300 disabled:hover:shadow-none"
                 >
                   +
                 </button>
@@ -354,7 +354,7 @@ function ProductDetails() {
               <button
                 onClick={handleAddToCart}
                 disabled={product.stock === 0 || addingToCart}
-                className="w-full py-4 bg-gray-900 text-white rounded-full text-base font-semibold hover:bg-gray-800 active:scale-98 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-900 disabled:active:scale-100"
+                className="w-full rounded-full bg-[#C9A84C] py-4 text-base font-bold text-[#0A0A0A] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-sm"
               >
                 {addingToCart ? 'Adding...' : product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
               </button>
@@ -364,9 +364,9 @@ function ProductDetails() {
 
         {/* Related Products Section */}
         {relatedProducts.length > 0 && (
-          <div className="mt-16 sm:mt-20 lg:mt-24 max-w-7xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-6 sm:mb-8">You May Also Like</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div className="mx-auto mt-16 max-w-7xl sm:mt-20 lg:mt-24">
+            <h2 className="mb-6 border-l-4 border-[#C9A84C] pl-4 text-3xl font-bold tracking-tight text-[#0A0A0A] sm:mb-8 sm:text-4xl">You May Also Like</h2>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {relatedProducts.map((relatedProduct) => (
                 <ProductCard key={relatedProduct._id} product={relatedProduct} />
               ))}
