@@ -23,7 +23,7 @@ function Products() {
     try {
       setLoading(true);
       setError("");
-      const res = await API.get("/products");
+      const res = await API.get("/admin/products");
       // Handle different response structures
       const productList = res.data.items || res.data.products || res.data.data || res.data;
       setProducts(Array.isArray(productList) ? productList : []);

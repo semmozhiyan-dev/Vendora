@@ -52,7 +52,7 @@ const getProducts = async (req, res, next) => {
   logger.info(`[${req.id}] Fetching products: page=${page}, limit=${limit}`);
 
     const [items, total] = await Promise.all([
-      Product.find().skip(skip).limit(limit).lean(),
+      Product.find().sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
       Product.countDocuments()
     ]);
 
