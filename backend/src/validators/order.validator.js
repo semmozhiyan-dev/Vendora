@@ -18,6 +18,7 @@ const createOrderSchema = Joi.object({
       })
     )
     .optional(),
+  totalAmount: Joi.number().positive().optional(),
 });
 
 const updateOrderStatusSchema = Joi.object({
