@@ -53,29 +53,30 @@ function Orders() {
 
   if (loading) {
     return (
-      <div>
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Orders</h1>
-          <p className="text-gray-600 mt-1">Manage customer orders and track deliveries</p>
+      <div className="space-y-6">
+        <div className="rounded-[28px] border border-gray-200 bg-white px-6 py-6 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#C9A84C]">Operations</p>
+          <h1 className="mt-3 text-3xl font-black tracking-tight text-[#0A0A0A]">Orders</h1>
+          <p className="mt-1 text-sm text-gray-600">Manage customer orders and track deliveries</p>
         </div>
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+        <div className="overflow-hidden rounded-[28px] border border-gray-200 bg-white shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-purple-50 to-pink-50 border-b border-gray-100">
+              <thead className="border-b border-gray-100 bg-[#FAFAFA]">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Order ID
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     User Email
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Total Amount
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Action
                   </th>
                 </tr>
@@ -96,11 +97,11 @@ function Orders() {
 
   if (error) {
     return (
-      <div className="bg-white rounded-xl shadow-md border border-gray-100 py-16 text-center">
-        <p className="text-gray-500 text-lg">Failed to load orders</p>
+      <div className="rounded-[28px] border border-gray-200 bg-white py-16 text-center shadow-sm">
+        <p className="text-lg text-gray-500">Failed to load orders</p>
         <button
           onClick={fetchOrders}
-          className="mt-4 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition"
+          className="mt-4 rounded-full bg-[#0A0A0A] px-5 py-2.5 font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
         >
           Retry
         </button>
@@ -109,33 +110,34 @@ function Orders() {
   }
 
   return (
-    <div>
+    <div className="space-y-6">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Orders</h1>
-        <p className="text-gray-600 mt-1">Manage customer orders and track deliveries</p>
+      <div className="rounded-[28px] border border-gray-200 bg-white px-6 py-6 shadow-sm">
+        <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#C9A84C]">Operations</p>
+        <h1 className="mt-3 text-3xl font-black tracking-tight text-[#0A0A0A]">Orders</h1>
+        <p className="mt-1 text-sm text-gray-600">Manage customer orders and track deliveries</p>
       </div>
 
       {/* Orders Table */}
       {orders.length > 0 ? (
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+        <div className="overflow-hidden rounded-[28px] border border-gray-200 bg-white shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-purple-50 to-pink-50 border-b border-gray-100">
+              <thead className="border-b border-gray-100 bg-[#FAFAFA]">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Order ID
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     User Email
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Total Amount
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-[0.24em] text-gray-600">
                     Action
                   </th>
                 </tr>
@@ -145,21 +147,21 @@ function Orders() {
                   <tr key={order._id} className="hover:bg-gray-50 transition-colors">
                     {/* Order ID */}
                     <td className="px-6 py-3 whitespace-nowrap">
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-[#0A0A0A]">
                         #{order._id.slice(-8).toUpperCase()}
                       </span>
                     </td>
 
                     {/* User Email */}
                     <td className="px-6 py-3 whitespace-nowrap">
-                      <span className="text-sm text-gray-900">
+                      <span className="text-sm text-[#0A0A0A]">
                         {order.user?.email || "N/A"}
                       </span>
                     </td>
 
                     {/* Total Amount */}
                     <td className="px-6 py-3 whitespace-nowrap">
-                      <span className="text-base font-bold text-purple-600">
+                      <span className="text-base font-bold text-[#0A0A0A]">
                         ${order.totalAmount?.toFixed(2) || "0.00"}
                       </span>
                     </td>
@@ -170,7 +172,7 @@ function Orders() {
                         value={order.status}
                         onChange={(e) => handleStatusChange(order._id, e.target.value)}
                         disabled={updatingStatus === order._id}
-                        className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all hover:border-purple-400 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-300"
+                        className="rounded-2xl border border-gray-200 bg-[#FAFAFA] px-3 py-1.5 text-sm font-medium text-[#0A0A0A] transition-all focus:border-[#C9A84C] focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20 hover:border-gray-300 disabled:cursor-not-allowed disabled:opacity-50"
                         style={{
                           color:
                             order.status === "DELIVERED"
@@ -194,7 +196,7 @@ function Orders() {
                     {/* Action */}
                     <td className="px-6 py-3 whitespace-nowrap text-right">
                       <button
-                        className="text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors"
+                        className="text-sm font-semibold text-[#C9A84C] transition-colors hover:text-[#0A0A0A]"
                         title="View details"
                       >
                         View Details
@@ -207,8 +209,8 @@ function Orders() {
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 py-16 text-center">
-          <p className="text-gray-500 text-lg">No orders yet</p>
+        <div className="rounded-[28px] border border-gray-200 bg-white py-16 text-center shadow-sm">
+          <p className="text-lg text-gray-500">No orders yet</p>
         </div>
       )}
     </div>

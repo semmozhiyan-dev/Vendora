@@ -21,6 +21,10 @@ function Home() {
       
       // Add hover images to all 8 products
       const productsWithHover = Array.isArray(productList) ? productList.map((product, index) => {
+        if (product.image) {
+          return product;
+        }
+
         if (index === 0) {
           return { ...product, image: '/images/products/image1.jpg', secondaryImage: '/images/products/image2.jpg' };
         } else if (index === 1) {
