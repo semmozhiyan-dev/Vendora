@@ -23,7 +23,7 @@ function Products() {
     try {
       setLoading(true);
       setError("");
-      const res = await API.get("/products");
+      const res = await API.get("/admin/products");
       // Handle different response structures
       const productList = res.data.items || res.data.products || res.data.data || res.data;
       setProducts(Array.isArray(productList) ? productList : []);
@@ -40,7 +40,8 @@ function Products() {
       setFormError("");
       
       // Send POST request to create product
-      await API.post("/admin/products", formData);
+      const res = await API.post("/admin/products", formData);
+      const createdProduct = res.data.data || res.data.product || res.data;
       
       toast.success("Product created successfully!");
       
@@ -48,6 +49,10 @@ function Products() {
       setIsModalOpen(false);
       setEditingProduct(null);
       
+      if (createdProduct && createdProduct._id) {
+        setProducts((prevProducts) => [createdProduct, ...prevProducts]);
+      }
+
       // Refetch products to show the new product
       await fetchProducts();
       
@@ -68,7 +73,8 @@ function Products() {
       setFormError("");
       
       // Send PUT request to update product
-      await API.put(`/admin/products/${editingProduct._id}`, formData);
+      const res = await API.put(`/admin/products/${editingProduct._id}`, formData);
+      const updatedProduct = res.data.data || res.data.product || res.data;
       
       toast.success("Product updated successfully!");
       
@@ -76,6 +82,12 @@ function Products() {
       setIsModalOpen(false);
       setEditingProduct(null);
       
+      if (updatedProduct && updatedProduct._id) {
+        setProducts((prevProducts) =>
+          prevProducts.map((product) => (product._id === updatedProduct._id ? updatedProduct : product))
+        );
+      }
+
       // Refetch products to show updated data
       await fetchProducts();
       
