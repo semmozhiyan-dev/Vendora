@@ -279,12 +279,19 @@ export function ProfileOrders() {
           ))}
         </div>
       ) : error ? (
-        <div className="rounded-[28px] border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-800">
+        <div className="rounded-[28px] border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700 shadow-sm">
           {error}
         </div>
       ) : orders.length === 0 ? (
-        <div className="rounded-[28px] border border-gray-200 bg-[#FAFAFA] px-5 py-8 text-sm text-gray-500">
-          You have not placed any orders yet.
+        <div className="rounded-[28px] border border-gray-200 bg-white px-6 py-10 text-center text-sm text-gray-500 shadow-sm">
+          <p className="text-base font-medium text-gray-700">You have not placed any orders yet.</p>
+          <button
+            type="button"
+            onClick={() => navigate("/products")}
+            className="mt-5 rounded-full bg-[#C9A84C] px-6 py-3 text-sm font-bold text-[#0A0A0A] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+          >
+            Start Shopping
+          </button>
         </div>
       ) : (
         <div className="space-y-4">
@@ -293,25 +300,29 @@ export function ProfileOrders() {
               key={order._id}
               type="button"
               onClick={() => navigate(`/orders/${order._id}`)}
-              className="w-full rounded-[28px] border border-gray-200 bg-white px-5 py-5 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-lg"
+              className="group w-full rounded-[28px] border border-gray-200 bg-white px-5 py-5 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-lg"
             >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="space-y-2">
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#C9A84C]">Order</p>
                   <div className="flex flex-wrap items-center gap-3">
-                    <p className="text-sm font-medium text-gray-900">Order #{order._id}</p>
-                    <span className={`rounded-full px-3 py-1 text-xs font-semibold ${getStatusClassName(order.status)}`}>
+                    <p className="font-mono text-sm font-semibold text-[#0A0A0A]">#{order._id}</p>
+                    <span className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${getStatusClassName(order.status)}`}>
                       {order.status || "UNKNOWN"}
                     </span>
                   </div>
                   <p className="text-sm text-gray-500">Date: {formatDate(order.createdAt)}</p>
                 </div>
 
-                <div className="text-sm font-medium text-gray-900">{formatAmount(order.totalAmount)}</div>
+                <div className="rounded-[22px] border border-gray-200 bg-[#FAFAFA] px-4 py-3 text-sm font-medium text-gray-900">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">Total</p>
+                  <p className="mt-1 text-base font-bold text-[#0A0A0A]">{formatAmount(order.totalAmount)}</p>
+                </div>
               </div>
 
-              <div className="mt-5 flex items-center justify-between text-sm text-gray-500">
+              <div className="mt-5 flex items-center justify-between border-t border-gray-100 pt-4 text-sm text-gray-500">
                 <span>Tap to view order details</span>
-                <span aria-hidden="true">→</span>
+                <span className="text-[#C9A84C] transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">→</span>
               </div>
             </button>
           ))}

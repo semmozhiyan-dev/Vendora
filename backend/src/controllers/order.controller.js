@@ -18,7 +18,7 @@ const createOrder = async (req, res, next) => {
     logger.info(`[${req.id}] Creating order for user: ${userId}`);
 
     let orderItems = [];
-    let totalAmount = 0;
+    let subtotal = 0;
 
     if (items && Array.isArray(items) && items.length > 0) {
       for (const item of items) {
@@ -33,7 +33,7 @@ const createOrder = async (req, res, next) => {
           return res.status(400).json({ success: false, message: `Insufficient stock for product: ${product.name}` });
         }
         orderItems.push({ product: product._id, quantity: item.quantity, price: product.price });
-        totalAmount += product.price * item.quantity;
+        subtotal += product.price * item.quantity;
       }
     } else {
       const cart = await Cart.findOne({ user: userId }).populate('items.product');
@@ -49,13 +49,17 @@ const createOrder = async (req, res, next) => {
 
       orderItems = cart.items.map((item) => {
         const price = item.product.price;
-        totalAmount += price * item.quantity;
+        subtotal += price * item.quantity;
         return { product: item.product._id, quantity: item.quantity, price };
       });
 
       cart.items = [];
       await cart.save();
     }
+
+    const shippingAmount = 0;
+    const taxAmount = Math.round(subtotal * 0.18);
+    const totalAmount = Math.round(subtotal + shippingAmount + taxAmount);
 
     const order = await Order.create({
       user: userId,
