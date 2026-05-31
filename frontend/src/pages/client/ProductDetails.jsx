@@ -5,6 +5,13 @@ import API from '../../api/axios';
 import ProductCard from '../../components/client/ProductCard';
 import { useCart } from '../../context/CartContext';
 
+const formatINR = (value) =>
+  new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0,
+  }).format(Number(value) || 0);
+
 function ProductDetails() {
   const { id } = useParams();
   const { refreshCart } = useCart();
@@ -303,7 +310,7 @@ function ProductDetails() {
 
             {/* Price */}
             <div className="font-mono text-4xl font-bold text-[#0A0A0A] sm:text-5xl">
-              ${typeof product.price === 'number' ? product.price.toFixed(2) : product.price}
+              {formatINR(product.price)}
             </div>
 
             {/* Stock Status */}

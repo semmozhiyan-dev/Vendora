@@ -3,6 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import API from '../../api/axios';
 
+const formatINR = (value) =>
+  new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0,
+  }).format(Math.round(Number(value) || 0));
+
 function Cart() {
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -80,9 +87,14 @@ function Cart() {
   };
 
   const items = cart?.items || [];
-  const subtotal = items.reduce((sum, item) => sum + (item.price ?? item.product?.price ?? 0) * item.quantity, 0);
-  const tax = subtotal * 0.18; // 18% GST
-  const total = subtotal + tax;
+  const subtotal = items.reduce((sum, item) => {
+    const price = Number(item.price ?? item.product?.price ?? 0);
+    const quantity = Number(item.quantity) || 0;
+    return sum + price * quantity;
+  }, 0);
+  const shipping = 0;
+  const tax = Math.round(subtotal * 0.18); // 18% GST
+  const total = Math.round(subtotal + shipping + tax);
 
   return (
     <>
@@ -183,7 +195,7 @@ function Cart() {
                     />
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-base font-semibold text-gray-950">{product.name}</p>
-                      <p className="mt-1 text-sm text-gray-500">₹{price.toLocaleString()}</p>
+                      <p className="mt-1 text-sm text-gray-500">{formatINR(price)}</p>
                       <div className="mt-3 flex items-center gap-3">
                         <button
                           onClick={() => updateQuantity(product._id, item.quantity - 1)}
@@ -213,7 +225,7 @@ function Cart() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
                       </button>
-                      <p className="font-mono text-lg font-bold text-[#0A0A0A]">₹{(price * item.quantity).toLocaleString()}</p>
+                      <p className="font-mono text-lg font-bold text-[#0A0A0A]">{formatINR(price * item.quantity)}</p>
                     </div>
                   </div>
                 );
@@ -227,7 +239,7 @@ function Cart() {
                 <div className="space-y-3 text-sm text-gray-600">
                   <div className="flex justify-between gap-3">
                     <span>Subtotal ({items.length} item{items.length !== 1 ? 's' : ''})</span>
-                    <span>₹{subtotal.toLocaleString()}</span>
+                    <span>{formatINR(subtotal)}</span>
                   </div>
                   <div className="flex justify-between gap-3">
                     <span>Shipping</span>
@@ -235,12 +247,12 @@ function Cart() {
                   </div>
                   <div className="flex justify-between gap-3">
                     <span>Tax (18% GST)</span>
-                    <span>₹{tax.toLocaleString()}</span>
+                    <span>{formatINR(tax)}</span>
                   </div>
                 </div>
                 <div className="mt-4 flex justify-between border-t border-gray-100 pt-4 font-semibold text-gray-900">
                   <span>Total</span>
-                  <span className="font-mono text-lg">₹{total.toLocaleString()}</span>
+                  <span className="font-mono text-lg">{formatINR(total)}</span>
                 </div>
                 <button
                   onClick={() => navigate('/checkout')}

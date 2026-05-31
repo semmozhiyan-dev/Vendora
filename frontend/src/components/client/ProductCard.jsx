@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const formatINR = (value) =>
+  new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0,
+  }).format(Number(value) || 0);
+
 function ProductCard({ product }) {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
@@ -58,7 +65,7 @@ function ProductCard({ product }) {
         {category ? <p className="text-xs font-medium uppercase tracking-[0.22em] text-gray-500">{category}</p> : null}
         <h3 className="line-clamp-2 text-lg font-semibold leading-snug text-gray-950">{name}</h3>
         <div className="flex items-center justify-between gap-3">
-          <p className="font-mono text-xl font-bold text-[#0A0A0A]">${typeof price === 'number' ? price.toFixed(2) : price}</p>
+          <p className="font-mono text-xl font-bold text-[#0A0A0A]">{formatINR(price)}</p>
           <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#C9A84C]">View details</span>
         </div>
       </div>
