@@ -52,17 +52,33 @@ function Product() {
   };
 
   return (
-    <div className="bg-white min-h-screen">
-      <div className="w-full px-4 sm:px-6 lg:px-12 py-10 sm:py-16">
-        {/* Header */}
-        <div className="mb-8 sm:mb-12 px-0 sm:px-6">
-          <h1 className="text-3xl sm:text-4xl font-semibold text-gray-900 mb-2">All Products</h1>
-          <p className="text-gray-600">Discover our complete collection</p>
+    <div className="min-h-screen bg-[#FAFAFA]">
+      <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-16">
+        <div className="mb-8 rounded-[32px] border border-gray-200 bg-white px-6 py-8 shadow-sm sm:px-8 sm:py-10">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#C9A84C]">Collection</p>
+              <h1 className="mt-3 text-4xl font-black tracking-tight text-[#0A0A0A] sm:text-5xl">All products</h1>
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-gray-600 sm:text-base">
+                A refined catalog of essentials and statement pieces, laid out with clear spacing, high contrast, and a premium editorial feel.
+              </p>
+            </div>
+            <div className="grid grid-cols-3 gap-3 sm:gap-4">
+              {[
+                { label: 'Clean layout' },
+                { label: 'Premium finish' },
+                { label: 'Fast browsing' },
+              ].map((item) => (
+                <div key={item.label} className="rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-4 text-center shadow-sm">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gray-500">{item.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* Products Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 px-0 sm:px-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
             <CardSkeleton />
             <CardSkeleton />
             <CardSkeleton />
@@ -73,24 +89,24 @@ function Product() {
             <CardSkeleton />
           </div>
         ) : error ? (
-          <div className="text-center py-16">
-            <p className="text-gray-500 text-lg mb-4">{error}</p>
+          <div className="rounded-[28px] border border-gray-200 bg-white px-6 py-16 text-center shadow-sm">
+            <p className="text-lg font-medium text-gray-700">{error}</p>
             <button
               onClick={fetchProducts}
-              className="px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+              className="mt-6 inline-flex items-center justify-center rounded-full bg-[#0A0A0A] px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
             >
               Retry
             </button>
           </div>
         ) : products.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 px-0 sm:px-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
             {products.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
           </div>
         ) : (
-          <div className="text-center py-20">
-            <p className="text-2xl text-gray-400 font-light">No products available</p>
+          <div className="rounded-[28px] border border-gray-200 bg-white px-6 py-20 text-center shadow-sm">
+            <p className="text-2xl font-semibold text-gray-500">No products available</p>
           </div>
         )}
       </div>

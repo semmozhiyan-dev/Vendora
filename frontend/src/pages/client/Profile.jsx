@@ -18,17 +18,17 @@ function SidebarLink({ to, children }) {
       to={to}
       end={to === "/profile"}
       className={({ isActive }) =>
-        `flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-sm font-medium transition-colors ${
+        `flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-sm font-semibold transition-all duration-200 ${
           isActive
-            ? "bg-gray-900 text-white shadow-sm"
-            : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+            ? "bg-[#0A0A0A] text-white shadow-sm"
+            : "border border-transparent text-gray-700 hover:border-gray-200 hover:bg-white hover:text-[#0A0A0A]"
         }`
       }
     >
       {({ isActive }) => (
         <>
           <span>{children}</span>
-          <span className={`h-2 w-2 rounded-full ${isActive ? "bg-white" : "bg-gray-300"}`} />
+          <span className={`h-2 w-2 rounded-full ${isActive ? "bg-[#C9A84C]" : "bg-gray-300"}`} />
         </>
       )}
     </NavLink>
@@ -38,8 +38,9 @@ function SidebarLink({ to, children }) {
 function SectionHeader({ title, description }) {
   return (
     <div className="space-y-1">
-      <h2 className="text-2xl font-semibold text-gray-900">{title}</h2>
-      <p className="text-sm text-gray-500">{description}</p>
+      <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#C9A84C]">Vendora</p>
+      <h2 className="text-3xl font-bold tracking-tight text-[#0A0A0A]">{title}</h2>
+      <p className="text-sm leading-relaxed text-gray-600">{description}</p>
     </div>
   );
 }
@@ -54,14 +55,14 @@ function ProfileLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAFAFA]">
       <div className="mx-auto flex w-full max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:px-8">
         <aside className="w-full max-w-xs shrink-0">
-          <div className="rounded-3xl border border-gray-200 bg-white p-4 shadow-sm">
+          <div className="rounded-[28px] border border-gray-200 bg-white p-4 shadow-sm">
             <div className="border-b border-gray-100 px-2 pb-4">
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-gray-400">Profile</p>
-              <h1 className="mt-2 text-2xl font-semibold text-gray-900">My Account</h1>
-              <p className="mt-1 text-sm text-gray-500">Manage your account settings</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#C9A84C]">Profile</p>
+              <h1 className="mt-2 text-3xl font-black tracking-tight text-[#0A0A0A]">My Account</h1>
+              <p className="mt-1 text-sm leading-relaxed text-gray-600">Manage your account settings</p>
             </div>
 
             <div className="mt-4 space-y-1">
@@ -76,7 +77,7 @@ function ProfileLayout() {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
+                className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-sm font-semibold text-red-600 transition-all duration-200 hover:bg-red-50"
               >
                 <span>Logout</span>
                 <span className="h-2 w-2 rounded-full bg-red-400" />
@@ -86,7 +87,7 @@ function ProfileLayout() {
         </aside>
 
         <section className="min-w-0 flex-1">
-          <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+          <div className="rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
             <Outlet />
           </div>
         </section>
@@ -148,23 +149,23 @@ export function ProfileOverview() {
         description="A quick summary of your profile and recent order activity."
       />
       <div className="grid gap-4 lg:grid-cols-3">
-        <div className="rounded-3xl border border-gray-200 bg-gray-50 px-6 py-5 shadow-sm lg:col-span-1">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-400">Profile</p>
-          <p className="mt-4 text-2xl font-semibold text-gray-900">{user?.name || "Guest user"}</p>
+        <div className="rounded-[28px] border border-gray-200 bg-white px-6 py-5 shadow-sm lg:col-span-1">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#C9A84C]">Profile</p>
+          <p className="mt-4 text-2xl font-bold text-[#0A0A0A]">{user?.name || "Guest user"}</p>
           <p className="mt-2 text-sm text-gray-500">{user?.email || "No email available"}</p>
         </div>
 
-        <div className="rounded-3xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-400">Quick Stat</p>
-          <p className="mt-4 text-4xl font-semibold text-gray-900">
+        <div className="rounded-[28px] border border-gray-200 bg-white px-6 py-5 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#C9A84C]">Quick Stat</p>
+          <p className="mt-4 text-4xl font-black text-[#0A0A0A]">
             {loading ? "—" : totalOrders}
           </p>
           <p className="mt-2 text-sm text-gray-500">Total orders placed</p>
         </div>
 
-        <div className="rounded-3xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-400">Latest Order</p>
-          <p className="mt-4 text-2xl font-semibold text-gray-900">
+        <div className="rounded-[28px] border border-gray-200 bg-white px-6 py-5 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#C9A84C]">Latest Order</p>
+          <p className="mt-4 text-2xl font-bold text-[#0A0A0A]">
             {loading ? "Loading..." : getStatusLabel(lastOrderStatus)}
           </p>
           <p className="mt-2 text-sm text-gray-500">Most recent order status</p>
@@ -172,22 +173,22 @@ export function ProfileOverview() {
       </div>
 
       {error ? (
-        <div className="rounded-3xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-800">
+        <div className="rounded-[28px] border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-800">
           {error}
         </div>
       ) : null}
 
-      <div className="rounded-3xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white px-6 py-5 shadow-sm">
+      <div className="rounded-[28px] border border-gray-200 bg-white px-6 py-5 shadow-sm">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-900">Account snapshot</p>
+            <p className="text-sm font-semibold text-[#0A0A0A]">Account snapshot</p>
             <p className="mt-1 text-sm text-gray-500">
               {loading
                 ? "Fetching your latest profile and order details..."
                 : "Your overview is ready for a quick check-in."}
             </p>
           </div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700">
+          <div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-[#FAFAFA] px-4 py-2 text-sm font-medium text-gray-700">
             <span className={`h-2.5 w-2.5 rounded-full ${loading ? "bg-amber-400" : "bg-emerald-500"}`} />
             {loading ? "Updating" : "Live summary"}
           </div>
@@ -261,7 +262,7 @@ export function ProfileOrders() {
       {loading ? (
         <div className="space-y-4">
           {[1, 2, 3].map((item) => (
-            <div key={item} className="animate-pulse rounded-3xl border border-gray-200 bg-white px-5 py-5 shadow-sm">
+            <div key={item} className="animate-pulse rounded-[28px] border border-gray-200 bg-white px-5 py-5 shadow-sm">
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-3">
                   <div className="h-5 w-48 rounded bg-gray-200" />
@@ -278,11 +279,11 @@ export function ProfileOrders() {
           ))}
         </div>
       ) : error ? (
-        <div className="rounded-3xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-800">
+        <div className="rounded-[28px] border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-800">
           {error}
         </div>
       ) : orders.length === 0 ? (
-        <div className="rounded-3xl border border-gray-200 bg-gray-50 px-5 py-8 text-sm text-gray-500">
+        <div className="rounded-[28px] border border-gray-200 bg-[#FAFAFA] px-5 py-8 text-sm text-gray-500">
           You have not placed any orders yet.
         </div>
       ) : (
@@ -292,13 +293,13 @@ export function ProfileOrders() {
               key={order._id}
               type="button"
               onClick={() => navigate(`/orders/${order._id}`)}
-              className="w-full rounded-3xl border border-gray-200 bg-white px-5 py-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-md"
+              className="w-full rounded-[28px] border border-gray-200 bg-white px-5 py-5 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-lg"
             >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="space-y-2">
                   <div className="flex flex-wrap items-center gap-3">
                     <p className="text-sm font-medium text-gray-900">Order #{order._id}</p>
-                    <span className={`rounded-full px-3 py-1 text-xs font-medium ${getStatusClassName(order.status)}`}>
+                    <span className={`rounded-full px-3 py-1 text-xs font-semibold ${getStatusClassName(order.status)}`}>
                       {order.status || "UNKNOWN"}
                     </span>
                   </div>
@@ -423,13 +424,13 @@ export function ProfileDetails() {
       <SectionHeader title="My Details" description="Update your basic account information." />
 
       {error ? (
-        <div className="rounded-3xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-800">
+        <div className="rounded-[28px] border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-800">
           {error}
         </div>
       ) : null}
 
       {success ? (
-        <div className="rounded-3xl border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-800">
+        <div className="rounded-[28px] border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-800">
           ✓ Your profile has been updated successfully.
         </div>
       ) : null}
@@ -447,7 +448,7 @@ export function ProfileDetails() {
             onChange={handleChange}
             disabled={submitting}
             placeholder="Your full name"
-            className="mt-3 w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 disabled:bg-gray-50 disabled:text-gray-500"
+            className="mt-3 w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20 disabled:bg-gray-50 disabled:text-gray-500"
           />
         </div>
 
@@ -463,7 +464,7 @@ export function ProfileDetails() {
             onChange={handleChange}
             disabled={submitting}
             placeholder="Your contact number"
-            className="mt-3 w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 disabled:bg-gray-50 disabled:text-gray-500"
+            className="mt-3 w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20 disabled:bg-gray-50 disabled:text-gray-500"
           />
         </div>
 
@@ -476,14 +477,14 @@ export function ProfileDetails() {
             type="email"
             value={user?.email || ""}
             disabled
-            className="mt-3 w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500"
+            className="mt-3 w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3 text-sm text-gray-500"
           />
         </div>
 
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-2xl border border-gray-900 bg-gray-900 px-6 py-3 text-sm font-medium text-white transition-all hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+          className="rounded-full bg-[#0A0A0A] px-6 py-3 text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {submitting ? "Saving..." : "Save Changes"}
         </button>
@@ -552,13 +553,13 @@ export function ProfilePassword() {
       <SectionHeader title="Change Password" description="Keep your account secure with a strong password." />
 
       {error ? (
-        <div className="rounded-3xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-800">
+        <div className="rounded-[28px] border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-800">
           {error}
         </div>
       ) : null}
 
       {success ? (
-        <div className="rounded-3xl border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-800">
+        <div className="rounded-[28px] border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-800">
           ✓ Your password has been changed successfully.
         </div>
       ) : null}
@@ -576,7 +577,7 @@ export function ProfilePassword() {
             onChange={handleChange}
             disabled={submitting}
             placeholder="Enter your current password"
-            className="mt-3 w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 disabled:bg-gray-50 disabled:text-gray-500"
+            className="mt-3 w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20 disabled:bg-gray-50 disabled:text-gray-500"
           />
         </div>
 
@@ -592,11 +593,11 @@ export function ProfilePassword() {
             onChange={handleChange}
             disabled={submitting}
             placeholder="Enter a new password (min. 6 characters)"
-            className="mt-3 w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 disabled:bg-gray-50 disabled:text-gray-500"
+            className="mt-3 w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20 disabled:bg-gray-50 disabled:text-gray-500"
           />
         </div>
 
-        <div className="rounded-3xl border border-gray-100 bg-gray-50 px-5 py-4">
+        <div className="rounded-[28px] border border-gray-200 bg-[#FAFAFA] px-5 py-4">
           <p className="text-sm text-gray-700">
             <span className="font-medium">Password requirements:</span>
           </p>
@@ -610,7 +611,7 @@ export function ProfilePassword() {
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-2xl border border-gray-900 bg-gray-900 px-6 py-3 text-sm font-medium text-white transition-all hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+          className="rounded-full bg-[#0A0A0A] px-6 py-3 text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/30 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {submitting ? "Updating..." : "Change Password"}
         </button>
@@ -763,7 +764,7 @@ export function ProfileAddresses() {
         <SectionHeader title="Address Book" description="Manage your shipping addresses and default delivery location." />
         <div className="space-y-4">
           {[1, 2, 3].map((item) => (
-            <div key={item} className="animate-pulse rounded-3xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
+            <div key={item} className="animate-pulse rounded-[28px] border border-gray-200 bg-white px-6 py-5 shadow-sm">
               <div className="mb-3 h-5 w-32 rounded bg-gray-200" />
               <div className="space-y-2">
                 <div className="h-4 w-full rounded bg-gray-200" />
@@ -785,38 +786,38 @@ export function ProfileAddresses() {
         <button
           type="button"
           onClick={() => handleOpenModal()}
-          className="rounded-2xl border border-gray-900 bg-gray-900 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-gray-800"
+            className="rounded-full bg-[#0A0A0A] px-4 py-2 text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
         >
           + Add Address
         </button>
       </div>
 
       {error ? (
-        <div className="rounded-3xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-800">
+        <div className="rounded-[28px] border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-800">
           {error}
         </div>
       ) : null}
 
       {success ? (
-        <div className="rounded-3xl border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-800">
+        <div className="rounded-[28px] border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-800">
           ✓ {success}
         </div>
       ) : null}
 
       {addresses.length === 0 ? (
-        <div className="rounded-3xl border border-gray-200 bg-gray-50 px-5 py-8 text-center text-sm text-gray-500">
+        <div className="rounded-[28px] border border-gray-200 bg-[#FAFAFA] px-5 py-8 text-center text-sm text-gray-500">
           No addresses yet. Add one to get started.
         </div>
       ) : (
         <div className="space-y-4">
           {addresses.map((address) => (
-            <div key={address._id} className="rounded-3xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
+            <div key={address._id} className="rounded-[28px] border border-gray-200 bg-white px-6 py-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <h3 className="text-sm font-medium text-gray-900">{address.fullName}</h3>
+                    <h3 className="text-sm font-semibold text-[#0A0A0A]">{address.fullName}</h3>
                     {address.isDefault && (
-                      <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700">
+                      <span className="rounded-full bg-[#C9A84C]/15 px-2.5 py-0.5 text-xs font-semibold text-[#C9A84C]">
                         Default
                       </span>
                     )}
@@ -833,7 +834,7 @@ export function ProfileAddresses() {
                     <button
                       type="button"
                       onClick={() => handleSetDefault(address._id)}
-                      className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                      className="rounded-full border border-gray-300 bg-white px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-400 hover:shadow-sm"
                     >
                       Set Default
                     </button>
@@ -841,14 +842,14 @@ export function ProfileAddresses() {
                   <button
                     type="button"
                     onClick={() => handleOpenModal(address)}
-                    className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                      className="rounded-full border border-gray-300 bg-white px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-400 hover:shadow-sm"
                   >
                     Edit
                   </button>
                   <button
                     type="button"
                     onClick={() => handleDelete(address._id)}
-                    className="rounded-lg border border-red-300 bg-white px-3 py-2 text-xs font-medium text-red-700 transition-colors hover:bg-red-50"
+                      className="rounded-full border border-red-300 bg-white px-3 py-2 text-xs font-semibold text-red-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-red-50 hover:shadow-sm"
                   >
                     Delete
                   </button>
@@ -860,9 +861,9 @@ export function ProfileAddresses() {
       )}
 
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-          <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-lg">
-            <h3 className="text-lg font-semibold text-gray-900">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-[28px] bg-white p-6 shadow-2xl">
+            <h3 className="text-2xl font-bold tracking-tight text-[#0A0A0A]">
               {editingId ? "Edit Address" : "Add New Address"}
             </h3>
 
@@ -879,7 +880,7 @@ export function ProfileAddresses() {
                   onChange={handleChange}
                   disabled={submitting}
                   placeholder="John Doe"
-                  className="mt-2 w-full rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 disabled:bg-gray-50"
+                  className="mt-2 w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3 text-sm placeholder-gray-400 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20 disabled:bg-gray-50"
                 />
               </div>
 
@@ -895,7 +896,7 @@ export function ProfileAddresses() {
                   onChange={handleChange}
                   disabled={submitting}
                   placeholder="9999999999"
-                  className="mt-2 w-full rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 disabled:bg-gray-50"
+                  className="mt-2 w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3 text-sm placeholder-gray-400 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20 disabled:bg-gray-50"
                 />
               </div>
 
@@ -911,7 +912,7 @@ export function ProfileAddresses() {
                   onChange={handleChange}
                   disabled={submitting}
                   placeholder="House No., Street, Locality"
-                  className="mt-2 w-full rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 disabled:bg-gray-50"
+                  className="mt-2 w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3 text-sm placeholder-gray-400 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20 disabled:bg-gray-50"
                 />
               </div>
 
@@ -928,7 +929,7 @@ export function ProfileAddresses() {
                     onChange={handleChange}
                     disabled={submitting}
                     placeholder="Mumbai"
-                    className="mt-2 w-full rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 disabled:bg-gray-50"
+                    className="mt-2 w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3 text-sm placeholder-gray-400 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20 disabled:bg-gray-50"
                   />
                 </div>
 
@@ -944,7 +945,7 @@ export function ProfileAddresses() {
                     onChange={handleChange}
                     disabled={submitting}
                     placeholder="Maharashtra"
-                    className="mt-2 w-full rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 disabled:bg-gray-50"
+                    className="mt-2 w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3 text-sm placeholder-gray-400 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20 disabled:bg-gray-50"
                   />
                 </div>
               </div>
@@ -961,7 +962,7 @@ export function ProfileAddresses() {
                   onChange={handleChange}
                   disabled={submitting}
                   placeholder="400001"
-                  className="mt-2 w-full rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 disabled:bg-gray-50"
+                  className="mt-2 w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3 text-sm placeholder-gray-400 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20 disabled:bg-gray-50"
                 />
               </div>
 
@@ -973,7 +974,7 @@ export function ProfileAddresses() {
                   checked={formData.isDefault}
                   onChange={handleChange}
                   disabled={submitting}
-                  className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                  className="h-4 w-4 rounded border-gray-300 text-[#0A0A0A] focus:ring-[#C9A84C]"
                 />
                 <label htmlFor="modal-isDefault" className="text-sm font-medium text-gray-700">
                   Set as default address
@@ -985,14 +986,14 @@ export function ProfileAddresses() {
                   type="button"
                   onClick={handleCloseModal}
                   disabled={submitting}
-                  className="flex-1 rounded-2xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-60"
+                  className="flex-1 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-400 hover:shadow-sm disabled:opacity-60"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 rounded-2xl border border-gray-900 bg-gray-900 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-gray-800 disabled:opacity-60"
+                  className="flex-1 rounded-full bg-[#0A0A0A] px-4 py-3 text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-60"
                 >
                   {submitting ? "Saving..." : editingId ? "Update" : "Add"}
                 </button>
@@ -1009,13 +1010,13 @@ export function ProfilePreferences() {
   return (
     <div className="space-y-4">
       <SectionHeader title="Preferences" description="Control your contact and notification settings." />
-      <div className="rounded-2xl border border-gray-200 bg-white px-5 py-4">
+      <div className="rounded-[28px] border border-gray-200 bg-white px-5 py-4 shadow-sm">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-sm font-medium text-gray-900">Email notifications</p>
+            <p className="text-sm font-semibold text-[#0A0A0A]">Email notifications</p>
             <p className="mt-1 text-sm text-gray-500">Receive updates about orders and account activity.</p>
           </div>
-          <div className="rounded-full bg-gray-900 px-3 py-1 text-xs font-medium text-white">On</div>
+          <div className="rounded-full bg-[#0A0A0A] px-3 py-1 text-xs font-semibold text-white">On</div>
         </div>
       </div>
     </div>

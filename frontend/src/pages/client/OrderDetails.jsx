@@ -229,32 +229,32 @@ function OrderDetails() {
 
       {/* Delivered Success Banner */}
       {order.status === 'DELIVERED' && (
-        <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6 mb-6">
+        <div className="mb-6 rounded-[28px] border border-emerald-200 bg-white p-6 shadow-sm">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-500">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-semibold text-green-900 mb-1">Order Delivered Successfully!</h3>
-              <p className="text-green-700 text-sm mb-3">
+              <h3 className="mb-1 text-lg font-semibold text-[#0A0A0A]">Order Delivered Successfully!</h3>
+              <p className="mb-3 text-sm text-gray-600">
                 Your order has been delivered. We hope you enjoy your purchase!
               </p>
               <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() => navigate('/products')}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+                  className="rounded-full bg-[#0A0A0A] px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
                 >
                   Shop Again
                 </button>
                 <button
-                  className="px-4 py-2 bg-white border border-green-300 text-green-700 rounded-lg text-sm font-medium hover:bg-green-50 transition-colors"
+                  className="rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-700 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                 >
                   Rate Products
                 </button>
                 <button
-                  className="px-4 py-2 bg-white border border-green-300 text-green-700 rounded-lg text-sm font-medium hover:bg-green-50 transition-colors"
+                  className="rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-700 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                 >
                   Need Help?
                 </button>
