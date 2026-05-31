@@ -51,7 +51,7 @@ const getAllProducts = async (page = 1, limit = 10, filters = {}) => {
     if (filters.category) query.category = filters.category;
     if (filters.isActive !== undefined) query.isActive = filters.isActive;
 
-    const products = await Product.find(query).skip(skip).limit(parseInt(limit));
+    const products = await Product.find(query).sort({ createdAt: -1 }).skip(skip).limit(parseInt(limit));
     const total = await Product.countDocuments(query);
 
     return {
