@@ -136,39 +136,61 @@ function Home() {
 
       <section className="border-b border-black/5 bg-[#0A0A0A] py-16 text-white">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-8 flex items-end justify-between gap-4">
+          <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#C9A84C]">Categories</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#C9A84C]">Showcase</p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">Shop by category</h2>
             </div>
-            <p className="hidden max-w-md text-sm leading-relaxed text-gray-300 md:block">
-              Refined collections designed to feel calm, premium, and easy to browse.
+            <p className="max-w-md text-sm leading-relaxed text-gray-300">
+              A cinematic product showcase that stays clean and responsive on both mobile and desktop.
             </p>
           </div>
-          <div className="grid gap-4 md:grid-cols-3">
-            {[
-              { title: 'Electronics', image: '/images/products/image5.jpg' },
-              { title: 'Fashion', image: '/images/products/image6.jpg' },
-              { title: 'Home', image: '/images/products/image7.jpg' },
-            ].map((category) => (
-              <div key={category.title} className="group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/5 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
-                <img src={category.image} alt={category.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 group-hover:brightness-110" />
-                <div className="absolute inset-0 bg-black/45" />
-                <div className="relative flex min-h-[240px] items-end p-6">
-                  <div className="flex w-full items-end justify-between gap-4">
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-300">Category</p>
-                      <h3 className="mt-2 text-2xl font-bold text-white">{category.title}</h3>
-                    </div>
-                    <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition-transform duration-300 group-hover:translate-x-1">
-                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
+
+          <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr] lg:items-stretch">
+            <div className="group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/5 shadow-[0_24px_80px_rgba(0,0,0,0.35)]">
+              <div className="absolute inset-0 bg-gradient-to-tr from-black/55 via-black/20 to-transparent" />
+              <video
+                className="h-full min-h-[260px] w-full object-cover sm:min-h-[380px] lg:min-h-[520px]"
+                src="/videos/showcase.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+              />
+              <div className="absolute inset-0 flex items-end p-5 sm:p-6 lg:p-8">
+                <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                  <div className="max-w-xl">
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#C9A84C]">Featured video</p>
+                    <h3 className="mt-2 text-2xl font-bold text-white sm:text-3xl">Showcase your collection in motion</h3>
+                    <p className="mt-3 max-w-lg text-sm leading-relaxed text-gray-200 sm:text-base">
+                      The video fills the section with a polished, immersive presentation while remaining fully responsive.
+                    </p>
+                  </div>
+                  <div className="inline-flex items-center gap-2 self-start rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm sm:self-auto">
+                    <span className="h-2 w-2 rounded-full bg-[#C9A84C]" />
+                    Showcase.mp4
                   </div>
                 </div>
               </div>
-            ))}
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              <div className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-lg">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#C9A84C]">Responsive</p>
+                <h3 className="mt-3 text-xl font-bold text-white">Built for every screen</h3>
+                <p className="mt-3 text-sm leading-relaxed text-gray-300">
+                  The video crops cleanly on small screens and scales up beautifully on larger displays.
+                </p>
+              </div>
+              <div className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-lg">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#C9A84C]">Performance</p>
+                <h3 className="mt-3 text-xl font-bold text-white">Lightweight and seamless</h3>
+                <p className="mt-3 text-sm leading-relaxed text-gray-300">
+                  Auto-play, muted playback keeps it smooth without interrupting the shopping flow.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
