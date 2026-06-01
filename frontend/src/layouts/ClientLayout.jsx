@@ -89,35 +89,35 @@ function ClientLayout({ children }) {
           </div>
         </nav>
 
-        <div className={`fixed inset-0 z-40 bg-black/30 transition-opacity duration-300 md:hidden ${mobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"}`} onClick={closeMobileMenu} aria-hidden="true" />
-        <div className={`fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] border-r border-gray-200 bg-white px-5 py-6 shadow-2xl transition-transform duration-300 ease-out md:hidden ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
-          <div className="flex items-center justify-between border-b border-gray-100 pb-5">
+        <div className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300 md:hidden ${mobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"}`} onClick={closeMobileMenu} aria-hidden="true" />
+        <div className={`fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] border-r border-white/10 bg-[#0A0A0A] px-5 py-6 text-white shadow-2xl transition-transform duration-300 ease-out md:hidden ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
+          <div className="flex items-center justify-between border-b border-white/10 pb-5">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-sm">
                 <img src="/images/products/Logo.jpeg" alt="Vendora logo" className="h-full w-full object-contain p-1" />
               </div>
               <div>
                 <p className="text-xs uppercase tracking-[0.24em] text-gray-400">Menu</p>
-                <p className="mt-1 text-lg font-black text-[#0A0A0A]">Vendora</p>
+                <p className="mt-1 text-lg font-black text-white">Vendora</p>
               </div>
             </div>
-            <button type="button" onClick={closeMobileMenu} className="rounded-full border border-gray-200 p-2 text-gray-700 transition-colors hover:border-gray-300 hover:text-[#0A0A0A]" aria-label="Close menu">
+            <button type="button" onClick={closeMobileMenu} className="rounded-full border border-white/10 p-2 text-white transition-colors hover:border-white/20 hover:bg-white/5" aria-label="Close menu">
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
           <div className="mt-6 flex flex-col gap-3">
-            <Link to="/" onClick={closeMobileMenu} className="rounded-2xl border border-gray-200 px-4 py-3 text-sm font-semibold text-gray-700 transition-all hover:-translate-y-0.5 hover:border-gray-300 hover:bg-gray-50 hover:text-[#0A0A0A]">
+            <Link to="/" onClick={closeMobileMenu} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10">
               Home
             </Link>
-            <Link to="/products" onClick={closeMobileMenu} className="rounded-2xl border border-gray-200 px-4 py-3 text-sm font-semibold text-gray-700 transition-all hover:-translate-y-0.5 hover:border-gray-300 hover:bg-gray-50 hover:text-[#0A0A0A]">
+            <Link to="/products" onClick={closeMobileMenu} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10">
               Products
             </Link>
-            <Link to="/cart" onClick={closeMobileMenu} className="rounded-2xl border border-gray-200 px-4 py-3 text-sm font-semibold text-gray-700 transition-all hover:-translate-y-0.5 hover:border-gray-300 hover:bg-gray-50 hover:text-[#0A0A0A]">
+            <Link to="/cart" onClick={closeMobileMenu} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10">
               Cart ({cartCount})
             </Link>
-            <Link to="/profile" onClick={closeMobileMenu} className="rounded-2xl border border-gray-200 px-4 py-3 text-sm font-semibold text-gray-700 transition-all hover:-translate-y-0.5 hover:border-gray-300 hover:bg-gray-50 hover:text-[#0A0A0A]">
+            <Link to="/profile" onClick={closeMobileMenu} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10">
               Profile
             </Link>
           </div>
