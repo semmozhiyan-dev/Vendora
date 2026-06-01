@@ -139,10 +139,10 @@ function Home() {
           <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#C9A84C]">Showcase</p>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">Shop by category</h2>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">Vendora ecommerce showcase</h2>
             </div>
             <p className="max-w-md text-sm leading-relaxed text-gray-300">
-              A cinematic product showcase that stays clean and responsive on both mobile and desktop.
+              A clean product showcase video that highlights Vendora’s premium collections and smooth shopping experience across mobile and desktop.
             </p>
           </div>
 
@@ -162,14 +162,13 @@ function Home() {
                 <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                   <div className="max-w-xl">
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#C9A84C]">Featured video</p>
-                    <h3 className="mt-2 text-2xl font-bold text-white sm:text-3xl">Showcase your collection in motion</h3>
+                    <h3 className="mt-2 text-2xl font-bold text-white sm:text-3xl">Vendora in motion</h3>
                     <p className="mt-3 max-w-lg text-sm leading-relaxed text-gray-200 sm:text-base">
-                      The video fills the section with a polished, immersive presentation while remaining fully responsive.
+                      This video showcases our featured products with a polished look and a smooth, responsive shopping feel.
                     </p>
                   </div>
-                  <div className="inline-flex items-center gap-2 self-start rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm sm:self-auto">
+                  <div className="inline-flex h-10 w-10 items-center justify-center self-start rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-sm sm:self-auto">
                     <span className="h-2 w-2 rounded-full bg-[#C9A84C]" />
-                    Showcase.mp4
                   </div>
                 </div>
               </div>
@@ -180,14 +179,14 @@ function Home() {
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#C9A84C]">Responsive</p>
                 <h3 className="mt-3 text-xl font-bold text-white">Built for every screen</h3>
                 <p className="mt-3 text-sm leading-relaxed text-gray-300">
-                  The video crops cleanly on small screens and scales up beautifully on larger displays.
+                  The product visuals stay clean on small screens and expand smoothly on larger displays.
                 </p>
               </div>
               <div className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-lg">
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#C9A84C]">Performance</p>
                 <h3 className="mt-3 text-xl font-bold text-white">Lightweight and seamless</h3>
                 <p className="mt-3 text-sm leading-relaxed text-gray-300">
-                  Auto-play, muted playback keeps it smooth without interrupting the shopping flow.
+                  Auto-play, muted playback keeps the product experience smooth without interrupting the shopping flow.
                 </p>
               </div>
             </div>
