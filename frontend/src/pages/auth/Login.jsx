@@ -81,7 +81,10 @@ const Login = () => {
         <div className="relative hidden overflow-hidden bg-[#0A0A0A] px-10 py-12 text-white lg:flex lg:flex-col lg:justify-between">
           <div>
             <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.26em] text-[#C9A84C]">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#C9A84C]" /> Vendora
+              <span className="flex h-6 w-6 overflow-hidden rounded-full bg-white/95 p-0.5">
+                <img src="/images/products/Logo.jpeg" alt="Vendora logo" className="h-full w-full object-contain" />
+              </span>
+              Vendora
             </div>
             <h1 className="mt-10 max-w-md text-5xl font-black tracking-tight text-white lg:text-6xl">
               Premium shopping, made simple.
@@ -102,7 +105,10 @@ const Login = () => {
           <div className="w-full max-w-md">
             <div className="mb-8 lg:hidden">
               <div className="inline-flex items-center gap-3 rounded-full border border-gray-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.26em] text-[#C9A84C] shadow-sm">
-                <span className="h-2.5 w-2.5 rounded-full bg-[#C9A84C]" /> Vendora
+                <span className="flex h-6 w-6 overflow-hidden rounded-full bg-[#FAFAFA] p-0.5">
+                  <img src="/images/products/Logo.jpeg" alt="Vendora logo" className="h-full w-full object-contain" />
+                </span>
+                Vendora
               </div>
               <h1 className="mt-6 text-4xl font-black tracking-tight text-[#0A0A0A]">Welcome back</h1>
               <p className="mt-3 text-sm leading-relaxed text-gray-600">Sign in to continue to your premium storefront.</p>

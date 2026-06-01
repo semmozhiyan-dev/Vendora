@@ -13,8 +13,8 @@ function ClientLayout({ children }) {
       <header className="sticky top-0 z-50 border-b border-black/5 bg-white/90 shadow-[0_1px_0_rgba(0,0,0,0.04)] backdrop-blur-xl">
         <nav className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <Link to="/" className="flex shrink-0 items-center gap-3" onClick={closeMobileMenu}>
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#0A0A0A] shadow-sm transition-transform duration-200 hover:scale-105">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#C9A84C]" />
+            <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-sm transition-transform duration-200 hover:scale-105">
+              <img src="/images/products/Logo.jpeg" alt="Vendora logo" className="h-full w-full object-contain p-1" />
             </div>
             <div className="leading-tight">
               <span className="block text-lg font-black tracking-tight text-[#0A0A0A]">Vendora</span>
@@ -92,9 +92,14 @@ function ClientLayout({ children }) {
         <div className={`fixed inset-0 z-40 bg-black/30 transition-opacity duration-300 md:hidden ${mobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"}`} onClick={closeMobileMenu} aria-hidden="true" />
         <div className={`fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] border-r border-gray-200 bg-white px-5 py-6 shadow-2xl transition-transform duration-300 ease-out md:hidden ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
           <div className="flex items-center justify-between border-b border-gray-100 pb-5">
-            <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-gray-400">Menu</p>
-              <p className="mt-1 text-lg font-black text-[#0A0A0A]">Vendora</p>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-sm">
+                <img src="/images/products/Logo.jpeg" alt="Vendora logo" className="h-full w-full object-contain p-1" />
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-[0.24em] text-gray-400">Menu</p>
+                <p className="mt-1 text-lg font-black text-[#0A0A0A]">Vendora</p>
+              </div>
             </div>
             <button type="button" onClick={closeMobileMenu} className="rounded-full border border-gray-200 p-2 text-gray-700 transition-colors hover:border-gray-300 hover:text-[#0A0A0A]" aria-label="Close menu">
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
