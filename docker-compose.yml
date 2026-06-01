@@ -92,8 +92,8 @@ services:
     depends_on:
       - nginx
     networks:
-      - vendora-network
       - monitoring-network
+      - vendora-network
     restart: unless-stopped
   prometheus:
     image: prom/prometheus:v2.55.1
@@ -126,7 +126,7 @@ services:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?GRAFANA_ADMIN_PASSWORD is required}
       GF_USERS_ALLOW_SIGN_UP: "false"
-      GF_SERVER_ROOT_URL: http://localhost:3000
+      GF_SERVER_ROOT_URL: https://grafana.vendore.tech
     volumes:
       - grafana-data:/var/lib/grafana
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
@@ -166,6 +166,7 @@ services:
       - frontend
       - backend
     networks:
+      - monitoring-network
       - vendora-network
     restart: unless-stopped
 
