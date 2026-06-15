@@ -27,8 +27,16 @@ const validateEnv = () => {
 const startServer = async () => {
   try {
     validateEnv();
-    await connectDB();
-    logger.info(`Connected to MongoDB`);
+    try {
+      await connectDB();
+      logger.info(`Connected to MongoDB`);
+    } catch (error) {
+      if (process.env.NODE_ENV === "production") {
+        throw error;
+      }
+
+      logger.warn(`MongoDB unavailable, starting in degraded mode: ${error.message}`);
+    }
 
     server = app.listen(PORT, '0.0.0.0', () => {
       logger.info(`Server running on port ${PORT}`);

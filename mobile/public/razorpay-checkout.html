@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout - Vendora</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #FAFAFA;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: #0A0A0A;
+    }
+    .container {
+      text-align: center;
+      padding: 40px 24px;
+      max-width: 420px;
+    }
+    .logo {
+      width: 56px;
+      height: 56px;
+      background: #0A0A0A;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 28px;
+      font-weight: 800;
+      color: #C9A84C;
+      letter-spacing: -1px;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    p {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 28px;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #e0e0e0;
+      border-top-color: #C9A84C;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .status {
+      font-size: 14px;
+      color: #999;
+    }
+    .error { color: #dc2626; }
+    .error a {
+      display: inline-block;
+      margin-top: 12px;
+      color: #C9A84C;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .error a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">V</div>
+    <h1>Completing your payment</h1>
+    <p>Please wait while we redirect you to the secure checkout...</p>
+    <div class="spinner"></div>
+    <div class="status">Initializing payment gateway</div>
+  </div>
+
+  <script>
+    (function() {
+      const API_BASE = "http://localhost:5000/api/v1"
+
+      function getQueryParam(name) {
+        const params = new URLSearchParams(window.location.search)
+        return params.get(name)
+      }
+
+      function getToken() {
+        try {
+          return localStorage.getItem("vendora_token")
+        } catch {
+          return null
+        }
+      }
+
+      async function verifyPaymentOnBackend(paymentResponse) {
+        const token = getToken()
+        const res = await fetch(API_BASE + "/payments/verify", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { "Authorization": "Bearer " + token } : {})
+          },
+          body: JSON.stringify({
+            razorpay_order_id: paymentResponse.razorpay_order_id,
+            razorpay_payment_id: paymentResponse.razorpay_payment_id,
+            razorpay_signature: paymentResponse.razorpay_signature
+          })
+        })
+        return res.json()
+      }
+
+      async function main() {
+        const key = getQueryParam("key")
+        const orderId = getQueryParam("order_id")
+        const amount = getQueryParam("amount")
+        const internalOrderId = getQueryParam("internal_order_id")
+        const name = getQueryParam("name") || ""
+        const email = getQueryParam("email") || ""
+        const phone = getQueryParam("phone") || ""
+
+        if (!key || !orderId || !amount || !internalOrderId) {
+          document.querySelector(".status").textContent = "Missing payment parameters"
+          document.querySelector(".status").className = "status error"
+          document.querySelector(".spinner").style.display = "none"
+          return
+        }
+
+        const script = document.createElement("script")
+        script.src = "https://checkout.razorpay.com/v1/checkout.js"
+        script.onload = function() {
+          const options = {
+            key: key,
+            amount: parseInt(amount, 10),
+            currency: "INR",
+            name: "Vendora",
+            order_id: orderId,
+            prefill: {
+              name: name,
+              email: email,
+              contact: phone
+            },
+            theme: { color: "#C9A84C" },
+            handler: async function(response) {
+              document.querySelector(".status").textContent = "Verifying payment..."
+              try {
+                const result = await verifyPaymentOnBackend(response)
+                if (result.success) {
+                  window.location.replace("/order-success?orderId=" + internalOrderId)
+                } else {
+                  document.querySelector(".status").textContent = result.message || "Payment verification failed"
+                  document.querySelector(".status").className = "status error"
+                  document.querySelector(".spinner").style.display = "none"
+                  document.querySelector(".container").innerHTML +=
+                    '<div class="error"><a href="/checkout">Return to checkout</a></div>'
+                }
+              } catch (e) {
+                document.querySelector(".status").textContent = "Payment verification error"
+                document.querySelector(".status").className = "status error"
+                document.querySelector(".spinner").style.display = "none"
+                document.querySelector(".container").innerHTML +=
+                  '<div class="error"><a href="/checkout">Return to checkout</a></div>'
+              }
+            },
+            modal: {
+              ondismiss: function() {
+                window.location.replace("/checkout?cancelled=true")
+              }
+            }
+          }
+          const rzp = new window.Razorpay(options)
+          rzp.open()
+        }
+        script.onerror = function() {
+          document.querySelector(".status").textContent = "Failed to load payment gateway. Please try again."
+          document.querySelector(".status").className = "status error"
+          document.querySelector(".spinner").style.display = "none"
+          document.querySelector(".container").innerHTML +=
+            '<div class="error"><a href="/checkout">Return to checkout</a></div>'
+        }
+        document.body.appendChild(script)
+      }
+
+      main()
+    })()
+  </script>
+</body>
+</html>

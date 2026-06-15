@@ -249,7 +249,7 @@ kill -9 <PID>
 ```
 
 ### "Cannot connect to MongoDB"
-Check `.env` file has correct `DB_URL`
+Check `.env` file has a valid `DB_URL` or `MONGO_URI`
 
 ### "Invalid or expired token"
 - Register/login again to get new token
