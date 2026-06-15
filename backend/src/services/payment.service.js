@@ -1,11 +1,12 @@
 const crypto = require('crypto');
-const razorpay = require('../config/razorpay');
+const { getRazorpay } = require('../config/razorpay');
 
 async function createRazorpayOrder(amountPaise, currency = 'INR', receipt) {
   if (!amountPaise || isNaN(amountPaise) || Number(amountPaise) <= 0) {
     throw new Error('Invalid amount for Razorpay order');
   }
 
+  const razorpay = getRazorpay();
   const options = {
     amount: Number(amountPaise),
     currency,

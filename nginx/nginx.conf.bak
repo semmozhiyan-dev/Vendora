@@ -1,0 +1,75 @@
+events {}
+http {
+    resolver 127.0.0.11 valid=30s;
+
+    # Cloudflare IP ranges
+    geo $cloudflare_ip {
+        default 0;
+        173.245.48.0/20 1;
+        103.21.244.0/22 1;
+        103.22.200.0/22 1;
+        103.31.4.0/22 1;
+        141.101.64.0/18 1;
+        108.162.192.0/18 1;
+        190.93.240.0/20 1;
+        188.114.96.0/20 1;
+        197.234.240.0/22 1;
+        198.41.128.0/17 1;
+        162.158.0.0/15 1;
+        104.16.0.0/13 1;
+        104.24.0.0/14 1;
+        172.64.0.0/13 1;
+        131.0.72.0/22 1;
+    }
+
+    server {
+        listen 80 default_server;
+        listen 443 ssl default_server;
+        server_name _;
+
+        ssl_certificate /etc/letsencrypt/live/vendore.tech/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/vendore.tech/privkey.pem;
+
+        return 444;
+    }
+
+    server {
+        listen 80;
+        server_name vendore.tech www.vendore.tech;
+        return 301 https://$host$request_uri;
+    }
+
+    server {
+        listen 443 ssl;
+        server_name vendore.tech www.vendore.tech;
+
+        ssl_certificate /etc/letsencrypt/live/vendore.tech/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/vendore.tech/privkey.pem;
+
+        if ($cloudflare_ip = 0) {
+            return 444;
+        }
+
+        location / {
+            set $frontend http://frontend:80;
+            proxy_pass $frontend;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        location /api/v1/ {
+            set $backend http://backend:8000;
+            proxy_pass $backend;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        location /stub_status {
+            stub_status on;
+            allow 172.0.0.0/8;
+            deny all;
+        }
+    }
+}

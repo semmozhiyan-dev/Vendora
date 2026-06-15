@@ -18,7 +18,7 @@ const createOrder = async (req, res, next) => {
     logger.info(`[${req.id}] Creating order for user: ${userId}`);
 
     let orderItems = [];
-    let totalAmount = 0;
+    let subtotal = 0;
 
     if (items && Array.isArray(items) && items.length > 0) {
       for (const item of items) {
@@ -33,7 +33,7 @@ const createOrder = async (req, res, next) => {
           return res.status(400).json({ success: false, message: `Insufficient stock for product: ${product.name}` });
         }
         orderItems.push({ product: product._id, quantity: item.quantity, price: product.price });
-        totalAmount += product.price * item.quantity;
+        subtotal += product.price * item.quantity;
       }
     } else {
       const cart = await Cart.findOne({ user: userId }).populate('items.product');
@@ -49,13 +49,17 @@ const createOrder = async (req, res, next) => {
 
       orderItems = cart.items.map((item) => {
         const price = item.product.price;
-        totalAmount += price * item.quantity;
+        subtotal += price * item.quantity;
         return { product: item.product._id, quantity: item.quantity, price };
       });
 
       cart.items = [];
       await cart.save();
     }
+
+    const shippingAmount = 0;
+    const taxAmount = Math.round(subtotal * 0.18);
+    const totalAmount = Math.round(subtotal + shippingAmount + taxAmount);
 
     const order = await Order.create({
       user: userId,
@@ -71,18 +75,18 @@ const createOrder = async (req, res, next) => {
     });
 
     const populated = await Order.findById(order._id).populate('items.product');
-    
+     
     // Send order placed email (non-blocking)
     const User = require('../models/user.model');
     const userDoc = await User.findById(userId);
     if (userDoc && userDoc.email) {
-      console.log(`[ORDER] Sending order placed email to: ${userDoc.email}`);
+      logger.info(`[ORDER] Sending order placed email to: ${userDoc.email}`);
       sendEmail(userDoc.email, 'Order Placed Successfully - Vendora', orderPlacedTemplate(userDoc.name || 'Customer', order._id));
     } else {
-      console.log(`[ORDER] User email not found for userId: ${userId}`);
+      logger.info(`[ORDER] User email not found for userId: ${userId}`);
     }
     
-    return res.status(201).json({ success: true, order: populated });
+    return res.status(201).json({ success: true, order: populated, orderId: populated._id.toString() });
   } catch (err) {
     return next(err);
   }
@@ -232,8 +236,9 @@ const updateOrderStatus = async (req, res, next) => {
     
     // Generate tracking ID when order is shipped
     if (newStatus === 'SHIPPED' && !order.trackingId) {
+      const crypto = require('crypto');
       const timestamp = Date.now().toString(36).toUpperCase();
-      const random = Math.random().toString(36).substring(2, 7).toUpperCase();
+      const random = crypto.randomBytes(3).toString('hex').toUpperCase(); // More secure than Math.random()
       order.trackingId = `TRK-${timestamp}-${random}`;
       
       // Set estimated delivery (3 to 5 days from now)
@@ -256,14 +261,14 @@ const updateOrderStatus = async (req, res, next) => {
     // Send email based on status change (non-blocking)
     const orderUser = await require('../models/user.model').findById(order.user);
     if (orderUser && orderUser.email) {
-      console.log(`[ORDER STATUS] Status changed to ${newStatus}, sending email to: ${orderUser.email}`);
+      logger.info(`[ORDER STATUS] Status changed to ${newStatus}, sending email to: ${orderUser.email}`);
       if (newStatus === 'SHIPPED') {
         sendEmail(orderUser.email, 'Your Order Has Shipped - Vendora', orderShippedTemplate(orderUser.name || 'Customer', order._id, order.trackingId));
       } else if (newStatus === 'DELIVERED') {
         sendEmail(orderUser.email, 'Order Delivered - Vendora', orderDeliveredTemplate(orderUser.name || 'Customer', order._id));
       }
     } else {
-      console.log(`[ORDER STATUS] User email not found for order: ${order._id}`);
+      logger.info(`[ORDER STATUS] User email not found for order: ${order._id}`);
     }
     
     return res.status(200).json({ success: true, order: populated });

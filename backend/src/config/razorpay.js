@@ -1,14 +1,30 @@
 const Razorpay = require('razorpay');
 
-const { RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET } = process.env;
+let razorpay = null;
 
-if (!RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET) {
-  throw new Error('Razorpay keys missing: set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in environment');
+// Lazily initialize Razorpay only when keys are available
+function getRazorpay() {
+  if (!razorpay) {
+    const { RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET } = process.env;
+    if (!RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET) {
+      throw new Error('Razorpay keys missing: set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in environment');
+    }
+    razorpay = new Razorpay({
+      key_id: RAZORPAY_KEY_ID,
+      key_secret: RAZORPAY_KEY_SECRET,
+    });
+  }
+  return razorpay;
 }
 
-const razorpay = new Razorpay({
-  key_id: RAZORPAY_KEY_ID,
-  key_secret: RAZORPAY_KEY_SECRET,
-});
+// Check if keys are available
+function isRazorpayAvailable() {
+  const { RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET } = process.env;
+  return !!(RAZORPAY_KEY_ID && RAZORPAY_KEY_SECRET);
+}
 
-module.exports = razorpay;
+module.exports = {
+  getRazorpay,
+  isRazorpayAvailable,
+};
+

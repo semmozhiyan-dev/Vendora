@@ -16,7 +16,7 @@ const createRazorpayOrder = async (req, res, next) => {
 
     // If only amount is provided (for testing/direct payment)
     if (!orderId && amount) {
-      const amountInPaise = Math.round(amount * 100);
+      const amountInPaise = Math.round(parseFloat(amount) * 100);
       const razorpayOrder = await createRzpOrder(amountInPaise, "INR", `test_${Date.now()}`);
       
       logger.info(`[${req.id}] Razorpay order created (test mode): ${razorpayOrder.id}`);
@@ -57,7 +57,7 @@ const createRazorpayOrder = async (req, res, next) => {
         return res.status(400).json({ success: false, message: `Order is already ${order.status}` });
       }
 
-      const amountInPaise = Math.round(order.totalAmount * 100);
+      const amountInPaise = Math.round(parseFloat(order.totalAmount) * 100);
       const razorpayOrder = await createRzpOrder(amountInPaise, "INR", order._id.toString());
 
       order.razorpayOrderId = razorpayOrder.id;
@@ -116,15 +116,37 @@ const verifyPayment = async (req, res, next) => {
       return res.status(200).json({ success: true, message: "Payment already verified", order });
     }
 
-    for (const item of order.items) {
-      await Product.findByIdAndUpdate(item.product, { $inc: { stock: -item.quantity } });
-    }
+    const session = await mongoose.startSession();
+    try {
+      session.startTransaction();
 
-    order.razorpayPaymentId = razorpay_payment_id;
-    order.razorpaySignature = razorpay_signature;
-    order.status = "PAID";
-    order.paidAt = new Date();
-    await order.save();
+      for (const item of order.items) {
+        const updatedProduct = await Product.findOneAndUpdate(
+          { _id: item.product, stock: { $gte: item.quantity } },
+          { $inc: { stock: -item.quantity } },
+          { new: true, session }
+        );
+
+        if (!updatedProduct) {
+          throw new Error(`Insufficient stock for product ${item.product}`);
+        }
+      }
+
+      order.razorpayPaymentId = razorpay_payment_id;
+      // Don't store full signature for security - only store if needed for refunds, otherwise hash it
+      // order.razorpaySignature = razorpay_signature; // Removed for security
+      order.status = "PAID";
+      order.paidAt = new Date();
+      await order.save({ session });
+
+      await session.commitTransaction();
+    } catch (stockErr) {
+      await session.abortTransaction();
+      logger.error(`[${req.id}] Failed to verify payment for order ${order._id}: ${stockErr.message}`);
+      return res.status(500).json({ success: false, message: "Stock update failed. Please contact support." });
+    } finally {
+      await session.endSession();
+    }
 
     logger.info(`[${req.id}] Payment verified and order marked PAID: ${order._id}`);
 
@@ -134,7 +156,7 @@ const verifyPayment = async (req, res, next) => {
     const User = require('../models/user.model');
     const userDoc = await User.findById(userId);
     if (userDoc && userDoc.email) {
-      console.log(`[PAYMENT] Sending payment success email to: ${userDoc.email}`);
+      logger.info(`[PAYMENT] Sending payment success email to: ${userDoc.email}`);
       sendEmail(userDoc.email, 'Payment Successful - Vendora', paymentSuccessTemplate(userDoc.name || 'Customer', order._id, order.totalAmount));
     }
     
@@ -172,6 +194,7 @@ const handleWebhook = async (req, res, next) => {
     logger.info(`[Webhook] Event received: ${event.event}`);
 
     const { event: eventName, payload } = event;
+    let processed = false;
 
     if (eventName === "payment.captured") {
       const razorpayOrderId = payload.payment.entity.order_id;
@@ -179,14 +202,28 @@ const handleWebhook = async (req, res, next) => {
 
       const order = await Order.findOne({ razorpayOrderId });
       if (order && order.status !== "PAID") {
+        // Update product stocks with error handling
+        let stockUpdateFailed = false;
         for (const item of order.items) {
-          await Product.findByIdAndUpdate(item.product, { $inc: { stock: -item.quantity } });
+          try {
+            await Product.findByIdAndUpdate(item.product, { $inc: { stock: -item.quantity } });
+          } catch (productErr) {
+            logger.error(`[Webhook] Failed to update stock for product ${item.product}: ${productErr.message}`);
+            stockUpdateFailed = true;
+          }
         }
-        order.razorpayPaymentId = razorpayPaymentId;
-        order.status = "PAID";
-        order.paidAt = new Date();
-        await order.save();
-        logger.info(`[Webhook] Order ${order._id} marked PAID via webhook`);
+        
+        // Only mark order as PAID if all stock updates succeeded
+        if (!stockUpdateFailed) {
+          order.razorpayPaymentId = razorpayPaymentId;
+          order.status = "PAID";
+          order.paidAt = new Date();
+          await order.save();
+          logger.info(`[Webhook] Order ${order._id} marked PAID via webhook`);
+          processed = true;
+        } else {
+          logger.warn(`[Webhook] Skipping PAID status for order ${order._id} due to stock update failures`);
+        }
       }
     }
 
@@ -197,10 +234,16 @@ const handleWebhook = async (req, res, next) => {
         order.status = "FAILED";
         await order.save();
         logger.info(`[Webhook] Order ${order._id} marked FAILED via webhook`);
+        processed = true;
       }
     }
 
-    return res.status(200).json({ success: true });
+    // Return appropriate response based on whether we processed the event
+    if (processed) {
+      return res.status(200).json({ success: true, message: "Webhook processed successfully" });
+    } else {
+      return res.status(200).json({ success: true, message: "Webhook received but no action required" });
+    }
   } catch (err) {
     return next(err);
   }

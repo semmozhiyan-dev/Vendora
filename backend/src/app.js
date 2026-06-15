@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
+const session = require("express-session");
 const mongoose = require("mongoose");
 const mongoSanitizeMiddleware = require("./middlewares/mongoSanitize.middleware");
 const requestIdMiddleware = require("./middlewares/requestId.middleware");
@@ -8,6 +9,7 @@ const loggerMiddleware = require("./middlewares/logger.middleware");
 const timeoutMiddleware = require("./middlewares/timeout.middleware");
 const rateLimitMiddleware = require("./middlewares/rateLimit.middleware");
 const { notFound, errorHandler } = require("./middlewares/error.middleware");
+const passport = require("./config/passport");
 
 const healthRoutes = require("./routes/health.routes");
 const authRoutes = require("./routes/auth.routes");
@@ -23,35 +25,79 @@ const swaggerSpec = require("./config/swagger");
 
 const app = express();
 
+const getSiteOrigin = (origin) => {
+  try {
+    const parsedOrigin = new URL(origin);
+    return `${parsedOrigin.protocol}//${parsedOrigin.hostname}`;
+  } catch (error) {
+    return origin;
+  }
+};
+
+const PRODUCTION_FRONTEND_ORIGIN =
+  process.env.FRONTEND_URL || process.env.FRONTEND_ORIGIN || "http://localhost:5173";
+const PRODUCTION_SITE_ORIGIN = getSiteOrigin(PRODUCTION_FRONTEND_ORIGIN);
+
 // ========== MIDDLEWARE CHAIN ORDER ==========
 
 // 0. Security Headers
 app.use(helmet());
 
-// 1. CORS - Configure allowed origins
-const allowedOrigins = [
-  process.env.FRONTEND_URL || "http://localhost:3000",
-  "http://localhost:5173", // Vite default
-  "http://localhost:5174", // Vite alternate port
-  "http://localhost:5000",
-];
+if (process.env.SESSION_SECRET) {
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: false,
+      cookie: { secure: process.env.NODE_ENV === "production" },
+    })
+  );
+}
+app.use(passport.initialize());
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, Postman, etc.)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Skip-Loading"],
-  })
+if (process.env.SESSION_SECRET) {
+  app.use(passport.session());
+}
+
+// 1. CORS - Configure allowed origins
+const allowedOrigins = new Set(
+  [
+    PRODUCTION_FRONTEND_ORIGIN,
+    PRODUCTION_SITE_ORIGIN,
+    process.env.FRONTEND_URL,
+    process.env.FRONTEND_ORIGIN,
+    "http://localhost:5173", // Vite default
+    "http://localhost:5174", // Vite alternate port
+    "http://localhost:5000",
+    "http://localhost",
+    "http://localhost:80",
+  ].filter(Boolean)
 );
+
+const corsOptionsDelegate = (req, callback) => {
+  const origin = req.header("Origin");
+
+  // Allow requests with no origin (mobile apps, Postman, curl, same-origin non-browser requests)
+  if (!origin) {
+    return callback(null, { 
+      origin: true, 
+      credentials: true,
+      methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+      allowedHeaders: ["Content-Type", "Authorization", "X-Skip-Loading"],
+    });
+  }
+
+  const isAllowed = allowedOrigins.has(origin);
+
+  callback(null, {
+    origin: isAllowed ? origin : false,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Skip-Loading"],
+  });
+};
+
+app.use(cors(corsOptionsDelegate));
 
 // 2. Body Parser (JSON)
 app.use(express.json({ limit: "10mb" }));

@@ -7,6 +7,7 @@ function ProductForm({ onSubmit, initialData = null, loading = false }) {
     price: "",
     stock: "",
     category: "",
+    image: "",
   });
 
   // Pre-fill form if editing
@@ -18,6 +19,7 @@ function ProductForm({ onSubmit, initialData = null, loading = false }) {
         price: initialData.price || "",
         stock: initialData.stock || "",
         category: initialData.category || "",
+          image: initialData.image || "",
       });
     }
   }, [initialData]);
@@ -47,7 +49,7 @@ function ProductForm({ onSubmit, initialData = null, loading = false }) {
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Name Field */}
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="name" className="mb-2 block text-sm font-semibold text-gray-700">
           Product Name
         </label>
         <input
@@ -57,14 +59,14 @@ function ProductForm({ onSubmit, initialData = null, loading = false }) {
           value={formData.name}
           onChange={handleChange}
           required
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition"
+          className="w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3.5 text-gray-900 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20"
           placeholder="Enter product name"
         />
       </div>
 
       {/* Description Field */}
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="description" className="mb-2 block text-sm font-semibold text-gray-700">
           Description
         </label>
         <textarea
@@ -73,14 +75,14 @@ function ProductForm({ onSubmit, initialData = null, loading = false }) {
           value={formData.description}
           onChange={handleChange}
           rows={4}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition resize-none"
+          className="w-full resize-none rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3.5 text-gray-900 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20"
           placeholder="Enter product description"
         />
       </div>
 
       {/* Category Field */}
       <div>
-        <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="category" className="mb-2 block text-sm font-semibold text-gray-700">
           Category
         </label>
         <input
@@ -90,7 +92,7 @@ function ProductForm({ onSubmit, initialData = null, loading = false }) {
           value={formData.category}
           onChange={handleChange}
           required
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition"
+          className="w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3.5 text-gray-900 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20"
           placeholder="e.g., Electronics, Clothing, Books"
         />
       </div>
@@ -99,7 +101,7 @@ function ProductForm({ onSubmit, initialData = null, loading = false }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Price Field */}
         <div>
-          <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="price" className="mb-2 block text-sm font-semibold text-gray-700">
             Price
           </label>
           <div className="relative">
@@ -113,9 +115,9 @@ function ProductForm({ onSubmit, initialData = null, loading = false }) {
               value={formData.price}
               onChange={handleChange}
               required
-              min="0"
+              min="0.01"
               step="0.01"
-              className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition"
+              className="w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] py-3.5 pl-8 pr-4 text-gray-900 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20"
               placeholder="0.00"
             />
           </div>
@@ -123,7 +125,7 @@ function ProductForm({ onSubmit, initialData = null, loading = false }) {
 
         {/* Stock Field */}
         <div>
-          <label htmlFor="stock" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="stock" className="mb-2 block text-sm font-semibold text-gray-700">
             Stock
           </label>
           <input
@@ -134,10 +136,29 @@ function ProductForm({ onSubmit, initialData = null, loading = false }) {
             onChange={handleChange}
             required
             min="0"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition"
+            className="w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3.5 text-gray-900 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20"
             placeholder="0"
           />
         </div>
+      </div>
+
+      {/* Image Field */}
+      <div>
+        <label htmlFor="image" className="mb-2 block text-sm font-semibold text-gray-700">
+          Image URL
+        </label>
+        <input
+          type="text"
+          id="image"
+          name="image"
+          value={formData.image}
+          onChange={handleChange}
+          className="w-full rounded-2xl border border-gray-200 bg-[#FAFAFA] px-4 py-3.5 text-gray-900 transition-all focus:border-[#C9A84C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C9A84C]/20"
+          placeholder="/images/products/image1.jpg or https://..."
+        />
+        <p className="mt-2 text-xs text-gray-500">
+          Use a public image path or URL so the client catalog can display the product.
+        </p>
       </div>
 
       {/* Submit Button */}
@@ -145,7 +166,7 @@ function ProductForm({ onSubmit, initialData = null, loading = false }) {
         <button
           type="submit"
           disabled={loading}
-          className="px-6 py-3 bg-black text-white rounded-lg font-medium hover:bg-gray-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-full bg-[#0A0A0A] px-6 py-3 font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
         >
           {loading ? (isEditMode ? "Saving..." : "Creating...") : (isEditMode ? "Save" : "Create")}
         </button>

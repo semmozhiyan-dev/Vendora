@@ -62,65 +62,72 @@ function OrderDetails() {
     });
   };
 
+  const formatAmount = (amount) => `₹${Number(amount || 0).toLocaleString('en-IN')}`;
+
+  const subtotal = order?.items?.reduce((sum, item) => sum + (Number(item.price) * Number(item.quantity)), 0) || 0;
+  const taxAmount = Math.round(subtotal * 0.18);
+
   if (loading) {
     return (
-      <div className="max-w-5xl mx-auto px-6 py-12">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         {/* Header Skeleton */}
-        <div className="flex items-center gap-4 mb-8 animate-pulse">
-          <div className="w-9 h-9 bg-gray-200 rounded-lg"></div>
-          <div className="flex-1">
-            <div className="h-8 bg-gray-200 rounded w-48 mb-2"></div>
-            <div className="h-4 bg-gray-200 rounded w-64"></div>
+        <div className="mb-8 animate-pulse rounded-[32px] border border-gray-200 bg-white px-6 py-8 shadow-sm sm:mb-10 sm:px-8">
+          <div className="flex items-start gap-4">
+            <div className="h-11 w-11 rounded-2xl bg-gray-200"></div>
+            <div className="flex-1">
+              <div className="h-8 w-56 rounded bg-gray-200"></div>
+              <div className="mt-3 h-4 w-72 rounded bg-gray-200"></div>
+            </div>
+            <div className="h-8 w-24 rounded-full bg-gray-200"></div>
           </div>
-          <div className="h-8 bg-gray-200 rounded w-20"></div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Main Content Skeleton */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="space-y-6 lg:col-span-2">
             {/* Order Items Skeleton */}
-            <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm animate-pulse">
-              <div className="h-6 bg-gray-200 rounded w-32 mb-4"></div>
+            <div className="animate-pulse rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="mb-4 h-6 w-32 rounded bg-gray-200"></div>
               <div className="space-y-4">
                 {[1, 2].map((i) => (
-                  <div key={i} className="flex gap-4 pb-4 border-b border-gray-100">
-                    <div className="w-20 h-20 bg-gray-200 rounded-lg flex-shrink-0"></div>
+                  <div key={i} className="flex gap-4 rounded-[22px] border border-gray-100 bg-[#FAFAFA] p-4">
+                    <div className="h-20 w-20 flex-shrink-0 rounded-2xl bg-gray-200"></div>
                     <div className="flex-1 space-y-2">
-                      <div className="h-5 bg-gray-200 rounded w-3/4"></div>
-                      <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-                      <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                      <div className="h-5 w-3/4 rounded bg-gray-200"></div>
+                      <div className="h-4 w-1/4 rounded bg-gray-200"></div>
+                      <div className="h-4 w-1/3 rounded bg-gray-200"></div>
                     </div>
-                    <div className="h-5 bg-gray-200 rounded w-20"></div>
+                    <div className="h-5 w-20 rounded bg-gray-200"></div>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Shipping Address Skeleton */}
-            <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm animate-pulse">
-              <div className="h-6 bg-gray-200 rounded w-40 mb-4"></div>
+            <div className="animate-pulse rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="mb-4 h-6 w-40 rounded bg-gray-200"></div>
               <div className="space-y-2">
-                <div className="h-4 bg-gray-200 rounded w-full"></div>
-                <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-                <div className="h-4 bg-gray-200 rounded w-4/6"></div>
-                <div className="h-4 bg-gray-200 rounded w-3/6 mt-3"></div>
-                <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+                <div className="h-4 w-full rounded bg-gray-200"></div>
+                <div className="h-4 w-5/6 rounded bg-gray-200"></div>
+                <div className="h-4 w-4/6 rounded bg-gray-200"></div>
+                <div className="mt-3 h-4 w-3/6 rounded bg-gray-200"></div>
+                <div className="h-4 w-4/6 rounded bg-gray-200"></div>
               </div>
             </div>
 
             {/* Timeline Skeleton */}
-            <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm animate-pulse">
-              <div className="h-6 bg-gray-200 rounded w-36 mb-6"></div>
+            <div className="animate-pulse rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="mb-6 h-6 w-36 rounded bg-gray-200"></div>
               <div className="space-y-0">
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} className="flex gap-4">
                     <div className="flex flex-col items-center">
-                      <div className="w-4 h-4 rounded-full bg-gray-200"></div>
-                      {i !== 4 && <div className="w-0.5 h-16 bg-gray-200"></div>}
+                      <div className="h-4 w-4 rounded-full bg-gray-200"></div>
+                      {i !== 4 && <div className="h-16 w-0.5 bg-gray-200"></div>}
                     </div>
                     <div className={`flex-1 ${i !== 4 ? 'pb-12' : ''}`}>
-                      <div className="h-5 bg-gray-200 rounded w-24 mb-2"></div>
-                      <div className="h-4 bg-gray-200 rounded w-32"></div>
+                      <div className="mb-2 h-5 w-24 rounded bg-gray-200"></div>
+                      <div className="h-4 w-32 rounded bg-gray-200"></div>
                     </div>
                   </div>
                 ))}
@@ -131,54 +138,54 @@ function OrderDetails() {
           {/* Sidebar Skeleton */}
           <div className="space-y-6">
             {/* Order Summary Skeleton */}
-            <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm animate-pulse">
-              <div className="h-6 bg-gray-200 rounded w-32 mb-4"></div>
+            <div className="animate-pulse rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="mb-4 h-6 w-32 rounded bg-gray-200"></div>
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <div className="h-4 bg-gray-200 rounded w-20"></div>
-                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+                  <div className="h-4 w-20 rounded bg-gray-200"></div>
+                  <div className="h-4 w-16 rounded bg-gray-200"></div>
                 </div>
                 <div className="flex justify-between">
-                  <div className="h-4 bg-gray-200 rounded w-20"></div>
-                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+                  <div className="h-4 w-20 rounded bg-gray-200"></div>
+                  <div className="h-4 w-16 rounded bg-gray-200"></div>
                 </div>
                 <div className="flex justify-between">
-                  <div className="h-4 bg-gray-200 rounded w-24"></div>
-                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+                  <div className="h-4 w-24 rounded bg-gray-200"></div>
+                  <div className="h-4 w-16 rounded bg-gray-200"></div>
                 </div>
               </div>
-              <div className="border-t border-gray-100 mt-4 pt-4 flex justify-between">
-                <div className="h-5 bg-gray-200 rounded w-16"></div>
-                <div className="h-6 bg-gray-200 rounded w-24"></div>
+              <div className="mt-4 flex justify-between border-t border-gray-100 pt-4">
+                <div className="h-5 w-16 rounded bg-gray-200"></div>
+                <div className="h-6 w-24 rounded bg-gray-200"></div>
               </div>
             </div>
 
             {/* Tracking Info Skeleton */}
-            <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm animate-pulse">
-              <div className="h-6 bg-gray-200 rounded w-40 mb-4"></div>
+            <div className="animate-pulse rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="mb-4 h-6 w-40 rounded bg-gray-200"></div>
               <div className="space-y-3">
                 <div>
-                  <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
-                  <div className="h-5 bg-gray-200 rounded w-full"></div>
+                  <div className="mb-2 h-4 w-24 rounded bg-gray-200"></div>
+                  <div className="h-5 w-full rounded bg-gray-200"></div>
                 </div>
                 <div>
-                  <div className="h-4 bg-gray-200 rounded w-32 mb-2"></div>
-                  <div className="h-5 bg-gray-200 rounded w-3/4"></div>
+                  <div className="mb-2 h-4 w-32 rounded bg-gray-200"></div>
+                  <div className="h-5 w-3/4 rounded bg-gray-200"></div>
                 </div>
               </div>
             </div>
 
             {/* Order Info Skeleton */}
-            <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm animate-pulse">
-              <div className="h-6 bg-gray-200 rounded w-36 mb-4"></div>
+            <div className="animate-pulse rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="mb-4 h-6 w-36 rounded bg-gray-200"></div>
               <div className="space-y-3">
                 <div>
-                  <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
-                  <div className="h-5 bg-gray-200 rounded w-full"></div>
+                  <div className="mb-2 h-4 w-24 rounded bg-gray-200"></div>
+                  <div className="h-5 w-full rounded bg-gray-200"></div>
                 </div>
                 <div>
-                  <div className="h-4 bg-gray-200 rounded w-28 mb-2"></div>
-                  <div className="h-5 bg-gray-200 rounded w-full"></div>
+                  <div className="mb-2 h-4 w-28 rounded bg-gray-200"></div>
+                  <div className="h-5 w-full rounded bg-gray-200"></div>
                 </div>
               </div>
             </div>
@@ -190,12 +197,12 @@ function OrderDetails() {
 
   if (error || !order) {
     return (
-      <div className="max-w-5xl mx-auto px-6 py-12">
-        <div className="text-center py-12">
-          <p className="text-red-500 text-lg mb-4">{error || 'Order not found'}</p>
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+        <div className="rounded-[28px] border border-red-200 bg-red-50 px-6 py-12 text-center shadow-sm">
+          <p className="mb-4 text-lg font-medium text-red-700">{error || 'Order not found'}</p>
           <button
             onClick={() => navigate('/orders')}
-            className="px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+            className="rounded-full bg-[#0A0A0A] px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
           >
             Back to Orders
           </button>
@@ -204,57 +211,62 @@ function OrderDetails() {
     );
   }
 
-  const subtotal = order.items?.reduce((sum, item) => sum + (item.price * item.quantity), 0) || 0;
+  const summaryTax = Math.round(subtotal * 0.18);
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-8">
-        <button
-          onClick={() => navigate('/orders')}
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-        >
-          <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <div className="flex-1">
-          <h1 className="text-3xl font-bold text-gray-900">Order Details</h1>
-          <p className="text-sm text-gray-500 mt-1 font-mono">{order._id}</p>
+      <div className="mb-8 rounded-[32px] border border-gray-200 bg-white px-6 py-8 shadow-sm sm:mb-10 sm:px-8">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <div className="flex items-start gap-4">
+            <button
+              onClick={() => navigate('/orders')}
+              className="flex h-12 w-12 items-center justify-center rounded-2xl border border-gray-200 bg-[#FAFAFA] text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-300 hover:bg-white"
+            >
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#C9A84C]">Order details</p>
+              <h1 className="mt-3 text-4xl font-black tracking-tight text-[#0A0A0A] sm:text-5xl">Order Details</h1>
+              <p className="mt-3 font-mono text-sm text-gray-500">{order._id}</p>
+            </div>
+          </div>
+          <span className={`inline-flex w-fit rounded-full px-4 py-2 text-sm font-semibold uppercase tracking-[0.18em] ${getStatusColor(order.status)}`}>
+            {order.status}
+          </span>
         </div>
-        <span className={`px-4 py-2 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
-          {order.status}
-        </span>
       </div>
 
       {/* Delivered Success Banner */}
       {order.status === 'DELIVERED' && (
-        <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6 mb-6">
+        <div className="mb-6 rounded-[28px] border border-emerald-200 bg-white p-6 shadow-sm">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-500">
+              <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-semibold text-green-900 mb-1">Order Delivered Successfully!</h3>
-              <p className="text-green-700 text-sm mb-3">
+              <h3 className="mb-1 text-lg font-semibold text-[#0A0A0A]">Order Delivered Successfully!</h3>
+              <p className="mb-3 text-sm text-gray-600">
                 Your order has been delivered. We hope you enjoy your purchase!
               </p>
               <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() => navigate('/products')}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+                  className="rounded-full bg-[#0A0A0A] px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
                 >
                   Shop Again
                 </button>
                 <button
-                  className="px-4 py-2 bg-white border border-green-300 text-green-700 rounded-lg text-sm font-medium hover:bg-green-50 transition-colors"
+                  className="rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-sm"
                 >
                   Rate Products
                 </button>
                 <button
-                  className="px-4 py-2 bg-white border border-green-300 text-green-700 rounded-lg text-sm font-medium hover:bg-green-50 transition-colors"
+                  className="rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-sm"
                 >
                   Need Help?
                 </button>
@@ -264,28 +276,33 @@ function OrderDetails() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="space-y-6 lg:col-span-2">
           {/* Order Items */}
-          <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Order Items</h2>
+          <div className="rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm">
+            <div className="mb-5 flex items-center justify-between gap-4">
+              <h2 className="text-lg font-semibold text-[#0A0A0A]">Order Items</h2>
+              <span className="rounded-full border border-gray-200 bg-[#FAFAFA] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
+                {order.items?.length || 0} Items
+              </span>
+            </div>
             <div className="space-y-4">
               {order.items?.map((item) => {
                 const product = item.product || item;
                 return (
-                  <div key={item._id || product._id} className="flex gap-4 pb-4 border-b border-gray-100 last:border-0 last:pb-0">
+                  <div key={item._id || product._id} className="flex gap-4 rounded-[24px] border border-gray-100 bg-[#FAFAFA] p-4 last:border-gray-100">
                     <img
                       src={product.image || '/images/products/image1.jpg'}
                       alt={product.name}
-                      className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
+                      className="h-20 w-20 flex-shrink-0 rounded-2xl object-cover"
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-900">{product.name}</p>
-                      <p className="text-sm text-gray-500 mt-1">Qty: {item.quantity}</p>
-                      <p className="text-sm text-gray-500">₹{item.price?.toLocaleString()} each</p>
+                      <p className="font-medium text-[#0A0A0A]">{product.name}</p>
+                      <p className="mt-1 text-sm text-gray-500">Qty: {item.quantity}</p>
+                      <p className="text-sm text-gray-500">{formatAmount(item.price)} each</p>
                     </div>
-                    <p className="font-semibold text-gray-900">₹{(item.price * item.quantity).toLocaleString()}</p>
+                    <p className="font-semibold text-[#0A0A0A]">{formatAmount(item.price * item.quantity)}</p>
                   </div>
                 );
               })}
@@ -294,10 +311,10 @@ function OrderDetails() {
 
           {/* Shipping Address */}
           {order.shippingAddress && (
-            <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Shipping Address</h2>
-              <div className="text-gray-600 space-y-1">
-                <p className="font-medium text-gray-900">{order.shippingAddress.fullName}</p>
+            <div className="rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm">
+              <h2 className="mb-4 text-lg font-semibold text-[#0A0A0A]">Shipping Address</h2>
+              <div className="space-y-1 text-gray-600">
+                <p className="font-medium text-[#0A0A0A]">{order.shippingAddress.fullName}</p>
                 <p>{order.shippingAddress.address}</p>
                 <p>
                   {order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.pincode}
@@ -310,8 +327,13 @@ function OrderDetails() {
 
           {/* Timeline */}
           {tracking?.timeline && tracking.timeline.length > 0 && (
-            <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">Order Timeline</h2>
+            <div className="rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="mb-6 flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#C9A84C]">Tracking</p>
+                  <h2 className="mt-2 text-lg font-semibold text-[#0A0A0A]">Order Timeline</h2>
+                </div>
+              </div>
               <Timeline timeline={tracking.timeline} currentStatus={order.status} />
             </div>
           )}
@@ -320,43 +342,43 @@ function OrderDetails() {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Order Summary */}
-          <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Order Summary</h2>
+          <div className="rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm">
+            <h2 className="mb-4 text-lg font-semibold text-[#0A0A0A]">Order Summary</h2>
             <div className="space-y-3 text-sm text-gray-600">
-              <div className="flex justify-between">
+              <div className="flex justify-between gap-4">
                 <span>Subtotal</span>
-                <span>₹{subtotal.toLocaleString()}</span>
+                <span>{formatAmount(subtotal)}</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between gap-4">
                 <span>Shipping</span>
-                <span className="text-green-600">Free</span>
+                <span className="text-emerald-600">Free</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between gap-4">
                 <span>Tax (18% GST)</span>
-                <span>₹{(subtotal * 0.18).toLocaleString()}</span>
+                <span>{formatAmount(summaryTax)}</span>
               </div>
             </div>
-            <div className="border-t border-gray-100 mt-4 pt-4 flex justify-between font-semibold text-gray-900">
+            <div className="mt-4 flex justify-between border-t border-gray-100 pt-4 font-semibold text-[#0A0A0A]">
               <span>Total</span>
-              <span className="text-lg">₹{order.totalAmount?.toLocaleString()}</span>
+              <span className="text-lg">{formatAmount(order.totalAmount)}</span>
             </div>
           </div>
 
           {/* Tracking Info */}
           {tracking && (
-            <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Tracking Information</h2>
+            <div className="rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm">
+              <h2 className="mb-4 text-lg font-semibold text-[#0A0A0A]">Tracking Information</h2>
               <div className="space-y-3 text-sm">
                 {tracking.trackingId && (
                   <div>
-                    <p className="text-gray-500 mb-1">Tracking ID</p>
-                    <p className="font-mono font-semibold text-gray-900">{tracking.trackingId}</p>
+                    <p className="mb-1 text-xs font-semibold uppercase tracking-[0.22em] text-gray-500">Tracking ID</p>
+                    <p className="font-mono font-semibold text-[#0A0A0A]">{tracking.trackingId}</p>
                   </div>
                 )}
                 {tracking.estimatedDelivery && (
                   <div>
-                    <p className="text-gray-500 mb-1">Estimated Delivery</p>
-                    <p className="font-medium text-gray-900">{formatDate(tracking.estimatedDelivery)}</p>
+                    <p className="mb-1 text-xs font-semibold uppercase tracking-[0.22em] text-gray-500">Estimated Delivery</p>
+                    <p className="font-medium text-[#0A0A0A]">{formatDate(tracking.estimatedDelivery)}</p>
                   </div>
                 )}
                 {!tracking.trackingId && !tracking.estimatedDelivery && (
@@ -367,23 +389,23 @@ function OrderDetails() {
           )}
 
           {/* Order Info */}
-          <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Order Information</h2>
+          <div className="rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm">
+            <h2 className="mb-4 text-lg font-semibold text-[#0A0A0A]">Order Information</h2>
             <div className="space-y-3 text-sm">
               <div>
-                <p className="text-gray-500 mb-1">Order Date</p>
-                <p className="font-medium text-gray-900">{formatDate(order.createdAt)}</p>
+                <p className="mb-1 text-xs font-semibold uppercase tracking-[0.22em] text-gray-500">Order Date</p>
+                <p className="font-medium text-[#0A0A0A]">{formatDate(order.createdAt)}</p>
               </div>
               {order.paidAt && (
                 <div>
-                  <p className="text-gray-500 mb-1">Payment Date</p>
-                  <p className="font-medium text-gray-900">{formatDate(order.paidAt)}</p>
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-[0.22em] text-gray-500">Payment Date</p>
+                  <p className="font-medium text-[#0A0A0A]">{formatDate(order.paidAt)}</p>
                 </div>
               )}
               {order.razorpayPaymentId && (
                 <div>
-                  <p className="text-gray-500 mb-1">Payment ID</p>
-                  <p className="font-mono text-xs text-gray-900">{order.razorpayPaymentId}</p>
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-[0.22em] text-gray-500">Payment ID</p>
+                  <p className="font-mono text-xs text-[#0A0A0A]">{order.razorpayPaymentId}</p>
                 </div>
               )}
             </div>

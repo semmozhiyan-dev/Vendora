@@ -23,7 +23,7 @@ const sanitize = (obj, isKey = false) => {
   if (typeof obj === "object") {
     const sanitized = {};
     for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
         // Sanitize the key (remove $ and .)
         const sanitizedKey = sanitize(key, true);
         // Sanitize the value (only remove $)
