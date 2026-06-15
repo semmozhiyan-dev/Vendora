@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "df65f51f-837e-4d32-bade-2aac4ee46810"
+      }
+    },
+    "android": {
+      "package": "com.semmozhi.vendora"
+    }
+  }
+}
