@@ -68,6 +68,9 @@ const allowedOrigins = new Set(
     process.env.FRONTEND_ORIGIN,
     "http://localhost:5173", // Vite default
     "http://localhost:5174", // Vite alternate port
+    "http://localhost:8081", // Expo web default
+    "http://localhost:8082", // Expo web alternate
+    "http://localhost:19006", // Expo web alternate
     "http://localhost:5000",
     "http://localhost",
     "http://localhost:80",

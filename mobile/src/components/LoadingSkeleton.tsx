@@ -49,7 +49,9 @@ const pulse = { opacity: 0.3 }
 const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.light.card,
-    borderRadius: BorderRadius.lg,
+    borderRadius: BorderRadius["2xl"],
+    borderWidth: 1,
+    borderColor: Colors.light.border,
     overflow: "hidden",
   },
   imageBlock: {
@@ -100,7 +102,9 @@ const styles = StyleSheet.create({
   },
   orderCard: {
     backgroundColor: Colors.light.card,
-    borderRadius: BorderRadius.lg,
+    borderRadius: BorderRadius["2xl"],
+    borderWidth: 1,
+    borderColor: Colors.light.border,
     padding: Spacing.four,
     gap: Spacing.two,
     marginBottom: Spacing.three,

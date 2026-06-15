@@ -1,0 +1,21 @@
+(node:14964) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"email":1} for model "User". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:14964) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"razorpayOrderId":1} for model "Order". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(node:14964) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Cart". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(node:20600) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"email":1} for model "User". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:20600) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"razorpayOrderId":1} for model "Order". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(node:20600) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Cart". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(node:26912) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"email":1} for model "User". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:26912) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"razorpayOrderId":1} for model "Order". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(node:26912) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Cart". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(node:26912) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:26912) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:26912) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:26912) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ue to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+de:27644) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"email":1} for model "User". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27644) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"razorpayOrderId":1} for model "Order". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(node:27644) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Cart". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.

@@ -3,7 +3,7 @@ const User = require("../models/user.model");
 const logger = require("../utils/logger");
 
 const sanitizeUser = (user) => ({
-  id: user._id,
+  _id: user._id,
   name: user.name,
   email: user.email,
   role: user.role,

@@ -2,13 +2,16 @@ import { Platform } from "react-native"
 
 export const Colors = {
   light: {
-    text: "#111827",
-    background: "#ffffff",
+    text: "#6b6375",
+    textHeading: "#08060d",
+    background: "#FAFAFA",
     backgroundElement: "#F3F4F6",
     backgroundSelected: "#E5E7EB",
     textSecondary: "#6B7280",
-    primary: "#2563EB",
-    primaryLight: "#DBEAFE",
+    primary: "#0A0A0A",
+    accent: "#C9A84C",
+    accentLight: "rgba(201, 168, 76, 0.1)",
+    primaryLight: "rgba(10, 10, 10, 0.05)",
     danger: "#EF4444",
     success: "#10B981",
     warning: "#F59E0B",
@@ -16,17 +19,20 @@ export const Colors = {
     card: "#ffffff",
   },
   dark: {
-    text: "#F9FAFB",
-    background: "#111827",
+    text: "#9CA3AF",
+    textHeading: "#F3F4F6",
+    background: "#16171d",
     backgroundElement: "#1F2937",
     backgroundSelected: "#374151",
     textSecondary: "#9CA3AF",
-    primary: "#3B82F6",
-    primaryLight: "#1E3A5F",
+    primary: "#F3F4F6",
+    accent: "#C9A84C",
+    accentLight: "rgba(201, 168, 76, 0.15)",
+    primaryLight: "rgba(243, 244, 246, 0.1)",
     danger: "#F87171",
     success: "#34D399",
     warning: "#FBBF24",
-    border: "#374151",
+    border: "#2E303A",
     card: "#1F2937",
   },
 } as const
@@ -41,6 +47,7 @@ export const Spacing = {
   four: 16,
   five: 24,
   six: 32,
+  seven: 40,
   eight: 48,
 } as const
 
@@ -59,6 +66,8 @@ export const BorderRadius = {
   md: 10,
   lg: 16,
   xl: 24,
+  "2xl": 28,
+  "3xl": 32,
   full: 9999,
 } as const
 

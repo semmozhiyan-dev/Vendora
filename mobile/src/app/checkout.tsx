@@ -7,29 +7,22 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
-  Alert,
   Platform,
 } from "react-native"
 import { useRouter } from "expo-router"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { getCart } from "../services/cart"
 import { createOrder } from "../services/orders"
-import { createRazorpayOrder, verifyPayment } from "../services/payments"
+import { createRazorpayOrder } from "../services/payments"
 import { CartItem } from "../types"
 import { formatPrice, calcSubtotal, calcGst, calcTotal } from "../utils/format"
 import { Colors, Spacing, FontSize, BorderRadius } from "../constants/theme"
-import { API_BASE_URL } from "../constants/api"
-
-declare global {
-  interface Window {
-    Razorpay: any
-  }
-}
 
 export default function CheckoutScreen() {
   const [items, setItems] = useState<CartItem[]>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
+  const [errorMsg, setErrorMsg] = useState("")
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -68,10 +61,11 @@ export default function CheckoutScreen() {
   const handlePlaceOrder = async () => {
     if (!form.fullName.trim() || !form.address.trim() || !form.city.trim() ||
         !form.state.trim() || !form.pincode.trim()) {
-      Alert.alert("Missing Fields", "Please fill in all shipping address fields")
+      setErrorMsg("Please fill in all required shipping address fields")
       return
     }
 
+    setErrorMsg("")
     setSubmitting(true)
     try {
       const orderItems = items.map((i) => ({
@@ -93,78 +87,25 @@ export default function CheckoutScreen() {
       const payRes = await createRazorpayOrder(order._id)
 
       if (Platform.OS === "web") {
-        await handleWebPayment(payRes, order._id)
+        const params = new URLSearchParams({
+          key: payRes.key,
+          order_id: payRes.razorpayOrderId,
+          amount: String(payRes.amount),
+          internal_order_id: order._id,
+          name: form.fullName,
+          email: form.email,
+          phone: form.phone,
+        })
+        const origin = window.location.origin
+        window.location.href = `${origin}/razorpay-checkout.html?${params.toString()}`
       } else {
-        Alert.alert(
-          "Order Created",
-          `Order placed successfully! Order ID: ${order._id.slice(-8)}`,
-          [{ text: "OK", onPress: () => router.replace("/(tabs)/orders") }]
-        )
+        router.replace(`/order-success?orderId=${order._id}`)
       }
     } catch (e: any) {
-      Alert.alert("Error", e.message || "Failed to place order")
+      setErrorMsg(e.message || "Failed to place order")
     } finally {
       setSubmitting(false)
     }
-  }
-
-  const handleWebPayment = async (payRes: any, orderId: string) => {
-    return new Promise<void>((resolve, reject) => {
-      if (typeof window === "undefined" || !window.Razorpay) {
-        const script = document.createElement("script")
-        script.src = "https://checkout.razorpay.com/v1/checkout.js"
-        script.onload = () => openRazorpay(payRes, orderId, resolve, reject)
-        document.body.appendChild(script)
-      } else {
-        openRazorpay(payRes, orderId, resolve, reject)
-      }
-    })
-  }
-
-  const openRazorpay = (
-    payRes: any,
-    orderId: string,
-    resolve: () => void,
-    reject: (e: Error) => void
-  ) => {
-    const options = {
-      key: payRes.key,
-      amount: payRes.amount,
-      currency: "INR",
-      name: "Vendora",
-      order_id: payRes.razorpayOrderId,
-      prefill: {
-        name: form.fullName,
-        email: form.email,
-        contact: form.phone,
-      },
-      theme: { color: Colors.light.primary },
-      handler: async (response: any) => {
-        try {
-          await verifyPayment({
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-          })
-          Alert.alert(
-            "Payment Successful",
-            "Your order has been placed!",
-            [{ text: "OK", onPress: () => router.replace("/(tabs)/orders") }]
-          )
-          resolve()
-        } catch (e: any) {
-          Alert.alert("Payment Error", e.message || "Verification failed")
-          reject(e)
-        }
-      },
-      modal: {
-        ondismiss: () => {
-          reject(new Error("Payment cancelled"))
-        },
-      },
-    }
-    const rzp = new window.Razorpay(options)
-    rzp.open()
   }
 
   if (loading) {
@@ -268,6 +209,11 @@ export default function CheckoutScreen() {
         </View>
       </View>
 
+      {errorMsg ? (
+        <View style={styles.errorBanner}>
+          <Text style={styles.errorText}>{errorMsg}</Text>
+        </View>
+      ) : null}
       <TouchableOpacity
         style={[styles.placeBtn, submitting && styles.placeBtnDisabled]}
         onPress={handlePlaceOrder}
@@ -289,21 +235,23 @@ const styles = StyleSheet.create({
   content: { padding: Spacing.four, paddingBottom: 60 },
   section: {
     backgroundColor: Colors.light.card,
-    borderRadius: BorderRadius.lg,
-    padding: Spacing.four,
+    borderRadius: BorderRadius["3xl"],
+    borderWidth: 1,
+    borderColor: Colors.light.border,
+    padding: Spacing.five,
     marginBottom: Spacing.four,
   },
   sectionTitle: {
     fontSize: FontSize.base,
-    fontWeight: "600",
-    color: Colors.light.text,
+    fontWeight: "700",
+    color: Colors.light.textHeading,
     marginBottom: Spacing.four,
   },
   formGrid: { gap: Spacing.three },
   input: {
-    backgroundColor: Colors.light.backgroundElement,
-    borderRadius: BorderRadius.md,
-    padding: Spacing.three,
+    backgroundColor: Colors.light.background,
+    borderRadius: BorderRadius.xl,
+    padding: Spacing.four,
     fontSize: FontSize.sm,
     color: Colors.light.text,
     borderWidth: 1,
@@ -315,8 +263,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: Spacing.two,
   },
-  summaryItemName: { fontSize: FontSize.sm, color: Colors.light.text, flex: 1 },
-  summaryItemPrice: { fontSize: FontSize.sm, fontWeight: "600", color: Colors.light.text },
+  summaryItemName: { fontSize: FontSize.sm, color: Colors.light.textHeading, flex: 1 },
+  summaryItemPrice: { fontSize: FontSize.sm, fontWeight: "700", color: Colors.light.primary },
   divider: {
     height: 1,
     backgroundColor: Colors.light.border,
@@ -328,21 +276,35 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.two,
   },
   summaryLabel: { fontSize: FontSize.sm, color: Colors.light.textSecondary },
-  summaryValue: { fontSize: FontSize.sm, fontWeight: "600", color: Colors.light.text },
+  summaryValue: { fontSize: FontSize.sm, fontWeight: "600", color: Colors.light.primary },
   totalRow: {
     borderTopWidth: 1,
     borderTopColor: Colors.light.border,
     paddingTop: Spacing.three,
     marginTop: Spacing.one,
   },
-  totalLabel: { fontSize: FontSize.base, fontWeight: "700", color: Colors.light.text },
-  totalValue: { fontSize: FontSize.base, fontWeight: "700", color: Colors.light.primary },
+  totalLabel: { fontSize: FontSize.base, fontWeight: "800", color: Colors.light.textHeading },
+  totalValue: { fontSize: FontSize.base, fontWeight: "900", color: Colors.light.primary },
+  errorBanner: {
+    backgroundColor: "#fef2f2",
+    borderRadius: BorderRadius["2xl"],
+    borderWidth: 1,
+    borderColor: "#fca5a5",
+    padding: Spacing.four,
+    marginBottom: Spacing.four,
+  },
+  errorText: {
+    color: "#dc2626",
+    fontSize: FontSize.sm,
+    fontWeight: "500",
+    textAlign: "center",
+  },
   placeBtn: {
-    backgroundColor: Colors.light.primary,
-    borderRadius: BorderRadius.md,
+    backgroundColor: Colors.light.accent,
+    borderRadius: BorderRadius.full,
     paddingVertical: Spacing.four,
     alignItems: "center",
   },
-  placeBtnDisabled: { opacity: 0.6 },
-  placeBtnText: { color: "#fff", fontSize: FontSize.base, fontWeight: "600" },
+  placeBtnDisabled: { opacity: 0.5 },
+  placeBtnText: { color: Colors.light.primary, fontSize: FontSize.base, fontWeight: "700" },
 })

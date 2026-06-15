@@ -23,7 +23,11 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      const msg = error.response.data?.message || "Something went wrong"
+      const data = error.response.data
+      let msg = data?.message || "Something went wrong"
+      if (data?.errors?.length) {
+        msg += ": " + data.errors.join("; ")
+      }
       return Promise.reject(new Error(msg))
     }
     if (error.code === "ECONNABORTED") {

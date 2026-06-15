@@ -54,6 +54,22 @@ function RootLayout() {
           name="admin/dashboard"
           options={{ headerShown: true, headerTitle: "Admin Dashboard", headerBackTitle: "Back" }}
         />
+        <Stack.Screen
+          name="admin/products"
+          options={{ headerShown: true, headerTitle: "Manage Products", headerBackTitle: "Back" }}
+        />
+        <Stack.Screen
+          name="admin/orders"
+          options={{ headerShown: true, headerTitle: "Manage Orders", headerBackTitle: "Back" }}
+        />
+        <Stack.Screen
+          name="admin/users"
+          options={{ headerShown: true, headerTitle: "Manage Users", headerBackTitle: "Back" }}
+        />
+        <Stack.Screen
+          name="order-success"
+          options={{ headerShown: false, presentation: "fullScreenModal" }}
+        />
       </Stack>
     </>
   )

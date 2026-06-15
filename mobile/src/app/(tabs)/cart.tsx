@@ -11,9 +11,11 @@ import {
 import { Image } from "expo-image"
 import { useRouter } from "expo-router"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useAuth } from "../../store/AuthContext"
 import { getCart, updateCartItem, removeCartItem } from "../../services/cart"
 import { CartItem } from "../../types"
 import { formatPrice, calcSubtotal, calcGst, calcTotal } from "../../utils/format"
+import { getProductImageUrl } from "../../utils/images"
 import EmptyState from "../../components/EmptyState"
 import ErrorState from "../../components/ErrorState"
 import { Colors, Spacing, FontSize, BorderRadius } from "../../constants/theme"
@@ -26,6 +28,7 @@ export default function CartScreen() {
   const [updatingIds, setUpdatingIds] = useState<Set<string>>(new Set())
   const router = useRouter()
   const insets = useSafeAreaInsets()
+  const { user } = useAuth()
 
   const fetchCart = useCallback(async (isRefresh = false) => {
     try {
@@ -75,7 +78,7 @@ export default function CartScreen() {
   if (loading && !refreshing) {
     return (
       <View style={[styles.container, { paddingTop: insets.top }]}>
-        <ActivityIndicator size="large" color={Colors.light.primary} style={{ marginTop: 100 }} />
+        <ActivityIndicator size="large" color={Colors.light.accent} style={{ marginTop: 100 }} />
       </View>
     )
   }
@@ -91,7 +94,6 @@ export default function CartScreen() {
   if (items.length === 0) {
     return (
       <View style={[styles.container, { paddingTop: insets.top }]}>
-        <Text style={styles.heading}>Cart</Text>
         <EmptyState
           icon="🛒"
           title="Your cart is empty"
@@ -105,7 +107,15 @@ export default function CartScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <Text style={styles.heading}>Cart ({items.length})</Text>
+      <View style={styles.headerRow}>
+        <View style={styles.logoBox}>
+          <Text style={styles.logoText}>V</Text>
+        </View>
+        <Text style={styles.heading}>Cart</Text>
+        <View style={styles.countBadge}>
+          <Text style={styles.countText}>{items.length}</Text>
+        </View>
+      </View>
       <FlatList
         data={items}
         keyExtractor={(item) => item.product._id}
@@ -118,7 +128,7 @@ export default function CartScreen() {
           return (
             <View style={[styles.itemCard, isUpdating && styles.updating]}>
               <Image
-                source={{ uri: item.product.image || undefined }}
+                source={{ uri: item.product.image || getProductImageUrl(item.product._id) }}
                 style={styles.itemImage}
                 contentFit="cover"
               />
@@ -169,7 +179,7 @@ export default function CartScreen() {
             <TouchableOpacity
               style={styles.checkoutBtn}
               onPress={() => router.push("/checkout")}
-              activeOpacity={0.8}
+              activeOpacity={0.9}
             >
               <Text style={styles.checkoutBtnText}>Proceed to Checkout</Text>
             </TouchableOpacity>
@@ -182,68 +192,100 @@ export default function CartScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.light.background },
-  heading: {
-    fontSize: FontSize["2xl"],
-    fontWeight: "700",
-    color: Colors.light.text,
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: Spacing.four,
     paddingVertical: Spacing.three,
+    gap: Spacing.three,
+  },
+  logoBox: {
+    width: 36,
+    height: 36,
+    borderRadius: BorderRadius.md,
+    backgroundColor: Colors.light.primary,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  logoText: {
+    fontSize: 18,
+    fontWeight: "900",
+    color: Colors.light.accent,
+  },
+  heading: {
+    fontSize: FontSize["2xl"],
+    fontWeight: "800",
+    color: Colors.light.textHeading,
+    flex: 1,
+  },
+  countBadge: {
+    backgroundColor: Colors.light.accent,
+    borderRadius: BorderRadius.full,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+  },
+  countText: {
+    fontSize: FontSize.xs,
+    fontWeight: "700",
+    color: Colors.light.primary,
   },
   list: { padding: Spacing.four, paddingBottom: 120 },
   itemCard: {
     flexDirection: "row",
     backgroundColor: Colors.light.card,
-    borderRadius: BorderRadius.lg,
+    borderRadius: BorderRadius["2xl"],
+    borderWidth: 1,
+    borderColor: Colors.light.border,
     padding: Spacing.three,
     marginBottom: Spacing.three,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
   },
   updating: { opacity: 0.6 },
   itemImage: {
-    width: 80,
-    height: 80,
-    borderRadius: BorderRadius.md,
+    width: 88,
+    height: 88,
+    borderRadius: BorderRadius.xl,
     backgroundColor: Colors.light.backgroundElement,
   },
   itemInfo: { flex: 1, marginLeft: Spacing.three, gap: Spacing.one },
-  itemName: { fontSize: FontSize.sm, fontWeight: "500", color: Colors.light.text },
-  itemPrice: { fontSize: FontSize.base, fontWeight: "700", color: Colors.light.primary },
+  itemName: { fontSize: FontSize.sm, fontWeight: "500", color: Colors.light.textHeading },
+  itemPrice: { fontSize: FontSize.base, fontWeight: "900", color: Colors.light.primary },
   quantityRow: { flexDirection: "row", alignItems: "center", gap: Spacing.three, marginTop: Spacing.one },
   qtyBtn: {
     width: 32,
     height: 32,
-    borderRadius: 16,
-    backgroundColor: Colors.light.backgroundElement,
+    borderRadius: BorderRadius.full,
+    borderWidth: 1,
+    borderColor: Colors.light.border,
+    backgroundColor: Colors.light.card,
     justifyContent: "center",
     alignItems: "center",
   },
-  qtyBtnText: { fontSize: 18, fontWeight: "600", color: Colors.light.text },
-  qtyValue: { fontSize: FontSize.base, fontWeight: "600", minWidth: 24, textAlign: "center" },
+  qtyBtnText: { fontSize: 18, fontWeight: "600", color: Colors.light.primary },
+  qtyValue: { fontSize: FontSize.base, fontWeight: "700", minWidth: 24, textAlign: "center" },
   summary: {
     backgroundColor: Colors.light.card,
-    borderRadius: BorderRadius.lg,
-    padding: Spacing.four,
+    borderRadius: BorderRadius["2xl"],
+    borderWidth: 1,
+    borderColor: Colors.light.border,
+    padding: Spacing.five,
     marginTop: Spacing.two,
-    gap: Spacing.two,
+    gap: Spacing.three,
   },
   summaryRow: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
   summaryLabel: { fontSize: FontSize.sm, color: Colors.light.textSecondary },
-  summaryValue: { fontSize: FontSize.sm, fontWeight: "600", color: Colors.light.text },
-  totalRow: { borderTopWidth: 1, borderTopColor: Colors.light.border, paddingTop: Spacing.three, marginTop: Spacing.one },
-  totalLabel: { fontSize: FontSize.base, fontWeight: "700", color: Colors.light.text },
-  totalValue: { fontSize: FontSize.base, fontWeight: "700", color: Colors.light.primary },
+  summaryValue: { fontSize: FontSize.sm, fontWeight: "600", color: Colors.light.primary },
+  totalRow: { borderTopWidth: 1, borderTopColor: Colors.light.border, paddingTop: Spacing.four, marginTop: Spacing.two },
+  totalLabel: { fontSize: FontSize.base, fontWeight: "700", color: Colors.light.textHeading },
+  totalValue: { fontSize: FontSize.base, fontWeight: "900", color: Colors.light.primary },
   checkoutBtn: {
-    backgroundColor: Colors.light.primary,
-    borderRadius: BorderRadius.md,
-    paddingVertical: Spacing.three,
+    backgroundColor: Colors.light.accent,
+    borderRadius: BorderRadius.full,
+    paddingVertical: Spacing.four,
     alignItems: "center",
-    marginTop: Spacing.two,
+    marginTop: Spacing.three,
   },
-  checkoutBtnText: { color: "#fff", fontSize: FontSize.base, fontWeight: "600" },
+  checkoutBtnText: { color: Colors.light.primary, fontSize: FontSize.base, fontWeight: "700" },
 })
